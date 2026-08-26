@@ -91,6 +91,11 @@
             color: #000000 !important;
             border-color: #000000 !important;
         }
+        
+        #login-container {
+            max-width: 400px;
+            margin: 80px auto;
+        }
     </style>
 </head>
 <body>
@@ -105,28 +110,50 @@
         </div>
     </div>
 
-    <div class="container">
+    <!-- หน้า Login เริ่มต้น -->
+    <div id="login-page" class="container">
+        <div id="login-container" class="card p-4">
+            <div class="text-center mb-4">
+                <img src="https://i.postimg.cc/Bb24tRpx/Logo98New-Wh.png" alt="Logo" style="height: 50px;" class="mb-3">
+                <h3 class="fw-bold text-primary">เข้าสู่ระบบ</h3>
+                <p class="text-muted small">ตารางคอมมิชชั่น ฝ่าย 98</p>
+            </div>
+            <div id="main-login-alert" class="alert alert-danger d-none py-2 small text-center"></div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Username</label>
+                <input type="text" id="main-user-input" class="form-control" placeholder="กรอกชื่อผู้ใช้">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Password</label>
+                <input type="password" id="main-pass-input" class="form-control" placeholder="กรอกรหัสผ่าน">
+            </div>
+            <button type="button" id="main-login-btn" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">เข้าสู่ระบบ</button>
+        </div>
+    </div>
+
+    <!-- ส่วนเนื้อหาหลัก -->
+    <div id="app-content" class="container d-none">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h1 class="card-title mb-0">
                     <img src="https://i.postimg.cc/Bb24tRpx/Logo98New-Wh.png" alt="Logo" class="header-logo me-2">
                     <span id="main-title-text">ตารางคอมมิชชั่น</span>
                 </h1>
-                <div class="d-flex align-items-center">
-                  <span id="last-update-display" class="me-3 text-white small fw-bold">อัปเดตล่าสุด : -</span>
-                  <button id="config-date-btn" class="btn btn-info btn-sm fw-bold text-white me-2 d-none"><i class="bi bi-calendar-range me-1"></i>ตั้งค่าช่วงวันที่</button>
-                  <button id="admin-btn" class="btn btn-warning btn-sm fw-bold"><i class="bi bi-shield-lock me-1"></i>Admin</button>
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                  <span id="logged-in-user-display" class="me-2 text-white small fw-bold"><i class="bi bi-person-circle me-1"></i><span id="username-text"></span></span>
+                  <span id="last-update-display" class="me-2 text-white small fw-bold">อัปเดตล่าสุด : -</span>
+                  <button id="manage-users-btn" class="btn btn-warning btn-sm fw-bold text-dark d-none"><i class="bi bi-people me-1"></i>จัดการผู้ใช้</button>
+                  <button id="config-date-btn" class="btn btn-info btn-sm fw-bold text-white d-none"><i class="bi bi-calendar-range me-1"></i>ตั้งค่าช่วงวันที่</button>
+                  <button id="logout-main-btn" class="btn btn-danger btn-sm fw-bold"><i class="bi bi-box-arrow-right me-1"></i>ออกจากระบบ</button>
                 </div>
             </div>
             <div class="card-body">
-                <!-- ปุ่มสลับมุมมอง 3 ปุ่ม -->
                 <div class="btn-group mb-4 w-100 shadow-sm" role="group" aria-label="Main Navigation">
                     <button type="button" id="btn-view-insurance" class="btn btn-dark-theme fw-bold active py-2"><i class="bi bi-journal-text me-1"></i>แบบประกัน</button>
                     <button type="button" id="btn-view-rider" class="btn btn-outline-dark-theme fw-bold py-2"><i class="bi bi-plus-square me-1"></i>สัญญาเพิ่มเติม</button>
                     <button type="button" id="btn-view-commission" class="btn btn-outline-dark-theme fw-bold py-2"><i class="bi bi-calculator me-1"></i>คำนวณค่าคอม</button>
                 </div>
 
-                <!-- ส่วนเนื้อหาด้านล่าง -->
                 <div id="main-content-wrapper">
                     <div class="row g-3 mb-4 align-items-center bg-light p-3 rounded-3 border">
                         <div class="col-md-3">
@@ -168,7 +195,6 @@
                     </div>
                 </div>
 
-                <!-- ส่วนแสดงผลกรณีเลือก "คำนวณค่าคอม" -->
                 <div id="commission-content-wrapper" class="d-none">
                     <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
                         <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
@@ -182,25 +208,49 @@
         </div>
     </div>
 
-    <!-- Modal Login Admin -->
-    <div class="modal fade" id="adminModal" tabindex="-1">
-        <div class="modal-dialog modal-sm">
+    <!-- Modal จัดการผู้ใช้สำหรับ Admin -->
+    <div class="modal fade" id="userManageModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title fs-6"><i class="bi bi-shield-lock me-1"></i>เข้าสู่ระบบ Admin</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title fs-6 fw-bold"><i class="bi bi-people me-1"></i>จัดการรายชื่อผู้ใช้งานระบบ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="admin-alert" class="alert alert-danger d-none py-2 small text-center">User หรือ Password ไม่ถูกต้อง</div>
-                    <div class="mb-3">
-                        <label class="form-label small">Username</label>
-                        <input type="text" id="admin-user-input" class="form-control" placeholder="กรอกชื่อผู้ใช้">
+                    <div class="card p-3 mb-3 bg-light border-0">
+                        <h6 class="fw-bold text-primary mb-2">เพิ่มผู้ใช้งานใหม่</h6>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <input type="text" id="new-user-input" class="form-control form-control-sm" placeholder="Username">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="password" id="new-pass-input" class="form-control form-control-sm" placeholder="Password">
+                            </div>
+                            <div class="col-md-2">
+                                <select id="new-role-input" class="form-select form-select-sm">
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" id="save-new-user-btn" class="btn btn-success btn-sm w-100 fw-bold">เพิ่ม</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small">Password</label>
-                        <input type="password" id="admin-pass-input" class="form-control" placeholder="กรอกรหัสผ่าน">
+                    <div class="table-responsive" style="max-height: 300px;">
+                        <table class="table table-bordered table-sm text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Role (สิทธิ์)</th>
+                                    <th>จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-table-body">
+                                <tr><td colspan="3">กำลังโหลด...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <button type="button" id="admin-submit-btn" class="btn btn-primary w-100 rounded-pill">ยืนยัน</button>
                 </div>
             </div>
         </div>
@@ -247,23 +297,6 @@
         </div>
     </div>
 
-    <!-- Modal ยืนยันออกจากระบบ Admin -->
-    <div class="modal fade" id="logoutModal" tabindex="-1">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content text-center p-3">
-                <div class="modal-body">
-                    <i class="bi bi-box-arrow-right text-warning display-4 mb-2"></i>
-                    <h5 class="fw-bold mb-2">ออกจากระบบ</h5>
-                    <p class="text-muted small mb-4">ต้องการออกจากระบบ Admin ใช่หรือไม่?</p>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-secondary w-50 rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="button" id="confirm-logout-btn" class="btn btn-warning text-white w-50 rounded-pill">ออกจากระบบ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal Form (เพิ่ม/แก้ไขข้อมูล) -->
     <div class="modal fade" id="dataModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -289,7 +322,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjGBaBpRV5y8VMtVKGv8I7SL7ua8mcScytF2MkL57xmpVUjECiPWg1PWqqcLAqj7CS/exec'; 
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5ZUGvfCgx-jhcca4NBdQaBEUjwZ-R3VK0DNiaRzSVhX4DoslYrh_VaOb_-0AMpV9f/exec'; 
 
         const SEARCH_INPUT = document.getElementById('search-input');
         const FILTER_CATEGORY = document.getElementById('filter-category');
@@ -299,18 +332,18 @@
         const RESET_BTN = document.getElementById('reset-btn');
         const TABLE_BODY = document.getElementById('table-body');
         const TABLE_HEAD = document.getElementById('table-head');
-        const ADMIN_BTN = document.getElementById('admin-btn');
-        const ADMIN_SUBMIT_BTN = document.getElementById('admin-submit-btn');
-        const ADMIN_ALERT = document.getElementById('admin-alert');
+        
         const ADMIN_ACTION_BAR = document.getElementById('admin-action-bar');
         const ADD_BTN = document.getElementById('add-btn');
         const DATA_FORM = document.getElementById('data-form');
         const CONFIG_DATE_BTN = document.getElementById('config-date-btn');
         const SAVE_DATE_BTN = document.getElementById('save-date-btn');
         const CONFIRM_DELETE_BTN = document.getElementById('confirm-delete-btn');
-        const CONFIRM_LOGOUT_BTN = document.getElementById('confirm-logout-btn');
+        const LOGOUT_MAIN_BTN = document.getElementById('logout-main-btn');
         const MAIN_TITLE_TEXT = document.getElementById('main-title-text');
         const LAST_UPDATE_DISPLAY = document.getElementById('last-update-display');
+        const MANAGE_USERS_BTN = document.getElementById('manage-users-btn');
+        const USERNAME_TEXT = document.getElementById('username-text');
 
         const BTN_VIEW_INSURANCE = document.getElementById('btn-view-insurance');
         const BTN_VIEW_RIDER = document.getElementById('btn-view-rider');
@@ -318,23 +351,165 @@
         const MAIN_CONTENT_WRAPPER = document.getElementById('main-content-wrapper');
         const COMMISSION_CONTENT_WRAPPER = document.getElementById('commission-content-wrapper');
 
-        let adminModal, dataModal, dateModal, deleteModal, logoutModal, toastInstance;
+        const LOGIN_PAGE = document.getElementById('login-page');
+        const APP_CONTENT = document.getElementById('app-content');
+        const MAIN_LOGIN_BTN = document.getElementById('main-login-btn');
+        const MAIN_LOGIN_ALERT = document.getElementById('main-login-alert');
+
+        let dataModal, dateModal, deleteModal, userManageModal, toastInstance;
         let isAdminLoggedIn = false;
         let allData = [];
-        let adminCredentials = { user: '', pass: '' };
         let metaConfig = { startDate: '', endDate: '', updateDate: '' };
         let currentSheetName = 'Data';
 
         document.addEventListener('DOMContentLoaded', () => {
-            adminModal = new bootstrap.Modal(document.getElementById('adminModal'));
             dataModal = new bootstrap.Modal(document.getElementById('dataModal'));
             dateModal = new bootstrap.Modal(document.getElementById('dateModal'));
             deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            userManageModal = new bootstrap.Modal(document.getElementById('userManageModal'));
             toastInstance = new bootstrap.Toast(document.getElementById('liveToast'));
-            
-            fetchData();
         });
+
+        MAIN_LOGIN_BTN.addEventListener('click', async () => {
+            const user = document.getElementById('main-user-input').value.trim();
+            const pass = document.getElementById('main-pass-input').value.trim();
+
+            if (!user || !pass) {
+                MAIN_LOGIN_ALERT.innerText = 'กรุณากรอก Username และ Password';
+                MAIN_LOGIN_ALERT.classList.remove('d-none');
+                return;
+            }
+
+            MAIN_LOGIN_BTN.disabled = true;
+            MAIN_LOGIN_BTN.innerText = 'กำลังตรวจสอบ...';
+            MAIN_LOGIN_ALERT.classList.add('d-none');
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=login&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`);
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    isAdminLoggedIn = (result.role && result.role.toLowerCase() === 'admin');
+                    USERNAME_TEXT.innerText = user;
+                    
+                    LOGIN_PAGE.classList.add('d-none');
+                    APP_CONTENT.classList.remove('d-none');
+
+                    if (isAdminLoggedIn) {
+                        ADMIN_ACTION_BAR.classList.remove('d-none');
+                        CONFIG_DATE_BTN.classList.remove('d-none');
+                        MANAGE_USERS_BTN.classList.remove('d-none');
+                    } else {
+                        ADMIN_ACTION_BAR.classList.add('d-none');
+                        CONFIG_DATE_BTN.classList.add('d-none');
+                        MANAGE_USERS_BTN.classList.add('d-none');
+                    }
+
+                    fetchData();
+                } else {
+                    MAIN_LOGIN_ALERT.innerText = result.message || 'Username หรือ Password ไม่ถูกต้อง';
+                    MAIN_LOGIN_ALERT.classList.remove('d-none');
+                }
+            } catch (err) {
+                MAIN_LOGIN_ALERT.innerText = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+                MAIN_LOGIN_ALERT.classList.remove('d-none');
+            } finally {
+                MAIN_LOGIN_BTN.disabled = false;
+                MAIN_LOGIN_BTN.innerText = 'เข้าสู่ระบบ';
+            }
+        });
+
+        LOGOUT_MAIN_BTN.addEventListener('click', () => {
+            APP_CONTENT.classList.add('d-none');
+            LOGIN_PAGE.classList.remove('d-none');
+            document.getElementById('main-user-input').value = '';
+            document.getElementById('main-pass-input').value = '';
+            USERNAME_TEXT.innerText = '';
+            isAdminLoggedIn = false;
+            allData = [];
+        });
+
+        MANAGE_USERS_BTN.addEventListener('click', () => {
+            loadUsersList();
+            userManageModal.show();
+        });
+
+        async function loadUsersList() {
+            const tbody = document.getElementById('user-table-body');
+            tbody.innerHTML = '<tr><td colspan="3">กำลังโหลด...</td></tr>';
+            try {
+                const res = await fetch(`${SCRIPT_URL}?sheet=Users`);
+                const result = await res.json();
+                let html = '';
+                if (result.data) {
+                    result.data.forEach(u => {
+                        // ปรับให้รองรับทั้งพิมพ์เล็ก พิมพ์ใหญ่ และตำแหน่งอาเรย์ (คอลัมน์แรก index 0 คือ username)
+                        const uname = u['username'] || u['Username'] || u[0] || '';
+                        const urole = u['role'] || u['Role'] || u[2] || 'user';
+                
+                        // ข้ามแถวที่ไม่มีชื่อ Username (แถวว่าง)
+                        if (!uname) return;
+
+                        html += `<tr>
+                            <td class="fw-bold text-start ps-4"><i class="bi bi-person me-1"></i>${uname}</td>
+                            <td><span class="badge bg-${urole.toLowerCase() === 'admin' ? 'danger' : 'secondary'}">${urole}</span></td>
+                            <td><button class="btn btn-sm btn-outline-danger py-0" onclick="deleteSystemUser(${u.rowIndex})"><i class="bi bi-trash"></i></button></td>
+                        </tr>`;
+                    });
+                }
+                tbody.innerHTML = html || '<tr><td colspan="3">ไม่พบข้อมูลผู้ใช้</td></tr>';
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-danger">โหลดข้อมูลไม่สำเร็จ</td></tr>';
+            }
+        }
+
+        document.getElementById('save-new-user-btn').addEventListener('click', async () => {
+            const user = document.getElementById('new-user-input').value.trim();
+            const pass = document.getElementById('new-pass-input').value.trim();
+            const role = document.getElementById('new-role-input').value;
+
+            if (!user || !pass) {
+                showToast('กรุณากรอก Username และ Password ให้ครบถ้วน', false);
+                return;
+            }
+
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'addUser', newUser: user, newPass: pass, newRole: role })
+                });
+                const result = await res.json();
+                if (result.status === 'success') {
+                    document.getElementById('new-user-input').value = '';
+                    document.getElementById('new-pass-input').value = '';
+                    loadUsersList();
+                    showToast('เพิ่มผู้ใช้งานสำเร็จ');
+                } else {
+                    showToast('เกิดข้อผิดพลาด: ' + (result.message || ''), false);
+                }
+            } catch (err) {
+                showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ', false);
+            }
+        });
+
+        window.deleteSystemUser = async function(rowIndex) {
+            if (!confirm('คุณต้องการลบผู้ใช้งานนี้ใช่หรือไม่?')) return;
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'deleteUser', rowIndex: rowIndex })
+                });
+                const result = await res.json();
+                if (result.status === 'success') {
+                    loadUsersList();
+                    showToast('ลบผู้ใช้งานสำเร็จ');
+                } else {
+                    showToast('ลบไม่สำเร็จ: ' + (result.message || ''), false);
+                }
+            } catch (err) {
+                showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ', false);
+            }
+        };
 
         function switchView(viewType) {
             BTN_VIEW_INSURANCE.className = 'btn btn-outline-dark-theme fw-bold py-2';
@@ -388,62 +563,31 @@
 
         function updateHeaderTitle() {
             let baseTitle = 'ตารางคอมมิชชั่น';
+            let dateRangeText = '';
+    
             if (metaConfig.startDate && metaConfig.endDate) {
                 const formattedStart = metaConfig.startDate.includes('-') ? formatDateThaiShort(metaConfig.startDate) : metaConfig.startDate;
                 const formattedEnd = metaConfig.endDate.includes('-') ? formatDateThaiShort(metaConfig.endDate) : metaConfig.endDate;
-                MAIN_TITLE_TEXT.innerText = `${baseTitle} (${formattedStart} - ${formattedEnd})`;
-            } else {
-                MAIN_TITLE_TEXT.innerText = baseTitle;
+                dateRangeText = ` (${formattedStart} - ${formattedEnd})`;
             }
 
+            let updateText = '';
             if (metaConfig.updateDate) {
                 const formattedUpdate = metaConfig.updateDate.includes('-') ? formatDateThaiShort(metaConfig.updateDate) : metaConfig.updateDate;
-                LAST_UPDATE_DISPLAY.innerText = `อัปเดตล่าสุด : ${formattedUpdate}`;
+                updateText = ` <span class="fs-6 fw-normal text-white-50">(อัปเดตล่าสุด : ${formattedUpdate})</span>`;
             } else {
-                LAST_UPDATE_DISPLAY.innerText = 'อัปเดตล่าสุด : -';
+                updateText = ` <span class="fs-6 fw-normal text-white-50">(อัปเดตล่าสุด : -)</span>`;
+            }
+
+            // รวมข้อความทั้งหมดเข้าที่หัวข้อหลัก
+            MAIN_TITLE_TEXT.innerHTML = `${baseTitle}${dateRangeText}${updateText}`;
+
+            // ซ่อนข้อความอัปเดตเดิมที่อยู่มุมขวาบน (ถ้ามี) เพื่อไม่ให้แสดงซ้ำซ้อน
+            if (LAST_UPDATE_DISPLAY) {
+                LAST_UPDATE_DISPLAY.style.display = 'none';
             }
         }
-
-        ADMIN_BTN.addEventListener('click', () => {
-            if (isAdminLoggedIn) {
-                logoutModal.show();
-            } else {
-                document.getElementById('admin-user-input').value = '';
-                document.getElementById('admin-pass-input').value = '';
-                ADMIN_ALERT.classList.add('d-none');
-                if(adminModal) adminModal.show();
-            }
-        });
-
-        CONFIRM_LOGOUT_BTN.addEventListener('click', () => {
-            logoutModal.hide();
-            isAdminLoggedIn = false;
-            ADMIN_BTN.innerHTML = '<i class="bi bi-shield-lock me-1"></i>Admin';
-            ADMIN_BTN.classList.replace('btn-danger', 'btn-warning');
-            ADMIN_ACTION_BAR.classList.add('d-none');
-            CONFIG_DATE_BTN.classList.add('d-none');
-            filterAndRenderTable();
-            showToast('ออกจากระบบ Admin แล้ว');
-        });
-
-        ADMIN_SUBMIT_BTN.addEventListener('click', () => {
-            const inputUser = document.getElementById('admin-user-input').value.trim();
-            const inputPass = document.getElementById('admin-pass-input').value.trim();
-
-            if (inputUser === adminCredentials.user && inputPass === adminCredentials.pass && adminCredentials.user !== '') {
-                isAdminLoggedIn = true;
-                adminModal.hide();
-                ADMIN_BTN.innerHTML = '<i class="bi bi-shield-fill-check me-1"></i> ออกจากระบบ Admin';
-                ADMIN_BTN.classList.replace('btn-warning', 'btn-danger');
-                ADMIN_ACTION_BAR.classList.remove('d-none');
-                CONFIG_DATE_BTN.classList.remove('d-none');
-                filterAndRenderTable();
-                showToast('เข้าสู่ระบบ Admin สำเร็จ');
-            } else {
-                ADMIN_ALERT.classList.remove('d-none');
-            }
-        });
-
+       
         CONFIG_DATE_BTN.addEventListener('click', () => {
             document.getElementById('config-start-date').value = metaConfig.startDate || '';
             document.getElementById('config-end-date').value = metaConfig.endDate || '';
@@ -475,13 +619,15 @@
             }
         });
 
-        ADD_BTN.addEventListener('click', () => {
-            document.getElementById('dataModalTitle').innerHTML = '<i class="bi bi-plus-circle me-1"></i>เพิ่มข้อมูลใหม่';
-            document.getElementById('form-row-index').value = '';
-            DATA_FORM.reset();
-            buildModalFormFields();
-            dataModal.show();
-        });
+        if (ADD_BTN) {
+            ADD_BTN.addEventListener('click', () => {
+                document.getElementById('dataModalTitle').innerHTML = '<i class="bi bi-plus-circle me-1"></i>เพิ่มข้อมูลใหม่';
+                document.getElementById('form-row-index').value = '';
+                DATA_FORM.reset();
+                buildModalFormFields();
+                dataModal.show();
+            });
+        }
 
         async function fetchData() {
             TABLE_BODY.innerHTML = '<tr><td colspan="13" class="text-center p-4 fs-5 text-muted">กำลังโหลดข้อมูล...</td></tr>';
@@ -490,18 +636,10 @@
                 const response = await fetch(`${SCRIPT_URL}?sheet=${currentSheetName}`);
                 const result = await response.json();
 
-                if (Array.isArray(result)) {
-                    allData = result;
-                } else {
-                    allData = result.data || [];
-                    if (result.admin) {
-                        adminCredentials.user = result.admin.user;
-                        adminCredentials.pass = result.admin.pass;
-                    }
-                    if (result.meta) {
-                        metaConfig = result.meta;
-                        updateHeaderTitle();
-                    }
+                allData = result.data || [];
+                if (result.meta) {
+                    metaConfig = result.meta;
+                    updateHeaderTitle();
                 }
 
                 if (allData.length === 0) {
@@ -626,32 +764,13 @@
             });
 
             const customRiderOrder = [
-                "เฮลท์ ฟิต สบ๊าบ สบาย",
-                "อุบัติเหตุ",
-                "ค่าชดเชยรายวัน",
-                "โรคร้ายแรง",
-                "ชั่วระยะเวลา",
-                "ประกันสุขภาพ",
-                "ไลฟ์เวิร์ส อุบัติเหตุ",
-                "ไลฟ์เวิร์ส ค่าชดเชยรายวัน",
-                "ไลฟ์เวิร์ส โรคร้ายแรง",
-                "ไลฟ์เวิร์ส ประกันสุขภาพ"
+                "เฮลท์ ฟิต สบ๊าบ สบาย", "อุบัติเหตุ", "ค่าชดเชยรายวัน", "โรคร้ายแรง", "ชั่วระยะเวลา", 
+                "ประกันสุขภาพ", "ไลฟ์เวิร์ส อุบัติเหตุ", "ไลฟ์เวิร์ส ค่าชดเชยรายวัน", "ไลฟ์เวิร์ส โรคร้ายแรง", "ไลฟ์เวิร์ส ประกันสุขภาพ"
             ];
 
             const customInsuranceOrder = [
-                "จำกัดระยะเวลาขาย",
-                "ตลอดชีพ",
-                "สะสมทรัพย์",
-                "สะสมทรัพย์ (มีเงินคืนระหว่างปี)",
-                "PAR Product",
-                "High Net Worth",
-                "Life Verse",
-                "ลดหย่อนบำนาญ",
-                "กบข.",
-                "ชีวิตหลังเกษียณ",
-                "ผู้สูงอายุ",
-                "คนพิการ",
-                "อิสลาม"
+                "จำกัดระยะเวลาขาย", "ตลอดชีพ", "สะสมทรัพย์", "สะสมทรัพย์ (มีเงินคืนระหว่างปี)", "PAR Product", 
+                "High Net Worth", "Life Verse", "ลดหย่อนบำนาญ", "กบข.", "ชีวิตหลังเกษียณ", "ผู้สูงอายุ", "คนพิการ", "อิสลาม"
             ];
 
             const sortedCategories = Array.from(categories).sort((a, b) => {
@@ -747,32 +866,13 @@
             }
 
             const customRiderOrder = [
-                "เฮลท์ ฟิต สบ๊าบ สบาย",
-                "อุบัติเหตุ",
-                "ค่าชดเชยรายวัน",
-                "โรคร้ายแรง",
-                "ชั่วระยะเวลา",
-                "ประกันสุขภาพ",
-                "ไลฟ์เวิร์ส อุบัติเหตุ",
-                "ไลฟ์เวิร์ส ค่าชดเชยรายวัน",
-                "ไลฟ์เวิร์ส โรคร้ายแรง",
-                "ไลฟ์เวิร์ส ประกันสุขภาพ"
+                "เฮลท์ ฟิต สบ๊าบ สบาย", "อุบัติเหตุ", "ค่าชดเชยรายวัน", "โรคร้ายแรง", "ชั่วระยะเวลา", 
+                "ประกันสุขภาพ", "ไลฟ์เวิร์ส อุบัติเหตุ", "ไลฟ์เวิร์ส ค่าชดเชยรายวัน", "ไลฟ์เวิร์ส โรคร้ายแรง", "ไลฟ์เวิร์ส ประกันสุขภาพ"
             ];
 
             const customInsuranceOrder = [
-                "จำกัดระยะเวลาขาย",
-                "ตลอดชีพ",
-                "สะสมทรัพย์",
-                "สะสมทรัพย์ (มีเงินคืนระหว่างปี)",
-                "PAR Product",
-                "High Net Worth",
-                "Life Verse",
-                "ลดหย่อนบำนาญ",
-                "กบข.",
-                "ชีวิตหลังเกษียณ",
-                "ผู้สูงอายุ",
-                "คนพิการ",
-                "อิสลาม"
+                "จำกัดระยะเวลาขาย", "ตลอดชีพ", "สะสมทรัพย์", "สะสมทรัพย์ (มีเงินคืนระหว่างปี)", "PAR Product", 
+                "High Net Worth", "Life Verse", "ลดหย่อนบำนาญ", "กบข.", "ชีวิตหลังเกษียณ", "ผู้สูงอายุ", "คนพิการ", "อิสลาม"
             ];
 
             filtered.sort((a, b) => {
