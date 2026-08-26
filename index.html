@@ -62,6 +62,10 @@
         tr.row-non-med td.col-name-cell { color: #dc3545 !important; }
         tr.row-italic-note .col-note { font-style: italic; }
         
+        tr.row-discount-green td:not(.col-code-cell):not(.col-name-cell):not(.highlight-custom) {
+            color: green !important;
+        }
+
         tr.category-header { background-color: #047dc2 !important; }
         tr.category-header td { background-color: #047dc2 !important; color: white; font-weight: bold; font-size: 1.05rem; padding: 10px 15px; border-top: 3px solid #035a8f !important; }
         
@@ -94,7 +98,63 @@
         
         #login-container {
             max-width: 400px;
-            margin: 80px auto;
+            margin: 40px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+        }
+        .login-header-box {
+            background-color: #0077cc;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .login-body-box {
+            padding: 25px 30px 15px 30px;
+        }
+        .login-footer-box {
+            background-color: #ffffff;
+            border-top: 1px solid #eef0f2;
+            padding: 15px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
+        .input-group-custom {
+            position: relative;
+        }
+        .input-group-custom .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        .input-group-custom .form-control {
+            padding-left: 42px;
+            height: 48px;
+            border-radius: 24px;
+            border: 1px solid #dee2e6;
+        }
+        .input-group-custom .form-control:focus {
+            border-color: #0077cc;
+            box-shadow: 0 0 0 0.2rem rgba(0, 119, 204, 0.15);
+        }
+        .btn-login-custom {
+            height: 48px;
+            border-radius: 24px;
+            background-color: #0d6efd;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #ffffff;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        .btn-login-custom:hover {
+            background-color: #0b5ed7;
         }
     </style>
 </head>
@@ -112,22 +172,35 @@
 
     <!-- หน้า Login เริ่มต้น -->
     <div id="login-page" class="container">
-        <div id="login-container" class="card p-4">
-            <div class="text-center mb-4">
-                <img src="https://i.postimg.cc/Bb24tRpx/Logo98New-Wh.png" alt="Logo" style="height: 50px;" class="mb-3">
-                <h3 class="fw-bold text-primary">เข้าสู่ระบบ</h3>
-                <p class="text-muted small">ตารางคอมมิชชั่น ฝ่าย 98</p>
+        <div id="login-container" class="card">
+            <div class="login-header-box">
+                <img src="https://i.postimg.cc/Bb24tRpx/Logo98New-Wh.png" alt="Logo" style="height: 45px;" class="mb-3">
+                <h4 class="fw-bold mb-0" style="line-height: 1.4;">
+                    ตารางคอมมิชชั่น<br>
+                    <span id="login-date-range-text" style="font-size: 1.1rem; font-weight: normal;">(โหลดข้อมูลช่วงวันที่...)</span>
+                </h4>
             </div>
-            <div id="main-login-alert" class="alert alert-danger d-none py-2 small text-center"></div>
-            <div class="mb-3">
-                <label class="form-label small fw-bold">Username</label>
-                <input type="text" id="main-user-input" class="form-control" placeholder="กรอกชื่อผู้ใช้">
+            <div class="login-body-box">
+                <div id="main-login-alert" class="alert alert-danger d-none py-2 small text-center mb-3"></div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-dark mb-1">Username</label>
+                    <div class="input-group-custom">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" id="main-user-input" class="form-control" placeholder="Username">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-dark mb-1">Password</label>
+                    <div class="input-group-custom">
+                        <i class="bi bi-lock input-icon"></i>
+                        <input type="password" id="main-pass-input" class="form-control" placeholder="Password">
+                    </div>
+                </div>
+                <button type="button" id="main-login-btn" class="btn btn-login-custom mb-3">เข้าสู่ระบบ</button>
             </div>
-            <div class="mb-3">
-                <label class="form-label small fw-bold">Password</label>
-                <input type="password" id="main-pass-input" class="form-control" placeholder="กรอกรหัสผ่าน">
+            <div class="login-footer-box">
+                สงวนสิทธิ์ : ฝ่าย 98
             </div>
-            <button type="button" id="main-login-btn" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">เข้าสู่ระบบ</button>
         </div>
     </div>
 
@@ -141,7 +214,7 @@
                 </h1>
                 <div class="d-flex align-items-center flex-wrap gap-2">
                   <span id="logged-in-user-display" class="me-2 text-white small fw-bold"><i class="bi bi-person-circle me-1"></i><span id="username-text"></span></span>
-                  <span id="last-update-display" class="me-2 text-white small fw-bold">อัปเดตล่าสุด : -</span>
+                  <span id="last-update-display" class="me-2 text-white small fw-bold" style="display: none;">อัปเดตล่าสุด : -</span>
                   <button id="manage-users-btn" class="btn btn-warning btn-sm fw-bold text-dark d-none"><i class="bi bi-people me-1"></i>จัดการผู้ใช้</button>
                   <button id="config-date-btn" class="btn btn-info btn-sm fw-bold text-white d-none"><i class="bi bi-calendar-range me-1"></i>ตั้งค่าช่วงวันที่</button>
                   <button id="logout-main-btn" class="btn btn-danger btn-sm fw-bold"><i class="bi bi-box-arrow-right me-1"></i>ออกจากระบบ</button>
@@ -188,7 +261,7 @@
                             <thead id="table-head"></thead>
                             <tbody id="table-body">
                                 <tr>
-                                    <td colspan="13" class="text-center p-4 fs-5 text-muted">กำลังโหลดข้อมูล...</td>
+                                    <td colspan="12" class="text-center p-4 fs-5 text-muted">กำลังโหลดข้อมูล...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -344,6 +417,7 @@
         const LAST_UPDATE_DISPLAY = document.getElementById('last-update-display');
         const MANAGE_USERS_BTN = document.getElementById('manage-users-btn');
         const USERNAME_TEXT = document.getElementById('username-text');
+        const LOGIN_DATE_RANGE_TEXT = document.getElementById('login-date-range-text');
 
         const BTN_VIEW_INSURANCE = document.getElementById('btn-view-insurance');
         const BTN_VIEW_RIDER = document.getElementById('btn-view-rider');
@@ -368,7 +442,26 @@
             deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
             userManageModal = new bootstrap.Modal(document.getElementById('userManageModal'));
             toastInstance = new bootstrap.Toast(document.getElementById('liveToast'));
+            
+            // โหลดข้อมูล Meta เบื้องต้นสำหรับหน้า Login โดยไม่ต้องกรอกรหัสผ่าน
+            preloadMetaConfig();
         });
+
+        async function preloadMetaConfig() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?sheet=${currentSheetName}`);
+                const result = await response.json();
+                if (result.meta) {
+                    metaConfig = result.meta;
+                    updateHeaderTitle();
+                }
+            } catch (err) {
+                console.error('Preload meta error:', err);
+                if (LOGIN_DATE_RANGE_TEXT) {
+                    LOGIN_DATE_RANGE_TEXT.innerText = '(ไม่สามารถโหลดช่วงวันที่ได้)';
+                }
+            }
+        }
 
         MAIN_LOGIN_BTN.addEventListener('click', async () => {
             const user = document.getElementById('main-user-input').value.trim();
@@ -443,11 +536,9 @@
                 let html = '';
                 if (result.data) {
                     result.data.forEach(u => {
-                        // ปรับให้รองรับทั้งพิมพ์เล็ก พิมพ์ใหญ่ และตำแหน่งอาเรย์ (คอลัมน์แรก index 0 คือ username)
                         const uname = u['username'] || u['Username'] || u[0] || '';
                         const urole = u['role'] || u['Role'] || u[2] || 'user';
                 
-                        // ข้ามแถวที่ไม่มีชื่อ Username (แถวว่าง)
                         if (!uname) return;
 
                         html += `<tr>
@@ -579,10 +670,17 @@
                 updateText = ` <span class="fs-6 fw-normal text-white-50">(อัปเดตล่าสุด : -)</span>`;
             }
 
-            // รวมข้อความทั้งหมดเข้าที่หัวข้อหลัก
             MAIN_TITLE_TEXT.innerHTML = `${baseTitle}${dateRangeText}${updateText}`;
 
-            // ซ่อนข้อความอัปเดตเดิมที่อยู่มุมขวาบน (ถ้ามี) เพื่อไม่ให้แสดงซ้ำซ้อน
+            // อัปเดตข้อความช่วงวันที่ในหน้า Login ให้ตรงกัน
+            if (LOGIN_DATE_RANGE_TEXT) {
+                if (dateRangeText) {
+                    LOGIN_DATE_RANGE_TEXT.innerText = dateRangeText;
+                } else {
+                    LOGIN_DATE_RANGE_TEXT.innerText = '';
+                }
+            }
+
             if (LAST_UPDATE_DISPLAY) {
                 LAST_UPDATE_DISPLAY.style.display = 'none';
             }
@@ -630,7 +728,7 @@
         }
 
         async function fetchData() {
-            TABLE_BODY.innerHTML = '<tr><td colspan="13" class="text-center p-4 fs-5 text-muted">กำลังโหลดข้อมูล...</td></tr>';
+            TABLE_BODY.innerHTML = '<tr><td colspan="12" class="text-center p-4 fs-5 text-muted">กำลังโหลดข้อมูล...</td></tr>';
 
             try {
                 const response = await fetch(`${SCRIPT_URL}?sheet=${currentSheetName}`);
@@ -643,7 +741,7 @@
                 }
 
                 if (allData.length === 0) {
-                    TABLE_BODY.innerHTML = '<tr><td colspan="13" class="text-center p-4 fs-5 text-muted">ไม่พบข้อมูลในชีต</td></tr>';
+                    TABLE_BODY.innerHTML = '<tr><td colspan="12" class="text-center p-4 fs-5 text-muted">ไม่พบข้อมูลในชีต</td></tr>';
                 } else {
                     populateCategoryDropdown();
                     renderTableHead();
@@ -652,7 +750,7 @@
 
             } catch (error) {
                 console.error('Error fetching data:', error);
-                TABLE_BODY.innerHTML = '<tr><td colspan="13" class="text-center p-4 fs-5 text-danger">เกิดข้อผิดพลาดในการดึงข้อมูล</td></tr>';
+                TABLE_BODY.innerHTML = '<tr><td colspan="12" class="text-center p-4 fs-5 text-danger">เกิดข้อผิดพลาดในการดึงข้อมูล</td></tr>';
             }
         }
 
@@ -689,8 +787,7 @@
                         <th rowspan="2">เงื่อนไข</th>
                         <th colspan="2">ปี 1</th>
                         <th colspan="4">ค่าพาหนะ</th>
-                        <th rowspan="2">ผลงาน</th>
-                        <th rowspan="2">หมายเหตุ</th>
+                        <th rowspan="2">เครดิตผลงาน</th>
                         ${isAdminLoggedIn ? '<th rowspan="2">จัดการ</th>' : ''}
                     </tr>
                     <tr>
@@ -738,9 +835,10 @@
                 const fields = ['ประเภท', 'รหัส', 'แบบประกัน', 'พิกัดเริ่ม', 'พิกัดสุดท้าย', 'ทุน', 'คอม', 'คอมพลัส', 'ปี 2', 'ปี 3', 'ปี 4', 'ปี 10', 'ผลงาน'];
                 fields.forEach(field => {
                     const val = existingData[field] !== undefined ? existingData[field] : '';
+                    const labelName = (field === 'ผลงาน') ? 'เครดิตผลงาน' : field;
                     fieldsHtml += `
                         <div class="col-md-4">
-                            <label class="form-label small fw-bold">${field}</label>
+                            <label class="form-label small fw-bold">${labelName}</label>
                             <input type="text" id="f-${field}" class="form-control" value="${val}">
                         </div>
                     `;
@@ -917,7 +1015,7 @@
                 return num.toLocaleString('en-US');
             };
 
-            const colspanVal = currentSheetName === 'Rider' ? (isAdminLoggedIn ? 12 : 11) : (isAdminLoggedIn ? 14 : 13);
+            const colspanVal = currentSheetName === 'Rider' ? (isAdminLoggedIn ? 12 : 11) : (isAdminLoggedIn ? 13 : 12);
 
             filtered.forEach((row) => {
                 const category = (row['ประเภท'] || 'อื่นๆ').trim();
@@ -953,8 +1051,8 @@
 
                 if (currentSheetName === 'Rider') {
                     rowsHtml += `<tr>
-                        <td class="fw-bold text-nowrap">${displayCode}</td>
-                        <td class="text-start">${displayName}</td>
+                        <td class="fw-bold text-nowrap col-code-cell">${displayCode}</td>
+                        <td class="text-start col-name-cell">${displayName}</td>
                         <td class="text-center">${row['เงื่อนไข'] || '-'}</td>
                         <td class="text-center">${formatStartAge(row['พิกัดเริ่ม'])}</td>
                         <td class="text-center">${formatNumber(row['พิกัดสุดท้าย'])}</td>
@@ -968,13 +1066,15 @@
                     </tr>`;
                 } else {
                     const noteVal = row['Note'] !== undefined ? row['Note'] : (row['หมายเหตุ'] !== undefined ? row['หมายเหตุ'] : '');
-                    let formattedNote = String(noteVal).split(',').map(item => item.trim()).join('\n');
                     
                     let rowClasses = [];
                     const noteStrUpper = String(noteVal).toUpperCase();
                     if (noteStrUpper.includes('NO CREDIT')) rowClasses.push('row-no-credit');
                     if (noteStrUpper.includes('NON-MED')) rowClasses.push('row-non-med');
-                    if (String(noteVal).includes('มีส่วนลดเบี้ย')) rowClasses.push('row-italic-note');
+                    
+                    if (String(noteVal).includes('มีส่วนลดเบี้ย')) {
+                        rowClasses.push('row-discount-green');
+                    }
 
                     rowsHtml += `<tr class="${rowClasses.join(' ')}">
                         <td class="fw-bold text-nowrap col-code-cell">${displayCode}</td>
@@ -989,7 +1089,6 @@
                         <td class="text-center">${formatNumber(row['ปี 4'])}</td>
                         <td class="text-center">${formatNumber(row['ปี 10'])}</td>
                         <td class="text-center text-nowrap highlight-custom">${formatNumber(row['ผลงาน'])}</td>
-                        <td class="col-note text-start">${formattedNote}</td>
                         ${actionTd}
                     </tr>`;
                 }
@@ -1076,7 +1175,7 @@
                     dataModal.hide();
                     fetchData();
                 } else {
-                    showToast('เกิดข้อผิดพลาด: ' + result.message, false);
+                    someToast('เกิดข้อผิดพลาด: ' + result.message, false);
                 }
             } catch (err) {
                 showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ', false);
