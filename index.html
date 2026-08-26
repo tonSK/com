@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางคอมมิชชั่น</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 30px; margin-bottom: 30px; }
+        .card { border: none; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+        .card-header { background-color: #047dc2; color: white; padding: 15px 20px; }
+        .card-title { font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; }
+        .form-control, .form-select { border-radius: 20px; }
+        .table-responsive { max-height: 75vh; overflow-y: auto; position: relative; }
+        .table { margin-top: 0; margin-bottom: 0; font-size: 0.9rem; background-color: #ffffff; border-collapse: separate; border-spacing: 0; }
+        
+        .table thead th {
+            position: sticky;
+            background-color: #273482 !important;
+            color: white !important;
+            background-clip: padding-box;
+            vertical-align: middle;
+            text-align: center;
+            box-shadow: inset 0 -1px 0 #3c489c, inset 0 1px 0 #3c489c;
+        }
+        .table thead tr:nth-child(1) th {
+            top: 0;
+            height: 48px;
+            z-index: 21;
+        }
+        .table thead tr:nth-child(2) th {
+            top: 48px; 
+            height: 40px;
+            z-index: 20;
+        }
+        
+        td { vertical-align: middle; background-color: #ffffff !important; }
+        
+        .col-condition {
+            max-width: 105px;
+            min-width: 105px;
+            width: 105px;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .col-note {
+            max-width: 105px;
+            min-width: 105px;
+            width: 105px;
+            white-space: pre-line;
+            word-wrap: break-word;
+            word-break: break-word;
+            font-size: 0.9rem;
+            color: #000000 !important;
+        }
+        
+        tr.row-no-credit td:not(.highlight-custom) { background-color: #f1f3f5 !important; }
+        tr.row-non-med td.col-code-cell,
+        tr.row-non-med td.col-name-cell { color: #dc3545 !important; }
+        tr.row-italic-note .col-note { font-style: italic; }
+        
+        tr.category-header { background-color: #047dc2 !important; }
+        tr.category-header td { background-color: #047dc2 !important; color: white; font-weight: bold; font-size: 1.05rem; padding: 10px 15px; border-top: 3px solid #035a8f !important; }
+        
+        tr.category-header-red td { background-color: #8b0000 !important; color: white; font-weight: bold; font-size: 1.05rem; padding: 10px 15px; border-top: 3px solid #5c0000 !important; }
+        tr.category-header-rider td { background-color: #047dc2 !important; color: white; font-weight: bold; font-size: 1.05rem; padding: 10px 15px; border-top: 3px solid #035a8f !important; }
+
+        .highlight-custom { background-color: #e3f2fd !important; font-weight: bold; color: #0d6efd !important; }
+        
+        .header-logo {
+            height: 35px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .btn-dark-theme {
+            background-color: #212529 !important;
+            color: #ffffff !important;
+            border-color: #212529 !important;
+        }
+        .btn-outline-dark-theme {
+            background-color: #ffffff !important;
+            color: #212529 !important;
+            border-color: #212529 !important;
+        }
+        .btn-outline-dark-theme:hover {
+            background-color: #f8f9fa !important;
+            color: #000000 !important;
+            border-color: #000000 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div id="toast-body" class="toast-body fw-bold">
+                    บันทึกข้อมูลสำเร็จ
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="card-title mb-0">
+                    <img src="https://i.postimg.cc/Bb24tRpx/Logo98New-Wh.png" alt="Logo" class="header-logo me-2">
+                    <span id="main-title-text">ตารางคอมมิชชั่น</span>
+                </h1>
+                <div class="d-flex align-items-center">
+                  <span id="last-update-display" class="me-3 text-white small fw-bold">อัปเดตล่าสุด : -</span>
+                  <button id="config-date-btn" class="btn btn-info btn-sm fw-bold text-white me-2 d-none"><i class="bi bi-calendar-range me-1"></i>ตั้งค่าช่วงวันที่</button>
+                  <button id="admin-btn" class="btn btn-warning btn-sm fw-bold"><i class="bi bi-shield-lock me-1"></i>Admin</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- ปุ่มสลับมุมมอง 3 ปุ่ม -->
+                <div class="btn-group mb-4 w-100 shadow-sm" role="group" aria-label="Main Navigation">
+                    <button type="button" id="btn-view-insurance" class="btn btn-dark-theme fw-bold active py-2"><i class="bi bi-journal-text me-1"></i>แบบประกัน</button>
+                    <button type="button" id="btn-view-rider" class="btn btn-outline-dark-theme fw-bold py-2"><i class="bi bi-plus-square me-1"></i>สัญญาเพิ่มเติม</button>
+                    <button type="button" id="btn-view-commission" class="btn btn-outline-dark-theme fw-bold py-2"><i class="bi bi-calculator me-1"></i>คำนวณค่าคอม</button>
+                </div>
+
+                <!-- ส่วนเนื้อหาด้านล่าง -->
+                <div id="main-content-wrapper">
+                    <div class="row g-3 mb-4 align-items-center bg-light p-3 rounded-3 border">
+                        <div class="col-md-3">
+                            <label for="search-input" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-search me-1"></i>ค้นหารหัส/ชื่อ:</label>
+                            <input type="text" id="search-input" class="form-control" placeholder="พิมพ์รหัสหรือชื่อ...">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filter-category" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-collection me-1"></i>กรองตามประเภท:</label>
+                            <select id="filter-category" class="form-select">
+                                <option value="">ทุกประเภท</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="filter-age" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-person-badge me-1"></i>ระบุอายุ (ปี):</label>
+                            <input type="number" id="filter-age" class="form-control" placeholder="เช่น 35">
+                        </div>
+                        <div class="col-md-2" id="filter-capital-wrapper">
+                            <label for="filter-capital" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-currency-dollar me-1"></i>ระบุทุนประกัน:</label>
+                            <input type="text" id="filter-capital" class="form-control" placeholder="เช่น 100,000">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button id="reset-btn" class="btn btn-outline-secondary w-100 rounded-pill"><i class="bi bi-x-circle me-1"></i>ล้างตัวกรอง</button>
+                        </div>
+                    </div>
+
+                    <div id="admin-action-bar" class="mb-3 d-none">
+                        <button id="add-btn" class="btn btn-success btn-sm fw-bold"><i class="bi bi-plus-circle me-1"></i>เพิ่มข้อมูลใหม่</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="data-table" class="table table-bordered table-hover">
+                            <thead id="table-head"></thead>
+                            <tbody id="table-body">
+                                <tr>
+                                    <td colspan="13" class="text-center p-4 fs-5 text-muted">กำลังโหลดข้อมูล...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ส่วนแสดงผลกรณีเลือก "คำนวณค่าคอม" -->
+                <div id="commission-content-wrapper" class="d-none">
+                    <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
+                        <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
+                        ระบบคำนวณค่าคอมมิชชั่น (กำลังพัฒนา)
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted small text-center">
+              สงวนสิทธิ์ : ฝ่าย 98
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login Admin -->
+    <div class="modal fade" id="adminModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fs-6"><i class="bi bi-shield-lock me-1"></i>เข้าสู่ระบบ Admin</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="admin-alert" class="alert alert-danger d-none py-2 small text-center">User หรือ Password ไม่ถูกต้อง</div>
+                    <div class="mb-3">
+                        <label class="form-label small">Username</label>
+                        <input type="text" id="admin-user-input" class="form-control" placeholder="กรอกชื่อผู้ใช้">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">Password</label>
+                        <input type="password" id="admin-pass-input" class="form-control" placeholder="กรอกรหัสผ่าน">
+                    </div>
+                    <button type="button" id="admin-submit-btn" class="btn btn-primary w-100 rounded-pill">ยืนยัน</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ตั้งค่าช่วงวันที่หัวข้อ -->
+    <div class="modal fade" id="dateModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title fs-6"><i class="bi bi-calendar-range me-1"></i>กำหนดช่วงวันที่หัวข้อ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">วันที่เริ่มต้นหัวข้อ</label>
+                        <input type="date" id="config-start-date" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">วันที่สิ้นสุดหัวข้อ</label>
+                        <input type="date" id="config-end-date" class="form-control">
+                    </div>
+                    <button type="button" id="save-date-btn" class="btn btn-info text-white w-100 rounded-pill">บันทึกข้อมูล</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ยืนยันการลบ -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content text-center p-3">
+                <div class="modal-body">
+                    <i class="bi bi-exclamation-circle text-danger display-4 mb-2"></i>
+                    <h5 class="fw-bold mb-2">ยืนยันการลบ</h5>
+                    <p class="text-muted small mb-4">คุณต้องการลบแถวนี้ใช่หรือไม่?</p>
+                    <input type="hidden" id="delete-row-index">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-secondary w-50 rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="button" id="confirm-delete-btn" class="btn btn-danger w-50 rounded-pill">ลบ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ยืนยันออกจากระบบ Admin -->
+    <div class="modal fade" id="logoutModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content text-center p-3">
+                <div class="modal-body">
+                    <i class="bi bi-box-arrow-right text-warning display-4 mb-2"></i>
+                    <h5 class="fw-bold mb-2">ออกจากระบบ</h5>
+                    <p class="text-muted small mb-4">ต้องการออกจากระบบ Admin ใช่หรือไม่?</p>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-secondary w-50 rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="button" id="confirm-logout-btn" class="btn btn-warning text-white w-50 rounded-pill">ออกจากระบบ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Form (เพิ่ม/แก้ไขข้อมูล) -->
+    <div class="modal fade" id="dataModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fs-6" id="dataModalTitle"><i class="bi bi-pencil-square me-1"></i>เพิ่ม/แก้ไขข้อมูล</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="data-form">
+                        <input type="hidden" id="form-row-index">
+                        <div class="row g-3" id="modal-form-fields"></div>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
+                            <button type="submit" id="save-data-btn" class="btn btn-success rounded-pill px-4">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjGBaBpRV5y8VMtVKGv8I7SL7ua8mcScytF2MkL57xmpVUjECiPWg1PWqqcLAqj7CS/exec'; 
+
+        const SEARCH_INPUT = document.getElementById('search-input');
+        const FILTER_CATEGORY = document.getElementById('filter-category');
+        const FILTER_AGE = document.getElementById('filter-age');
+        const FILTER_CAPITAL = document.getElementById('filter-capital');
+        const FILTER_CAPITAL_WRAPPER = document.getElementById('filter-capital-wrapper');
+        const RESET_BTN = document.getElementById('reset-btn');
+        const TABLE_BODY = document.getElementById('table-body');
+        const TABLE_HEAD = document.getElementById('table-head');
+        const ADMIN_BTN = document.getElementById('admin-btn');
+        const ADMIN_SUBMIT_BTN = document.getElementById('admin-submit-btn');
+        const ADMIN_ALERT = document.getElementById('admin-alert');
+        const ADMIN_ACTION_BAR = document.getElementById('admin-action-bar');
+        const ADD_BTN = document.getElementById('add-btn');
+        const DATA_FORM = document.getElementById('data-form');
+        const CONFIG_DATE_BTN = document.getElementById('config-date-btn');
+        const SAVE_DATE_BTN = document.getElementById('save-date-btn');
+        const CONFIRM_DELETE_BTN = document.getElementById('confirm-delete-btn');
+        const CONFIRM_LOGOUT_BTN = document.getElementById('confirm-logout-btn');
+        const MAIN_TITLE_TEXT = document.getElementById('main-title-text');
+        const LAST_UPDATE_DISPLAY = document.getElementById('last-update-display');
+
+        const BTN_VIEW_INSURANCE = document.getElementById('btn-view-insurance');
+        const BTN_VIEW_RIDER = document.getElementById('btn-view-rider');
+        const BTN_VIEW_COMMISSION = document.getElementById('btn-view-commission');
+        const MAIN_CONTENT_WRAPPER = document.getElementById('main-content-wrapper');
+        const COMMISSION_CONTENT_WRAPPER = document.getElementById('commission-content-wrapper');
+
+        let adminModal, dataModal, dateModal, deleteModal, logoutModal, toastInstance;
+        let isAdminLoggedIn = false;
+        let allData = [];
+        let adminCredentials = { user: '', pass: '' };
+        let metaConfig = { startDate: '', endDate: '', updateDate: '' };
+        let currentSheetName = 'Data';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            adminModal = new bootstrap.Modal(document.getElementById('adminModal'));
+            dataModal = new bootstrap.Modal(document.getElementById('dataModal'));
+            dateModal = new bootstrap.Modal(document.getElementById('dateModal'));
+            deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            toastInstance = new bootstrap.Toast(document.getElementById('liveToast'));
+            
+            fetchData();
+        });
+
+        function switchView(viewType) {
+            BTN_VIEW_INSURANCE.className = 'btn btn-outline-dark-theme fw-bold py-2';
+            BTN_VIEW_RIDER.className = 'btn btn-outline-dark-theme fw-bold py-2';
+            BTN_VIEW_COMMISSION.className = 'btn btn-outline-dark-theme fw-bold py-2';
+
+            if (viewType === 'insurance') {
+                BTN_VIEW_INSURANCE.className = 'btn btn-dark-theme fw-bold active py-2';
+                currentSheetName = 'Data';
+                MAIN_CONTENT_WRAPPER.style.display = 'block';
+                COMMISSION_CONTENT_WRAPPER.classList.add('d-none');
+                FILTER_CAPITAL_WRAPPER.style.display = 'block';
+                fetchData();
+            } else if (viewType === 'rider') {
+                BTN_VIEW_RIDER.className = 'btn btn-dark-theme fw-bold active py-2';
+                currentSheetName = 'Rider';
+                MAIN_CONTENT_WRAPPER.style.display = 'block';
+                COMMISSION_CONTENT_WRAPPER.classList.add('d-none');
+                FILTER_CAPITAL_WRAPPER.style.display = 'none';
+                fetchData();
+            } else if (viewType === 'commission') {
+                BTN_VIEW_COMMISSION.className = 'btn btn-dark-theme fw-bold active py-2';
+                MAIN_CONTENT_WRAPPER.style.display = 'none';
+                COMMISSION_CONTENT_WRAPPER.classList.remove('d-none');
+            }
+        }
+
+        BTN_VIEW_INSURANCE.addEventListener('click', () => switchView('insurance'));
+        BTN_VIEW_RIDER.addEventListener('click', () => switchView('rider'));
+        BTN_VIEW_COMMISSION.addEventListener('click', () => switchView('commission'));
+
+        function showToast(message, isSuccess = true) {
+            const toastEl = document.getElementById('liveToast');
+            const toastBody = document.getElementById('toast-body');
+            toastBody.innerText = message;
+            toastEl.className = `toast align-items-center text-white ${isSuccess ? 'bg-success' : 'bg-danger'} border-0 shadow-lg`;
+            toastInstance.show();
+        }
+
+        function formatDateThaiShort(dateString) {
+            if (!dateString) return '';
+            const parts = dateString.split('-');
+            if (parts.length !== 3) return dateString;
+            const fullYearThai = parseInt(parts[0]) + 543;
+            const shortYearThai = String(fullYearThai).slice(-2);
+            const monthNames = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+            const month = monthNames[parseInt(parts[1])] || parts[1];
+            const day = parseInt(parts[2]);
+            return `${day} ${month} ${shortYearThai}`;
+        }
+
+        function updateHeaderTitle() {
+            let baseTitle = 'ตารางคอมมิชชั่น';
+            if (metaConfig.startDate && metaConfig.endDate) {
+                const formattedStart = metaConfig.startDate.includes('-') ? formatDateThaiShort(metaConfig.startDate) : metaConfig.startDate;
+                const formattedEnd = metaConfig.endDate.includes('-') ? formatDateThaiShort(metaConfig.endDate) : metaConfig.endDate;
+                MAIN_TITLE_TEXT.innerText = `${baseTitle} (${formattedStart} - ${formattedEnd})`;
+            } else {
+                MAIN_TITLE_TEXT.innerText = baseTitle;
+            }
+
+            if (metaConfig.updateDate) {
+                const formattedUpdate = metaConfig.updateDate.includes('-') ? formatDateThaiShort(metaConfig.updateDate) : metaConfig.updateDate;
+                LAST_UPDATE_DISPLAY.innerText = `อัปเดตล่าสุด : ${formattedUpdate}`;
+            } else {
+                LAST_UPDATE_DISPLAY.innerText = 'อัปเดตล่าสุด : -';
+            }
+        }
+
+        ADMIN_BTN.addEventListener('click', () => {
+            if (isAdminLoggedIn) {
+                logoutModal.show();
+            } else {
+                document.getElementById('admin-user-input').value = '';
+                document.getElementById('admin-pass-input').value = '';
+                ADMIN_ALERT.classList.add('d-none');
+                if(adminModal) adminModal.show();
+            }
+        });
+
+        CONFIRM_LOGOUT_BTN.addEventListener('click', () => {
+            logoutModal.hide();
+            isAdminLoggedIn = false;
+            ADMIN_BTN.innerHTML = '<i class="bi bi-shield-lock me-1"></i>Admin';
+            ADMIN_BTN.classList.replace('btn-danger', 'btn-warning');
+            ADMIN_ACTION_BAR.classList.add('d-none');
+            CONFIG_DATE_BTN.classList.add('d-none');
+            filterAndRenderTable();
+            showToast('ออกจากระบบ Admin แล้ว');
+        });
+
+        ADMIN_SUBMIT_BTN.addEventListener('click', () => {
+            const inputUser = document.getElementById('admin-user-input').value.trim();
+            const inputPass = document.getElementById('admin-pass-input').value.trim();
+
+            if (inputUser === adminCredentials.user && inputPass === adminCredentials.pass && adminCredentials.user !== '') {
+                isAdminLoggedIn = true;
+                adminModal.hide();
+                ADMIN_BTN.innerHTML = '<i class="bi bi-shield-fill-check me-1"></i> ออกจากระบบ Admin';
+                ADMIN_BTN.classList.replace('btn-warning', 'btn-danger');
+                ADMIN_ACTION_BAR.classList.remove('d-none');
+                CONFIG_DATE_BTN.classList.remove('d-none');
+                filterAndRenderTable();
+                showToast('เข้าสู่ระบบ Admin สำเร็จ');
+            } else {
+                ADMIN_ALERT.classList.remove('d-none');
+            }
+        });
+
+        CONFIG_DATE_BTN.addEventListener('click', () => {
+            document.getElementById('config-start-date').value = metaConfig.startDate || '';
+            document.getElementById('config-end-date').value = metaConfig.endDate || '';
+            dateModal.show();
+        });
+
+        SAVE_DATE_BTN.addEventListener('click', async () => {
+            const sDate = document.getElementById('config-start-date').value;
+            const eDate = document.getElementById('config-end-date').value;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'updateMeta', startDate: sDate, endDate: eDate, sheetName: currentSheetName })
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    metaConfig.startDate = sDate;
+                    metaConfig.endDate = eDate;
+                    if(result.updateDate) metaConfig.updateDate = result.updateDate;
+                    updateHeaderTitle();
+                    dateModal.hide();
+                    showToast('บันทึกข้อมูลเรียบร้อยแล้ว');
+                } else {
+                    showToast('เกิดข้อผิดพลาด: ' + result.message, false);
+                }
+            } catch (err) {
+                showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ', false);
+            }
+        });
+
+        ADD_BTN.addEventListener('click', () => {
+            document.getElementById('dataModalTitle').innerHTML = '<i class="bi bi-plus-circle me-1"></i>เพิ่มข้อมูลใหม่';
+            document.getElementById('form-row-index').value = '';
+            DATA_FORM.reset();
+            buildModalFormFields();
+            dataModal.show();
+        });
+
+        async function fetchData() {
+            TABLE_BODY.innerHTML = '<tr><td colspan="13" class="text-center p-4 fs-5 text-muted">กำลังโหลดข้อมูล...</td></tr>';
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?sheet=${currentSheetName}`);
+                const result = await response.json();
+
+                if (Array.isArray(result)) {
+                    allData = result;
+                } else {
+                    allData = result.data || [];
+                    if (result.admin) {
+                        adminCredentials.user = result.admin.user;
+                        adminCredentials.pass = result.admin.pass;
+                    }
+                    if (result.meta) {
+                        metaConfig = result.meta;
+                        updateHeaderTitle();
+                    }
+                }
+
+                if (allData.length === 0) {
+                    TABLE_BODY.innerHTML = '<tr><td colspan="13" class="text-center p-4 fs-5 text-muted">ไม่พบข้อมูลในชีต</td></tr>';
+                } else {
+                    populateCategoryDropdown();
+                    renderTableHead();
+                    filterAndRenderTable();
+                }
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                TABLE_BODY.innerHTML = '<tr><td colspan="13" class="text-center p-4 fs-5 text-danger">เกิดข้อผิดพลาดในการดึงข้อมูล</td></tr>';
+            }
+        }
+
+        function renderTableHead() {
+            let headHtml = '';
+            if (currentSheetName === 'Rider') {
+                headHtml = `
+                    <tr>
+                        <th rowspan="2">รหัส</th>
+                        <th rowspan="2">สัญญาเพิ่มเติม</th>
+                        <th rowspan="2">เงื่อนไข</th>
+                        <th colspan="2">พิกัดอายุ</th>
+                        <th colspan="3">ปี 1</th>
+                        <th colspan="3">ค่าพาหนะ</th>
+                        ${isAdminLoggedIn ? '<th rowspan="2">จัดการ</th>' : ''}
+                    </tr>
+                    <tr>
+                        <th>เริ่ม</th>
+                        <th>จบ</th>
+                        <th>Com</th>
+                        <th>Com+</th>
+                        <th>LA Bonus</th>
+                        <th>ปี 2</th>
+                        <th>ปี 3</th>
+                        <th>≥ ปี 4</th>
+                    </tr>
+                `;
+            } else {
+                headHtml = `
+                    <tr>
+                        <th rowspan="2">รหัส</th>
+                        <th rowspan="2">แบบประกัน</th>
+                        <th colspan="2">พิกัดอายุ</th>
+                        <th rowspan="2">เงื่อนไข</th>
+                        <th colspan="2">ปี 1</th>
+                        <th colspan="4">ค่าพาหนะ</th>
+                        <th rowspan="2">ผลงาน</th>
+                        <th rowspan="2">หมายเหตุ</th>
+                        ${isAdminLoggedIn ? '<th rowspan="2">จัดการ</th>' : ''}
+                    </tr>
+                    <tr>
+                        <th>เริ่ม</th>
+                        <th>จบ</th>
+                        <th>Com</th>
+                        <th>Com+</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4-9</th>
+                        <th>≥10</th>
+                    </tr>
+                `;
+            }
+            TABLE_HEAD.innerHTML = headHtml;
+        }
+
+        function buildModalFormFields(existingData = {}) {
+            let fieldsHtml = '';
+            if (currentSheetName === 'Rider') {
+                const fields = [
+                    { key: 'ประเภท', label: 'ประเภท' },
+                    { key: 'รหัส', label: 'รหัส' },
+                    { key: 'สัญญาเพิ่มเติม', label: 'สัญญาเพิ่มเติม' },
+                    { key: 'เงื่อนไข', label: 'เงื่อนไข' },
+                    { key: 'พิกัดเริ่ม', label: 'พิกัดอายุเริ่ม', type: 'number' },
+                    { key: 'พิกัดสุดท้าย', label: 'พิกัดอายุสิ้นสุด', type: 'number' },
+                    { key: 'คอม', label: 'คอม (ปี 1)' },
+                    { key: 'คอมพลัส', label: 'คอมพลัส' },
+                    { key: 'LA Bonus', label: 'LA Bonus' },
+                    { key: 'ปี 2', label: 'ปี 2' },
+                    { key: 'ปี 3', label: 'ปี 3' },
+                    { key: '≥ ปี 4', label: '≥ ปี 4' }
+                ];
+                fields.forEach(f => {
+                    const val = existingData[f.key] !== undefined ? existingData[f.key] : '';
+                    fieldsHtml += `
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">${f.label}</label>
+                            <input type="${f.type || 'text'}" id="f-${f.key}" class="form-control" value="${val}">
+                        </div>
+                    `;
+                });
+            } else {
+                const fields = ['ประเภท', 'รหัส', 'แบบประกัน', 'พิกัดเริ่ม', 'พิกัดสุดท้าย', 'ทุน', 'คอม', 'คอมพลัส', 'ปี 2', 'ปี 3', 'ปี 4', 'ปี 10', 'ผลงาน'];
+                fields.forEach(field => {
+                    const val = existingData[field] !== undefined ? existingData[field] : '';
+                    fieldsHtml += `
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">${field}</label>
+                            <input type="text" id="f-${field}" class="form-control" value="${val}">
+                        </div>
+                    `;
+                });
+                const noteVal = existingData['Note'] !== undefined ? existingData['Note'] : (existingData['หมายเหตุ'] !== undefined ? existingData['หมายเหตุ'] : '');
+                fieldsHtml += `
+                    <div class="col-md-12">
+                        <label class="form-label small fw-bold">หมายเหตุ (Note)</label>
+                        <input type="text" id="f-Note" class="form-control" value="${noteVal}" placeholder="ระบุหมายเหตุเพิ่มเติม (ถ้ามี)">
+                    </div>
+                `;
+            }
+            document.getElementById('modal-form-fields').innerHTML = fieldsHtml;
+        }
+
+        function populateCategoryDropdown() {
+            const categories = new Set();
+            allData.forEach(row => {
+                const cat = (row['ประเภท'] || '').trim();
+                if (cat) categories.add(cat);
+            });
+
+            const customRiderOrder = [
+                "เฮลท์ ฟิต สบ๊าบ สบาย",
+                "อุบัติเหตุ",
+                "ค่าชดเชยรายวัน",
+                "โรคร้ายแรง",
+                "ชั่วระยะเวลา",
+                "ประกันสุขภาพ",
+                "ไลฟ์เวิร์ส อุบัติเหตุ",
+                "ไลฟ์เวิร์ส ค่าชดเชยรายวัน",
+                "ไลฟ์เวิร์ส โรคร้ายแรง",
+                "ไลฟ์เวิร์ส ประกันสุขภาพ"
+            ];
+
+            const customInsuranceOrder = [
+                "จำกัดระยะเวลาขาย",
+                "ตลอดชีพ",
+                "สะสมทรัพย์",
+                "สะสมทรัพย์ (มีเงินคืนระหว่างปี)",
+                "PAR Product",
+                "High Net Worth",
+                "Life Verse",
+                "ลดหย่อนบำนาญ",
+                "กบข.",
+                "ชีวิตหลังเกษียณ",
+                "ผู้สูงอายุ",
+                "คนพิการ",
+                "อิสลาม"
+            ];
+
+            const sortedCategories = Array.from(categories).sort((a, b) => {
+                if (currentSheetName === 'Rider') {
+                    const indexA = customRiderOrder.indexOf(a);
+                    const indexB = customRiderOrder.indexOf(b);
+                    if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+                    if (indexA !== -1) return -1;
+                    if (indexB !== -1) return 1;
+                } else {
+                    const indexA = customInsuranceOrder.indexOf(a);
+                    const indexB = customInsuranceOrder.indexOf(b);
+                    if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+                    if (indexA !== -1) return -1;
+                    if (indexB !== -1) return 1;
+                }
+                return a.localeCompare(b, 'th');
+            });
+
+            let optionsHtml = '<option value="">ทุกประเภท</option>';
+            sortedCategories.forEach(cat => {
+                optionsHtml += `<option value="${cat}">${cat}</option>`;
+            });
+            FILTER_CATEGORY.innerHTML = optionsHtml;
+        }
+
+        function filterAndRenderTable() {
+            const searchKeyword = SEARCH_INPUT.value.toLowerCase().trim();
+            const selectedCategory = FILTER_CATEGORY.value.trim();
+            const targetAge = parseFloat(FILTER_AGE.value);
+            const rawCapitalStr = FILTER_CAPITAL.value.replace(/,/g, '').trim();
+            const targetCapital = parseFloat(rawCapitalStr);
+
+            let filtered = allData.filter(row => {
+                const code = (row['รหัส'] || '').trim();
+                const name = (currentSheetName === 'Rider' ? row['สัญญาเพิ่มเติม'] : row['แบบประกัน']) || '';
+                const category = (row['ประเภท'] || '').trim();
+                if (!code && !name) return false;
+
+                const startAge = parseFloat(row['พิกัดเริ่ม']);
+                const endAge = parseFloat(row['พิกัดสุดท้าย']);
+
+                if (selectedCategory && category !== selectedCategory) return false;
+                if (searchKeyword && !(`${code} ${name} ${category}`.toLowerCase().includes(searchKeyword))) return false;
+                if (!isNaN(targetAge) && (isNaN(startAge) || isNaN(endAge) || targetAge < startAge || targetAge > endAge)) return false;
+
+                return true;
+            });
+
+            if (currentSheetName === 'Data' && !isNaN(targetCapital)) {
+                const groups = {};
+                filtered.forEach(row => {
+                    const key = `${row['รหัส']}_${row['แบบประกัน']}_${row['พิกัดเริ่ม']}_${row['พิกัดสุดท้าย']}`;
+                    if (!groups[key]) groups[key] = [];
+                    groups[key].push(row);
+                });
+
+                let newFiltered = [];
+                Object.keys(groups).forEach(key => {
+                    const groupRows = groups[key];
+                    let validRows = [];
+
+                    groupRows.forEach(r => {
+                        const rawCapVal = String(r['ทุน'] || '').replace(/,/g, '').trim();
+                        const capNum = parseFloat(rawCapVal);
+
+                        if (rawCapVal === '' || isNaN(capNum)) {
+                            validRows.push(r);
+                        } else if (capNum <= targetCapital) {
+                            validRows.push(r);
+                        }
+                    });
+
+                    if (validRows.length > 0) {
+                        const numericRows = validRows.filter(r => !isNaN(parseFloat(String(r['ทุน'] || '').replace(/,/g, '').trim())));
+                        const nonNumericRows = validRows.filter(r => isNaN(parseFloat(String(r['ทุน'] || '').replace(/,/g, '').trim())));
+
+                        let bestRows = [...nonNumericRows];
+
+                        if (numericRows.length > 0) {
+                            let bestNumeric = numericRows.reduce((prev, curr) => {
+                                const pCap = parseFloat(String(prev['ทุน'] || '').replace(/,/g, '').trim());
+                                const cCap = parseFloat(String(curr['ทุน'] || '').replace(/,/g, '').trim());
+                                return cCap > pCap ? curr : prev;
+                            });
+                            bestRows.push(bestNumeric);
+                        }
+
+                        newFiltered.push(...bestRows);
+                    }
+                });
+                filtered = newFiltered;
+            }
+
+            const customRiderOrder = [
+                "เฮลท์ ฟิต สบ๊าบ สบาย",
+                "อุบัติเหตุ",
+                "ค่าชดเชยรายวัน",
+                "โรคร้ายแรง",
+                "ชั่วระยะเวลา",
+                "ประกันสุขภาพ",
+                "ไลฟ์เวิร์ส อุบัติเหตุ",
+                "ไลฟ์เวิร์ส ค่าชดเชยรายวัน",
+                "ไลฟ์เวิร์ส โรคร้ายแรง",
+                "ไลฟ์เวิร์ส ประกันสุขภาพ"
+            ];
+
+            const customInsuranceOrder = [
+                "จำกัดระยะเวลาขาย",
+                "ตลอดชีพ",
+                "สะสมทรัพย์",
+                "สะสมทรัพย์ (มีเงินคืนระหว่างปี)",
+                "PAR Product",
+                "High Net Worth",
+                "Life Verse",
+                "ลดหย่อนบำนาญ",
+                "กบข.",
+                "ชีวิตหลังเกษียณ",
+                "ผู้สูงอายุ",
+                "คนพิการ",
+                "อิสลาม"
+            ];
+
+            filtered.sort((a, b) => {
+                const catA = (a['ประเภท'] || 'อื่นๆ').trim();
+                const catB = (b['ประเภท'] || 'อื่นๆ').trim();
+                if (catA !== catB) {
+                    if (currentSheetName === 'Rider') {
+                        const indexA = customRiderOrder.indexOf(catA);
+                        const indexB = customRiderOrder.indexOf(catB);
+                        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+                        if (indexA !== -1) return -1;
+                        if (indexB !== -1) return 1;
+                    } else {
+                        const indexA = customInsuranceOrder.indexOf(catA);
+                        const indexBVal = customInsuranceOrder.indexOf(catB);
+                        if (indexA !== -1 && indexBVal !== -1) return indexA - indexBVal;
+                        if (indexA !== -1) return -1;
+                        if (indexBVal !== -1) return 1;
+                    }
+                    return catA.localeCompare(catB, 'th');
+                }
+                return (a['รหัส'] || '').localeCompare(b['รหัส'] || '');
+            });
+
+            let rowsHtml = '';
+            let lastCategory = '';
+            let lastCode = '';
+            let lastName = '';
+
+            const formatNumber = (val) => {
+                if (val === '' || val === null || val === undefined) return '-';
+                const num = Number(String(val).replace(/,/g, ''));
+                if (isNaN(num)) return val;
+                if (num === 0) return '-';
+                return num.toLocaleString('en-US');
+            };
+
+            const formatStartAge = (val) => {
+                if (val === '' || val === null || val === undefined) return '-';
+                const num = Number(String(val).replace(/,/g, ''));
+                if (isNaN(num)) return val;
+                return num.toLocaleString('en-US');
+            };
+
+            const colspanVal = currentSheetName === 'Rider' ? (isAdminLoggedIn ? 12 : 11) : (isAdminLoggedIn ? 14 : 13);
+
+            filtered.forEach((row) => {
+                const category = (row['ประเภท'] || 'อื่นๆ').trim();
+                const code = (row['รหัส'] || '').trim();
+                const name = (currentSheetName === 'Rider' ? row['สัญญาเพิ่มเติม'] : row['แบบประกัน']) || '';
+
+                if (category !== lastCategory) {
+                    let headerClass = 'category-header';
+                    if (currentSheetName === 'Rider') {
+                        headerClass = 'category-header-rider';
+                    } else if (category === 'จำกัดระยะเวลาขาย') {
+                        headerClass = 'category-header-red';
+                    }
+                    rowsHtml += `<tr class="${headerClass}"><td colspan="${colspanVal}"><i class="bi bi-folder2-open me-2"></i>${category}</td></tr>`;
+                    lastCategory = category;
+                    lastCode = '';
+                    lastName = '';
+                }
+
+                const displayCode = (code === lastCode && name === lastName) ? '' : code;
+                const displayName = (code === lastCode && name === lastName) ? '' : name;
+
+                lastCode = code;
+                lastName = name;
+
+                let actionTd = '';
+                if (isAdminLoggedIn) {
+                    actionTd = `<td class="text-center text-nowrap">
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editRow(${row.rowIndex})"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(${row.rowIndex})"><i class="bi bi-trash"></i></button>
+                    </td>`;
+                }
+
+                if (currentSheetName === 'Rider') {
+                    rowsHtml += `<tr>
+                        <td class="fw-bold text-nowrap">${displayCode}</td>
+                        <td class="text-start">${displayName}</td>
+                        <td class="text-center">${row['เงื่อนไข'] || '-'}</td>
+                        <td class="text-center">${formatStartAge(row['พิกัดเริ่ม'])}</td>
+                        <td class="text-center">${formatNumber(row['พิกัดสุดท้าย'])}</td>
+                        <td class="text-center highlight-custom">${formatNumber(row['คอม'])}</td>
+                        <td class="text-center highlight-custom">${formatNumber(row['คอมพลัส'])}</td>
+                        <td class="text-center highlight-custom">${formatNumber(row['LA Bonus'])}</td>
+                        <td class="text-center">${formatNumber(row['ปี 2'])}</td>
+                        <td class="text-center">${formatNumber(row['ปี 3'])}</td>
+                        <td class="text-center">${formatNumber(row['≥ ปี 4'])}</td>
+                        ${actionTd}
+                    </tr>`;
+                } else {
+                    const noteVal = row['Note'] !== undefined ? row['Note'] : (row['หมายเหตุ'] !== undefined ? row['หมายเหตุ'] : '');
+                    let formattedNote = String(noteVal).split(',').map(item => item.trim()).join('\n');
+                    
+                    let rowClasses = [];
+                    const noteStrUpper = String(noteVal).toUpperCase();
+                    if (noteStrUpper.includes('NO CREDIT')) rowClasses.push('row-no-credit');
+                    if (noteStrUpper.includes('NON-MED')) rowClasses.push('row-non-med');
+                    if (String(noteVal).includes('มีส่วนลดเบี้ย')) rowClasses.push('row-italic-note');
+
+                    rowsHtml += `<tr class="${rowClasses.join(' ')}">
+                        <td class="fw-bold text-nowrap col-code-cell">${displayCode}</td>
+                        <td class="text-start col-name-cell">${displayName}</td>
+                        <td class="text-center">${formatStartAge(row['พิกัดเริ่ม'])}</td>
+                        <td class="text-center">${formatNumber(row['พิกัดสุดท้าย'])}</td>
+                        <td class="text-center text-nowrap col-condition">${formatNumber(row['ทุน'])}</td>
+                        <td class="text-center highlight-custom">${formatNumber(row['คอม'])}</td>
+                        <td class="text-center highlight-custom">${formatNumber(row['คอมพลัส'])}</td>
+                        <td class="text-center">${formatNumber(row['ปี 2'])}</td>
+                        <td class="text-center">${formatNumber(row['ปี 3'])}</td>
+                        <td class="text-center">${formatNumber(row['ปี 4'])}</td>
+                        <td class="text-center">${formatNumber(row['ปี 10'])}</td>
+                        <td class="text-center text-nowrap highlight-custom">${formatNumber(row['ผลงาน'])}</td>
+                        <td class="col-note text-start">${formattedNote}</td>
+                        ${actionTd}
+                    </tr>`;
+                }
+            });
+
+            TABLE_BODY.innerHTML = rowsHtml === '' ? `<tr><td colspan="${colspanVal}" class="text-center p-4 fs-5 text-muted">ไม่พบข้อมูลตามเงื่อนไขที่ระบุ</td></tr>` : rowsHtml;
+        }
+
+        window.editRow = function(rowIndex) {
+            const rowData = allData.find(r => r.rowIndex === rowIndex);
+            if (!rowData) return;
+
+            document.getElementById('dataModalTitle').innerHTML = '<i class="bi bi-pencil-square me-1"></i>แก้ไขข้อมูล';
+            document.getElementById('form-row-index').value = rowIndex;
+            buildModalFormFields(rowData);
+            dataModal.show();
+        };
+
+        window.deleteRow = function(rowIndex) {
+            document.getElementById('delete-row-index').value = rowIndex;
+            deleteModal.show();
+        };
+
+        CONFIRM_DELETE_BTN.addEventListener('click', async () => {
+            const rowIndex = document.getElementById('delete-row-index').value;
+            deleteModal.hide();
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'delete', rowIndex: rowIndex, sheetName: currentSheetName })
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    if(result.updateDate) metaConfig.updateDate = result.updateDate;
+                    updateHeaderTitle();
+                    showToast('ลบข้อมูลสำเร็จ');
+                    fetchData();
+                } else {
+                    showToast('เกิดข้อผิดพลาด: ' + result.message, false);
+                }
+            } catch (err) {
+                showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ', false);
+            }
+        });
+
+        DATA_FORM.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const rowIndex = document.getElementById('form-row-index').value;
+            const action = rowIndex ? 'edit' : 'add';
+
+            let rowData = {};
+            if (currentSheetName === 'Rider') {
+                const fields = ['ประเภท', 'รหัส', 'สัญญาเพิ่มเติม', 'เงื่อนไข', 'พิกัดเริ่ม', 'พิกัดสุดท้าย', 'คอม', 'คอมพลัส', 'LA Bonus', 'ปี 2', 'ปี 3', '≥ ปี 4'];
+                fields.forEach(field => {
+                    const el = document.getElementById(`f-${field}`);
+                    rowData[field] = el ? el.value : '';
+                });
+            } else {
+                const fields = ['ประเภท', 'รหัส', 'แบบประกัน', 'พิกัดเริ่ม', 'พิกัดสุดท้าย', 'ทุน', 'คอม', 'คอมพลัส', 'ปี 2', 'ปี 3', 'ปี 4', 'ปี 10', 'ผลงาน'];
+                fields.forEach(field => {
+                    const el = document.getElementById(`f-${field}`);
+                    rowData[field] = el ? el.value : '';
+                });
+                const noteEl = document.getElementById('f-Note');
+                let noteKey = allData.length > 0 && allData[0]['หมายเหตุ'] !== undefined ? 'หมายเหตุ' : 'Note';
+                rowData[noteKey] = noteEl ? noteEl.value : '';
+            }
+
+            const saveBtn = document.getElementById('save-data-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = 'กำลังบันทึก...';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: action, rowIndex: rowIndex, row: rowData, sheetName: currentSheetName })
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    if(result.updateDate) metaConfig.updateDate = result.updateDate;
+                    updateHeaderTitle();
+                    showToast('บันทึกข้อมูลสำเร็จ');
+                    dataModal.hide();
+                    fetchData();
+                } else {
+                    showToast('เกิดข้อผิดพลาด: ' + result.message, false);
+                }
+            } catch (err) {
+                showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ', false);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'บันทึก';
+            }
+        });
+
+        FILTER_CAPITAL.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value) value = Number(value).toLocaleString('en-US');
+            e.target.value = value;
+            filterAndRenderTable();
+        });
+
+        SEARCH_INPUT.addEventListener('input', filterAndRenderTable);
+        FILTER_CATEGORY.addEventListener('change', filterAndRenderTable);
+        FILTER_AGE.addEventListener('input', filterAndRenderTable);
+        RESET_BTN.addEventListener('click', () => {
+            SEARCH_INPUT.value = '';
+            FILTER_CATEGORY.value = '';
+            FILTER_AGE.value = '';
+            FILTER_CAPITAL.value = '';
+            filterAndRenderTable();
+        });
+    </script>
+</body>
+</html>
