@@ -276,6 +276,30 @@
         }
     });
 
+    async function loadAllSheets() {
+        try {
+            const results = await Promise.allSettled([
+                fetchSheet('Cal'),
+                fetchSheet('RiderAge'),
+                fetchSheet('Data'),
+                fetchSheet('Rider')
+            ]);
+
+            results.forEach((result, index) => {
+                if (result.status === 'rejected') {
+                    console.warn(`ชีตที่ ${index} โหลดไม่สำเร็จ:`, result.reason);
+                }
+            });
+
+            // ดึงข้อมูลเฉพาะชีตที่สำเร็จมาใช้งานต่อ และปลดล็อกฟอร์ม
+            document.getElementById('ageInput').disabled = false;
+            document.getElementById('loading-status').style.display = 'none';
+        
+        } catch (error) {
+            console.error('Critical load error:', error);
+        }
+    }
+
     async function loadSheetData() {
         try {
             const [calRes, riderAgeRes, dataRes, riderRes] = await Promise.all([
@@ -865,6 +889,22 @@
         
         calculateGrandTotal();
     }
+
+    function parseSheetData(rows) {
+        if (!rows || rows.length === 0) return [];
+        const headers = rows[0]; // แถวแรกเป็นชื่อหัวคอลัมน์
+    
+        return rows.slice(1).map(row => {
+            let obj = {};
+            headers.forEach((header, index) => {
+                obj[header.trim()] = row[index];
+            });
+            return obj;
+        });
+    }
+
+    // เวลาเรียกใช้งาน สามารถอ้างอิงผ่านชื่อหัวคอลัมน์ใน Google Sheets ได้โดยตรงอย่างปลอดภัย
+    // เช่น item['แบบประกัน'], item['พิกัดเริ่ม']
 </script>
 
 </body>
