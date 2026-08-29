@@ -340,21 +340,21 @@
                 <div id="main-content-wrapper">
                     <div class="row g-3 mb-4 align-items-center bg-light p-3 rounded-3 border">
                         <div class="col-md-3">
-                            <label for="search-input" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-search me-1"></i>ค้นหารหัส/ชื่อ:</label>
+                            <label for="search-input" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-search me-1"></i>ค้นหารหัส/ชื่อ</label>
                             <input type="text" id="search-input" class="form-control" placeholder="พิมพ์รหัสหรือชื่อ...">
                         </div>
                         <div class="col-md-3">
-                            <label for="filter-category" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-collection me-1"></i>กรองตามประเภท:</label>
+                            <label for="filter-category" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-collection me-1"></i>กรองตามประเภท</label>
                             <select id="filter-category" class="form-select">
                                 <option value="">ทุกประเภท</option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="filter-age" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-person-badge me-1"></i>ระบุอายุ (ปี):</label>
-                            <input type="number" id="filter-age" class="form-control" placeholder="เช่น 35">
+                            <label for="filter-age" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-person-badge me-1"></i>ค้นหาอายุ</label>
+                            <input type="number" id="filter-age" class="form-control" placeholder="เช่น 30">
                         </div>
                         <div class="col-md-2" id="filter-capital-wrapper">
-                            <label for="filter-capital" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-currency-dollar me-1"></i>ระบุทุนประกัน:</label>
+                            <label for="filter-capital" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-currency-dollar me-1"></i>ค้นหาทุนประกัน</label>
                             <input type="text" id="filter-capital" class="form-control" placeholder="เช่น 100,000">
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
@@ -381,7 +381,7 @@
                 <div id="commission-content-wrapper" class="d-none">
                     <div class="row g-2 mb-4">
                         <div class="col">
-                            <button type="button" id="btn-comm-general" class="btn btn-dark-theme fw-bold w-100 py-2 shadow-sm">ประกันทั่วไป</button>
+                            <button type="button" id="btn-comm-general" class="btn btn-dark-theme fw-bold w-100 py-2 shadow-sm">ทั่วไป</button>
                         </div>
                         <div class="col">
                             <button type="button" id="btn-comm-sababy" class="btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm">สบ๊าบ สบาย</button>
@@ -397,7 +397,7 @@
 
     <div class="form-row" style="margin-top: 10px;">
         <div class="form-group">
-            <label for="gen-ageInput">อายุ</label>
+            <label for="gen-ageInput">ระบุอายุ</label>
             <input type="text" id="gen-ageInput" list="gen-ageList" placeholder="กำลังโหลดข้อมูล..." disabled autocomplete="off">
             <datalist id="gen-ageList"></datalist>
         </div>
@@ -419,11 +419,11 @@
     <div class="form-row">
         <div class="form-group">
             <label for="gen-covPeriodInput">คุ้มครอง (ปี)</label>
-            <input type="text" id="gen-covPeriodInput" placeholder="แสดงอัตโนมัติ" disabled>
+            <input type="text" id="gen-covPeriodInput" placeholder="-" disabled>
         </div>
         <div class="form-group">
             <label for="gen-payPeriodInput">ชำระเบี้ย (ปี)</label>
-            <input type="text" id="gen-payPeriodInput" placeholder="แสดงอัตโนมัติ" disabled>
+            <input type="text" id="gen-payPeriodInput" placeholder="-" disabled>
         </div>
     </div>
 
@@ -489,7 +489,7 @@
 
     <div class="form-row" style="margin-top: 10px;">
         <div class="form-group">
-            <label for="sab-ageInput">อายุ</label>
+            <label for="sab-ageInput">ระบุอายุ</label>
             <input type="text" id="sab-ageInput" list="sab-ageList" placeholder="กำลังโหลดข้อมูล..." disabled autocomplete="off">
             <datalist id="sab-ageList"></datalist>
         </div>
@@ -509,11 +509,11 @@
     <div class="form-row">
         <div class="form-group">
             <label for="sab-covPeriodInput">คุ้มครอง (ปี)</label>
-            <input type="text" id="sab-covPeriodInput" placeholder="แสดงอัตโนมัติ" disabled>
+            <input type="text" id="sab-covPeriodInput" placeholder="-" disabled>
         </div>
         <div class="form-group">
             <label for="sab-payPeriodInput">ชำระเบี้ย (ปี)</label>
-            <input type="text" id="sab-payPeriodInput" placeholder="แสดงอัตโนมัติ" disabled>
+            <input type="text" id="sab-payPeriodInput" placeholder="-" disabled>
         </div>
     </div>
 
@@ -1336,13 +1336,13 @@
             }
 
             const customRiderOrder = [
-                "เฮลท์ ฟิต สบ๊าบ สบาย", "อุบัติเหตุ", "ค่าชดเชยรายวัน", "โรคร้ายแรง", "ชั่วระยะเวลา", 
-                "ประกันสุขภาพ", "ไลฟ์เวิร์ส อุบัติเหตุ", "ไลฟ์เวิร์ส ค่าชดเชยรายวัน", "ไลฟ์เวิร์ส โรคร้ายแรง", "ไลฟ์เวิร์ส ประกันสุขภาพ"
+                "เฮลท์ ฟิต สบ๊าบ สบาย", "อุบัติเหตุ ฆาตกรรมและจลาจล", "ชดเชยรายได้", "โรคร้ายแรง", "ชั่วระยะเวลา", 
+                "สุขภาพ", "ไลฟ์เวิร์ส อุบัติเหตุ ฆาตกรรมและจลาจล", "ไลฟ์เวิร์ส ชดเชยรายได้", "ไลฟ์เวิร์ส โรคร้ายแรง", "ไลฟ์เวิร์ส สุขภาพ"
             ];
 
             const customInsuranceOrder = [
-                "จำกัดระยะเวลาขาย", "ตลอดชีพ", "สะสมทรัพย์", "สะสมทรัพย์ (มีเงินคืนระหว่างปี)", "PAR Product", 
-                "High Net Worth", "Life Verse", "ลดหย่อนบำนาญ", "กบข.", "ชีวิตหลังเกษียณ", "ผู้สูงอายุ", "คนพิการ", "อิสลาม"
+                "จำกัดระยะเวลาขาย", "ตลอดชีพ", "สะสมทรัพย์", "สะสมทรัพย์ (เงินคืนระหว่างปี)", "PAR Product", 
+                "High Net Worth", "ลดหย่อนบำนาญ", "Life Verse", "กบข.", "ชีวิตหลังเกษียณ", "ผู้สูงอายุ", "คนพิการ", "อิสลาม"
             ];
 
             filtered.sort((a, b) => {
@@ -1659,7 +1659,7 @@
             }
 
             ageInput.disabled = false;
-            ageInput.placeholder = "พิมพ์หรือเลือกอายุ (0-80)";
+            ageInput.placeholder = "ระบุหรือเลือกอายุ (0-80)";
         } catch (error) {
             console.error("Error loading data:", error);
             ageInput.placeholder = "โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรช";
@@ -1896,9 +1896,9 @@
 
         if (availableProducts.length > 0) {
             productInput.disabled = false;
-            productInput.placeholder = "พิมพ์หรือเลือกแบบประกัน";
+            productInput.placeholder = "ระบุหรือเลือกแบบประกัน";
             codeInput.disabled = false;
-            codeInput.placeholder = "พิมพ์หรือเลือกรหัส";
+            codeInput.placeholder = "ระบุหรือเลือกรหัส";
 
             let addedProducts = new Set();
             let addedCodes = new Set();
@@ -2309,7 +2309,7 @@
             }
 
             ageInput.disabled = false;
-            ageInput.placeholder = "พิมพ์หรือเลือกอายุ (11-64)";
+            ageInput.placeholder = "ระบุหรือเลือกอายุ (11-64)";
         } catch (error) {
             console.error("Error loading data:", error);
             ageInput.placeholder = "โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรช";
