@@ -156,6 +156,21 @@
         .btn-login-custom:hover {
             background-color: #0b5ed7;
         }
+
+        /* หน้าคำนวณค่าคอมที่โหลดจากไฟล์ภายนอก */
+        .commission-frame {
+            width: 100%;
+            min-height: 980px;
+            border: none;
+            display: block;
+            background: transparent;
+            border-radius: 12px;
+        }
+
+        #commission-sub-content {
+            width: 100%;
+        }
+
     </style>
 </head>
 <body>
@@ -286,10 +301,32 @@
                     </div>
 
                     <div id="commission-sub-content">
-                        <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
-                            <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
-                            ระบบคำนวณค่าคอมมิชชั่น - ประกันทั่วไป (กำลังพัฒนา)
+
+                        <!-- โหลด general.html ครั้งเดียว และเก็บสถานะไว้เมื่อสลับเมนู -->
+                        <div id="general-panel" class="d-none">
+                            <iframe
+                                id="general-frame"
+                                class="commission-frame"
+                                title="คำนวณค่าคอม - ประกันทั่วไป"
+                                src="about:blank"
+                                loading="eager">
+                            </iframe>
                         </div>
+
+                        <div id="sababy-panel" class="d-none">
+                            <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
+                                <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
+                                ระบบคำนวณค่าคอมมิชชั่น - สบ๊าบ สบาย (กำลังพัฒนา)
+                            </div>
+                        </div>
+
+                        <div id="liveverse-panel" class="d-none">
+                            <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
+                                <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
+                                ระบบคำนวณค่าคอมมิชชั่น - ไลฟ์เวิร์ส (กำลังพัฒนา)
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -445,6 +482,14 @@
         const BTN_COMM_LIVEVERSE = document.getElementById('btn-comm-liveverse');
         const COMMISSION_SUB_CONTENT = document.getElementById('commission-sub-content');
 
+        const GENERAL_PANEL = document.getElementById('general-panel');
+        const SABABY_PANEL = document.getElementById('sababy-panel');
+        const LIVEVERSE_PANEL = document.getElementById('liveverse-panel');
+        const GENERAL_FRAME = document.getElementById('general-frame');
+
+        // ป้องกันการโหลด general.html ซ้ำทุกครั้งที่กดเมนู
+        let generalFrameLoaded = false;
+
         const LOGIN_PAGE = document.getElementById('login-page');
         const APP_CONTENT = document.getElementById('app-content');
         const MAIN_LOGIN_BTN = document.getElementById('main-login-btn');
@@ -465,19 +510,6 @@
             
             preloadMetaConfig();
         });
-
-        async function loadMetaConfig() {
-            try {
-                const response = await fetch(SCRIPT_URL + '?action=getConfig');
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-                // ประมวลผลข้อมูลปกติ
-            } catch (error) {
-                console.error('Error loading config:', error);
-                document.getElementById('loading-status').innerText = 'เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณารีเฟรชหน้าเว็บ';
-            // ปลดล็อก UI หรือซ่อน Loading Spinner ที่นี่
-            }
-        }
 
         async function preloadMetaConfig() {
             try {
@@ -663,6 +695,7 @@
                 COMMISSION_CONTENT_WRAPPER.classList.add('d-none');
                 FILTER_CAPITAL_WRAPPER.style.display = 'block';
                 fetchData();
+
             } else if (viewType === 'rider') {
                 BTN_VIEW_RIDER.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
                 currentSheetName = 'Rider';
@@ -670,55 +703,54 @@
                 COMMISSION_CONTENT_WRAPPER.classList.add('d-none');
                 FILTER_CAPITAL_WRAPPER.style.display = 'none';
                 fetchData();
+
             } else if (viewType === 'commission') {
                 BTN_VIEW_COMMISSION.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
                 MAIN_CONTENT_WRAPPER.style.display = 'none';
                 COMMISSION_CONTENT_WRAPPER.classList.remove('d-none');
+
+                // เปิดประกันทั่วไปเป็นค่าเริ่มต้น
                 switchCommissionSub('general');
             }
         }
 
-        async function switchCommissionSub(subType) {
+        function resetCommissionButtons() {
             BTN_COMM_GENERAL.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
             BTN_COMM_SABABY.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
             BTN_COMM_LIVEVERSE.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
+        }
+
+        function hideAllCommissionPanels() {
+            GENERAL_PANEL.classList.add('d-none');
+            SABABY_PANEL.classList.add('d-none');
+            LIVEVERSE_PANEL.classList.add('d-none');
+        }
+
+        function switchCommissionSub(subType) {
+            resetCommissionButtons();
+            hideAllCommissionPanels();
 
             if (subType === 'general') {
-                BTN_COMM_GENERAL.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
-                COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">กำลังโหลดข้อมูล...</div>';
-                try {
-                    const response = await fetch('general.html');
-                    if (response.ok) {
-                        const htmlContent = await response.text();
-                        COMMISSION_SUB_CONTENT.innerHTML = htmlContent;
-                    } else {
-                        COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-danger fs-5 bg-light rounded-3 border">ไม่สามารถโหลดไฟล์ general.html ได้</div>';
-                    }
-                } catch (err) {
-                    COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-danger fs-5 bg-light rounded-3 border">เกิดข้อผิดพลาดในการโหลดไฟล์ general.html</div>';
+                BTN_COMM_GENERAL.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
+                GENERAL_PANEL.classList.remove('d-none');
+
+                /*
+                 * ใช้ iframe แทน fetch + innerHTML
+                 * เพราะ <script> ภายใน general.html จะทำงานตามปกติ
+                 * และโหลดเพียงครั้งเดียว จึงไม่ต้องดึงข้อมูลใหม่ทุกครั้งที่สลับเมนู
+                 */
+                if (!generalFrameLoaded) {
+                    GENERAL_FRAME.src = 'general.html';
+                    generalFrameLoaded = true;
                 }
+
             } else if (subType === 'sababy') {
-                BTN_COMM_SABABY.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
-                COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">กำลังโหลดข้อมูล...</div>';
-                try {
-                    const response = await fetch('sabai.html');
-                    if (response.ok) {
-                        const htmlContent = await response.text();
-                        COMMISSION_SUB_CONTENT.innerHTML = htmlContent;
-                    } else {
-                        COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-danger fs-5 bg-light rounded-3 border">ไม่สามารถโหลดไฟล์ sabai.html ได้</div>';
-                    }
-                } catch (err) {
-                    COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-danger fs-5 bg-light rounded-3 border">เกิดข้อผิดพลาดในการโหลดไฟล์ sabai.html</div>';
-                }
+                BTN_COMM_SABABY.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
+                SABABY_PANEL.classList.remove('d-none');
+
             } else if (subType === 'liveverse') {
-                BTN_COMM_LIVEVERSE.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
-                COMMISSION_SUB_CONTENT.innerHTML = `
-                    <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
-                        <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
-                        ระบบคำนวณค่าคอมมิชชั่น - ไลฟ์เวิร์ส (กำลังพัฒนา)
-                    </div>
-                `;
+                BTN_COMM_LIVEVERSE.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
+                LIVEVERSE_PANEL.classList.remove('d-none');
             }
         }
 
