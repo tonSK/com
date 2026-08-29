@@ -665,27 +665,39 @@
             }
         }
 
-        function switchCommissionSub(subType) {
+        async function switchCommissionSub(subType) {
             BTN_COMM_GENERAL.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
             BTN_COMM_SABABY.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
             BTN_COMM_LIVEVERSE.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
 
             if (subType === 'general') {
                 BTN_COMM_GENERAL.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
-                COMMISSION_SUB_CONTENT.innerHTML = `
-                    <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
-                        <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
-                        ระบบคำนวณค่าคอมมิชชั่น - ประกันทั่วไป (กำลังพัฒนา)
-                    </div>
-                `;
+                COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">กำลังโหลดข้อมูล...</div>';
+                try {
+                    const response = await fetch('general.html');
+                    if (response.ok) {
+                        const htmlContent = await response.text();
+                        COMMISSION_SUB_CONTENT.innerHTML = htmlContent;
+                    } else {
+                        COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-danger fs-5 bg-light rounded-3 border">ไม่สามารถโหลดไฟล์ general.html ได้</div>';
+                    }
+                } catch (err) {
+                    COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-danger fs-5 bg-light rounded-3 border">เกิดข้อผิดพลาดในการโหลดไฟล์ general.html</div>';
+                }
             } else if (subType === 'sababy') {
                 BTN_COMM_SABABY.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
-                COMMISSION_SUB_CONTENT.innerHTML = `
-                    <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
-                        <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
-                        ระบบคำนวณค่าคอมมิชชั่น - สบ๊าบ สบาย (กำลังพัฒนา)
-                    </div>
-                `;
+                COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">กำลังโหลดข้อมูล...</div>';
+                try {
+                    const response = await fetch('sabai.html');
+                    if (response.ok) {
+                        const htmlContent = await response.text();
+                        COMMISSION_SUB_CONTENT.innerHTML = htmlContent;
+                    } else {
+                        COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-danger fs-5 bg-light rounded-3 border">ไม่สามารถโหลดไฟล์ sabai.html ได้</div>';
+                    }
+                } catch (err) {
+                    COMMISSION_SUB_CONTENT.innerHTML = '<div class="p-4 text-center text-danger fs-5 bg-light rounded-3 border">เกิดข้อผิดพลาดในการโหลดไฟล์ sabai.html</div>';
+                }
             } else if (subType === 'liveverse') {
                 BTN_COMM_LIVEVERSE.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
                 COMMISSION_SUB_CONTENT.innerHTML = `
