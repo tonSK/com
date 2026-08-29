@@ -11,18 +11,47 @@
             font-family: 'Sarabun', sans-serif;
         }
         body {
-            background-color: #f4f6f9;
+            background-color: transparent;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             color: #333;
         }
         .container {
+            width: 100%;
             max-width: 1100px;
             margin: 0 auto;
             background: #fff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+                border-radius: 0;
+            }
+
+            .form-group {
+                min-width: 100%;
+            }
+
+            .code-container {
+                flex-wrap: wrap;
+            }
+
+            .code-container input {
+                min-width: 0;
+                flex: 1 1 220px;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 8px;
+            }
         }
         .form-row {
             display: flex;
@@ -113,6 +142,7 @@
             font-style: italic;
             padding: 10px;
         }
+        /* สไตล์ตารางผลรวมใหม่ */
         .summary-table {
             margin-top: 25px;
             background-color: #ebf8ff;
@@ -276,33 +306,75 @@
         }
     });
 
+    async function fetchJson(url) {
+        const response = await fetch(url, {
+            method: 'GET',
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        return response.json();
+    }
+
     async function loadSheetData() {
+        // แสดงสถานะเฉพาะระหว่างโหลดจริง และไม่ค้างที่ข้อความเดิมเมื่อเกิดข้อผิดพลาด
+        ageInput.disabled = true;
+        ageInput.placeholder = "กำลังโหลดข้อมูล...";
+        productInput.disabled = true;
+        codeInput.disabled = true;
+
         try {
-            // ป้องกันหน้าค้างโดยใช้ Promise.allSettled เพื่อให้ระบบข้ามชีตที่มีปัญหาได้
-            const results = await Promise.allSettled([
-                fetch(`${SCRIPT_URL}?sheet=Cal`).then(res => res.json()),
-                fetch(`${SCRIPT_URL}?sheet=RiderAge`).then(res => res.json()),
-                fetch(`${SCRIPT_URL}?sheet=Data`).then(res => res.json()),
-                fetch(`${SCRIPT_URL}?sheet=Rider`).then(res => res.json())
+            const [calResult, riderAgeResult, dataResult, riderResult] = await Promise.allSettled([
+                fetchJson(`${SCRIPT_URL}?sheet=Cal`),
+                fetchJson(`${SCRIPT_URL}?sheet=RiderAge`),
+                fetchJson(`${SCRIPT_URL}?sheet=Data`),
+                fetchJson(`${SCRIPT_URL}?sheet=Rider`)
             ]);
-            
-            calData = results[0].status === 'fulfilled' ? (results[0].value.data || []) : [];
-            riderAgeData = results[1].status === 'fulfilled' ? (results[1].value.data || []) : [];
-            dataSheetData = results[2].status === 'fulfilled' ? (results[2].value.data || []) : [];
-            riderSheetData = results[3].status === 'fulfilled' ? (results[3].value.data || []) : [];
+
+            // Cal และ RiderAge เป็นข้อมูลหลักที่ต้องมีเพื่อเริ่มต้นใช้งาน
+            if (calResult.status !== 'fulfilled' || riderAgeResult.status !== 'fulfilled') {
+                throw new Error('ไม่สามารถโหลดข้อมูลหลักได้');
+            }
+
+            calData = calResult.value.data || [];
+            riderAgeData = riderAgeResult.value.data || [];
+            dataSheetData = dataResult.status === 'fulfilled' ? (dataResult.value.data || []) : [];
+            riderSheetData = riderResult.status === 'fulfilled' ? (riderResult.value.data || []) : [];
 
             ageList.innerHTML = '';
             for (let i = 0; i <= 80; i++) {
-                let opt = document.createElement('option');
+                const opt = document.createElement('option');
                 opt.value = i;
                 ageList.appendChild(opt);
             }
 
             ageInput.disabled = false;
             ageInput.placeholder = "พิมพ์หรือเลือกอายุ (0-80)";
+            productInput.placeholder = "กรุณาระบุอายุก่อน...";
+            codeInput.placeholder = "กรุณาระบุอายุก่อน...";
+
+            // แจ้งหน้าแม่ว่า iframe โหลดพร้อมแล้ว
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'general-ready' }, '*');
+            }
+
         } catch (error) {
             console.error("Error loading data:", error);
-            ageInput.placeholder = "โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรช";
+
+            ageInput.disabled = false;
+            ageInput.placeholder = "โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่";
+            productInput.disabled = true;
+            codeInput.disabled = true;
+
+            riderTableBody.innerHTML =
+                '<tr><td colspan="4" class="loading" style="color:#e53e3e;">โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรชหน้าเว็บ</td></tr>';
+
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'general-error' }, '*');
+            }
         }
     }
 
@@ -581,7 +653,7 @@
 
         if (matchedRow) {
             let keys = Object.keys(matchedRow);
-            let codeName = matchedRow['รหัส'] !== undefined ? String(matchedRow['รหัส']).trim() : (keys[0] ? String(matchedRow[keys[0]]).trim() : "");
+            let codeName = matchedRow['รหัส'] !== undefined ? String(matchedRow['รหัส']).trim() : (keys[0] ? String(row[keys[0]]).trim() : "");
             if (codeInput.value !== codeName) {
                 codeInput.value = codeName;
             }
