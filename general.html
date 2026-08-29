@@ -113,7 +113,6 @@
             font-style: italic;
             padding: 10px;
         }
-        /* สไตล์ตารางผลรวมใหม่ */
         .summary-table {
             margin-top: 25px;
             background-color: #ebf8ff;
@@ -279,17 +278,18 @@
 
     async function loadSheetData() {
         try {
-            const [calRes, riderAgeRes, dataRes, riderRes] = await Promise.all([
+            // ป้องกันหน้าค้างโดยใช้ Promise.allSettled เพื่อให้ระบบข้ามชีตที่มีปัญหาได้
+            const results = await Promise.allSettled([
                 fetch(`${SCRIPT_URL}?sheet=Cal`).then(res => res.json()),
                 fetch(`${SCRIPT_URL}?sheet=RiderAge`).then(res => res.json()),
-                fetch(`${SCRIPT_URL}?sheet=Data`).then(res => res.json()).catch(() => ({ data: [] })),
-                fetch(`${SCRIPT_URL}?sheet=Rider`).then(res => res.json()).catch(() => ({ data: [] }))
+                fetch(`${SCRIPT_URL}?sheet=Data`).then(res => res.json()),
+                fetch(`${SCRIPT_URL}?sheet=Rider`).then(res => res.json())
             ]);
             
-            calData = calRes.data || [];
-            riderAgeData = riderAgeRes.data || [];
-            dataSheetData = dataRes.data || [];
-            riderSheetData = riderRes.data || [];
+            calData = results[0].status === 'fulfilled' ? (results[0].value.data || []) : [];
+            riderAgeData = results[1].status === 'fulfilled' ? (results[1].value.data || []) : [];
+            dataSheetData = results[2].status === 'fulfilled' ? (results[2].value.data || []) : [];
+            riderSheetData = results[3].status === 'fulfilled' ? (results[3].value.data || []) : [];
 
             ageList.innerHTML = '';
             for (let i = 0; i <= 80; i++) {
@@ -581,7 +581,7 @@
 
         if (matchedRow) {
             let keys = Object.keys(matchedRow);
-            let codeName = matchedRow['รหัส'] !== undefined ? String(matchedRow['รหัส']).trim() : (keys[0] ? String(row[keys[0]]).trim() : "");
+            let codeName = matchedRow['รหัส'] !== undefined ? String(matchedRow['รหัส']).trim() : (keys[0] ? String(matchedRow[keys[0]]).trim() : "");
             if (codeInput.value !== codeName) {
                 codeInput.value = codeName;
             }
