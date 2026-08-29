@@ -113,7 +113,6 @@
             font-style: italic;
             padding: 10px;
         }
-        /* สไตล์ตารางผลรวมใหม่ */
         .summary-table {
             margin-top: 25px;
             background-color: #ebf8ff;
@@ -280,8 +279,8 @@
     async function loadSheetData() {
         try {
             const [calRes, riderAgeRes, dataRes, riderRes] = await Promise.all([
-                fetch(`${SCRIPT_URL}?sheet=Cal`).then(res => res.json()),
-                fetch(`${SCRIPT_URL}?sheet=RiderAge`).then(res => res.json()),
+                fetch(`${SCRIPT_URL}?sheet=Cal`).then(res => res.json()).catch(() => ({ data: [] })),
+                fetch(`${SCRIPT_URL}?sheet=RiderAge`).then(res => res.json()).catch(() => ({ data: [] })),
                 fetch(`${SCRIPT_URL}?sheet=Data`).then(res => res.json()).catch(() => ({ data: [] })),
                 fetch(`${SCRIPT_URL}?sheet=Rider`).then(res => res.json()).catch(() => ({ data: [] }))
             ]);
@@ -301,7 +300,7 @@
             ageInput.disabled = false;
             ageInput.placeholder = "พิมพ์หรือเลือกอายุ (0-80)";
         } catch (error) {
-            console.error("Error loading data:", error);
+            console.error("Error loading data from main index:", error);
             ageInput.placeholder = "โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรช";
         }
     }
