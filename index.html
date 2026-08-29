@@ -170,7 +170,6 @@
         </div>
     </div>
 
-    <!-- หน้า Login เริ่มต้น -->
     <div id="login-page" class="container">
         <div id="login-container" class="card">
             <div class="login-header-box">
@@ -204,7 +203,6 @@
         </div>
     </div>
 
-    <!-- ส่วนเนื้อหาหลัก -->
     <div id="app-content" class="container d-none">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -221,10 +219,16 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="btn-group mb-4 w-100 shadow-sm" role="group" aria-label="Main Navigation">
-                    <button type="button" id="btn-view-insurance" class="btn btn-dark-theme fw-bold active py-2"><i class="bi bi-journal-text me-1"></i>แบบประกัน</button>
-                    <button type="button" id="btn-view-rider" class="btn btn-outline-dark-theme fw-bold py-2"><i class="bi bi-plus-square me-1"></i>สัญญาเพิ่มเติม</button>
-                    <button type="button" id="btn-view-commission" class="btn btn-outline-dark-theme fw-bold py-2"><i class="bi bi-calculator me-1"></i>คำนวณค่าคอม</button>
+                <div class="row g-2 mb-4">
+                    <div class="col">
+                        <button type="button" id="btn-view-insurance" class="btn btn-dark-theme fw-bold w-100 py-2 shadow-sm"><i class="bi bi-journal-text me-1"></i>แบบประกัน</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" id="btn-view-rider" class="btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm"><i class="bi bi-plus-square me-1"></i>สัญญาเพิ่มเติม</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" id="btn-view-commission" class="btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm"><i class="bi bi-calculator me-1"></i>คำนวณค่าคอม</button>
+                    </div>
                 </div>
 
                 <div id="main-content-wrapper">
@@ -269,9 +273,23 @@
                 </div>
 
                 <div id="commission-content-wrapper" class="d-none">
-                    <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
-                        <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
-                        ระบบคำนวณค่าคอมมิชชั่น (กำลังพัฒนา)
+                    <div class="row g-2 mb-4">
+                        <div class="col">
+                            <button type="button" id="btn-comm-general" class="btn btn-dark-theme fw-bold w-100 py-2 shadow-sm">ประกันทั่วไป</button>
+                        </div>
+                        <div class="col">
+                            <button type="button" id="btn-comm-sababy" class="btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm">สบ๊าบ สบาย</button>
+                        </div>
+                        <div class="col">
+                            <button type="button" id="btn-comm-liveverse" class="btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm">ไลฟ์เวิร์ส</button>
+                        </div>
+                    </div>
+
+                    <div id="commission-sub-content">
+                        <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
+                            <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
+                            ระบบคำนวณค่าคอมมิชชั่น - ประกันทั่วไป (กำลังพัฒนา)
+                        </div>
                     </div>
                 </div>
             </div>
@@ -281,7 +299,6 @@
         </div>
     </div>
 
-    <!-- Modal จัดการผู้ใช้สำหรับ Admin -->
     <div class="modal fade" id="userManageModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -330,7 +347,6 @@
         </div>
     </div>
 
-    <!-- Modal ตั้งค่าช่วงวันที่หัวข้อ -->
     <div class="modal fade" id="dateModal" tabindex="-1">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -353,7 +369,6 @@
         </div>
     </div>
 
-    <!-- Modal ยืนยันการลบ -->
     <div class="modal fade" id="deleteModal" tabindex="-1">
         <div class="modal-dialog modal-sm">
             <div class="modal-content text-center p-3">
@@ -371,7 +386,6 @@
         </div>
     </div>
 
-    <!-- Modal Form (เพิ่ม/แก้ไขข้อมูล) -->
     <div class="modal fade" id="dataModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -425,6 +439,11 @@
         const BTN_VIEW_COMMISSION = document.getElementById('btn-view-commission');
         const MAIN_CONTENT_WRAPPER = document.getElementById('main-content-wrapper');
         const COMMISSION_CONTENT_WRAPPER = document.getElementById('commission-content-wrapper');
+
+        const BTN_COMM_GENERAL = document.getElementById('btn-comm-general');
+        const BTN_COMM_SABABY = document.getElementById('btn-comm-sababy');
+        const BTN_COMM_LIVEVERSE = document.getElementById('btn-comm-liveverse');
+        const COMMISSION_SUB_CONTENT = document.getElementById('commission-sub-content');
 
         const LOGIN_PAGE = document.getElementById('login-page');
         const APP_CONTENT = document.getElementById('app-content');
@@ -525,7 +544,6 @@
             userManageModal.show();
         });
 
-        // ฟังก์ชันแปลงรูปแบบวันที่ให้เป็น DD/MM/YYYY, HH:MM:SS
         function formatDateTimeThai(dateString) {
             if (!dateString || dateString === '-') return '-';
             const date = new Date(dateString);
@@ -621,34 +639,71 @@
         };
 
         function switchView(viewType) {
-            BTN_VIEW_INSURANCE.className = 'btn btn-outline-dark-theme fw-bold py-2';
-            BTN_VIEW_RIDER.className = 'btn btn-outline-dark-theme fw-bold py-2';
-            BTN_VIEW_COMMISSION.className = 'btn btn-outline-dark-theme fw-bold py-2';
+            BTN_VIEW_INSURANCE.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
+            BTN_VIEW_RIDER.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
+            BTN_VIEW_COMMISSION.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
 
             if (viewType === 'insurance') {
-                BTN_VIEW_INSURANCE.className = 'btn btn-dark-theme fw-bold active py-2';
+                BTN_VIEW_INSURANCE.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
                 currentSheetName = 'Data';
                 MAIN_CONTENT_WRAPPER.style.display = 'block';
                 COMMISSION_CONTENT_WRAPPER.classList.add('d-none');
                 FILTER_CAPITAL_WRAPPER.style.display = 'block';
                 fetchData();
             } else if (viewType === 'rider') {
-                BTN_VIEW_RIDER.className = 'btn btn-dark-theme fw-bold active py-2';
+                BTN_VIEW_RIDER.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
                 currentSheetName = 'Rider';
                 MAIN_CONTENT_WRAPPER.style.display = 'block';
                 COMMISSION_CONTENT_WRAPPER.classList.add('d-none');
                 FILTER_CAPITAL_WRAPPER.style.display = 'none';
                 fetchData();
             } else if (viewType === 'commission') {
-                BTN_VIEW_COMMISSION.className = 'btn btn-dark-theme fw-bold active py-2';
+                BTN_VIEW_COMMISSION.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
                 MAIN_CONTENT_WRAPPER.style.display = 'none';
                 COMMISSION_CONTENT_WRAPPER.classList.remove('d-none');
+                switchCommissionSub('general');
+            }
+        }
+
+        function switchCommissionSub(subType) {
+            BTN_COMM_GENERAL.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
+            BTN_COMM_SABABY.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
+            BTN_COMM_LIVEVERSE.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
+
+            if (subType === 'general') {
+                BTN_COMM_GENERAL.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
+                COMMISSION_SUB_CONTENT.innerHTML = `
+                    <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
+                        <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
+                        ระบบคำนวณค่าคอมมิชชั่น - ประกันทั่วไป (กำลังพัฒนา)
+                    </div>
+                `;
+            } else if (subType === 'sababy') {
+                BTN_COMM_SABABY.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
+                COMMISSION_SUB_CONTENT.innerHTML = `
+                    <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
+                        <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
+                        ระบบคำนวณค่าคอมมิชชั่น - สบ๊าบ สบาย (กำลังพัฒนา)
+                    </div>
+                `;
+            } else if (subType === 'liveverse') {
+                BTN_COMM_LIVEVERSE.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
+                COMMISSION_SUB_CONTENT.innerHTML = `
+                    <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
+                        <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
+                        ระบบคำนวณค่าคอมมิชชั่น - ไลฟ์เวิร์ส (กำลังพัฒนา)
+                    </div>
+                `;
             }
         }
 
         BTN_VIEW_INSURANCE.addEventListener('click', () => switchView('insurance'));
         BTN_VIEW_RIDER.addEventListener('click', () => switchView('rider'));
         BTN_VIEW_COMMISSION.addEventListener('click', () => switchView('commission'));
+
+        BTN_COMM_GENERAL.addEventListener('click', () => switchCommissionSub('general'));
+        BTN_COMM_SABABY.addEventListener('click', () => switchCommissionSub('sababy'));
+        BTN_COMM_LIVEVERSE.addEventListener('click', () => switchCommissionSub('liveverse'));
 
         function showToast(message, isSuccess = true) {
             const toastEl = document.getElementById('liveToast');
