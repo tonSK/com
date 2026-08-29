@@ -34,6 +34,7 @@
         .form-group {
             flex: 1;
             min-width: 250px;
+            position: relative;
         }
         label {
             display: block;
@@ -49,6 +50,7 @@
             font-size: 1rem;
             outline: none;
             transition: border-color 0.2s;
+            background-color: #fff;
         }
         input:focus, select:focus {
             border-color: #3182ce;
@@ -136,19 +138,22 @@
     <div class="form-row" style="margin-top: 10px;">
         <div class="form-group">
             <label for="ageInput">ระบุอายุ</label>
-            <input type="text" id="ageInput" list="ageList" placeholder="กำลังโหลดข้อมูล..." disabled autocomplete="off">
-            <datalist id="ageList"></datalist>
+            <select id="ageInput" disabled>
+                <option value="">กำลังโหลดข้อมูล...</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="productInput">แบบประกัน</label>
-            <input type="text" id="productInput" list="productList" placeholder="กรุณาระบุอายุก่อน..." disabled autocomplete="off">
-            <datalist id="productList"></datalist>
+            <select id="productInput" disabled>
+                <option value="">กรุณาระบุอายุก่อน...</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="codeInput">รหัส</label>
             <div class="code-container">
-                <input type="text" id="codeInput" list="codeList" placeholder="กรุณาระบุอายุก่อน..." disabled autocomplete="off">
-                <datalist id="codeList"></datalist>
+                <select id="codeInput" disabled>
+                    <option value="">กรุณาระบุอายุก่อน...</option>
+                </select>
                 <button type="button" id="clearBtn" class="btn-clear">ล้างค่า</button>
             </div>
         </div>
@@ -229,11 +234,8 @@
     let riderSheetData = [];
 
     const ageInput = document.getElementById('ageInput');
-    const ageList = document.getElementById('ageList');
     const productInput = document.getElementById('productInput');
-    const productList = document.getElementById('productList');
     const codeInput = document.getElementById('codeInput');
-    const codeList = document.getElementById('codeList');
     const clearBtn = document.getElementById('clearBtn');
     const covPeriodInput = document.getElementById('covPeriodInput');
     const payPeriodInput = document.getElementById('payPeriodInput');
@@ -290,18 +292,18 @@
             dataSheetData = dataRes.data || [];
             riderSheetData = riderRes.data || [];
 
-            ageList.innerHTML = '';
+            ageInput.innerHTML = '<option value="">-- กรุณาเลือกอายุ --</option>';
             for (let i = 0; i <= 80; i++) {
                 let opt = document.createElement('option');
                 opt.value = i;
-                ageList.appendChild(opt);
+                opt.textContent = i;
+                ageInput.appendChild(opt);
             }
 
             ageInput.disabled = false;
-            ageInput.placeholder = "พิมพ์หรือเลือกอายุ (0-80)";
         } catch (error) {
             console.error("Error loading data:", error);
-            ageInput.placeholder = "โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรช";
+            ageInput.innerHTML = '<option value="">โหลดข้อมูลไม่สำเร็จ</option>';
         }
     }
 
@@ -309,11 +311,9 @@
 
     function clearAllValues() {
         ageInput.value = "";
-        productInput.value = "";
-        productList.innerHTML = "";
-        codeInput.value = "";
-        codeList.innerHTML = "";
+        productInput.innerHTML = '<option value="">กรุณาระบุอายุก่อน...</option>';
         productInput.disabled = true;
+        codeInput.innerHTML = '<option value="">กรุณาระบุอายุก่อน...</option>';
         codeInput.disabled = true;
         covPeriodInput.value = "";
         payPeriodInput.value = "";
@@ -363,29 +363,14 @@
             }
         });
 
-        if (totalPremium > 0) {
-            totalPremiumResult.textContent = formatNumber(totalPremium, false);
-            totalPremiumResult.style.color = "#2b6cb0";
-        } else {
-            totalPremiumResult.textContent = "-";
-            totalPremiumResult.style.color = "#2d3748";
-        }
+        totalPremiumResult.textContent = totalPremium > 0 ? formatNumber(totalPremium, false) : "-";
+        totalPremiumResult.style.color = totalPremium > 0 ? "#2b6cb0" : "#2d3748";
 
-        if (totalComm > 0) {
-            totalCommResult.textContent = formatNumber(totalComm, false);
-            totalCommResult.style.color = "#2b6cb0";
-        } else {
-            totalCommResult.textContent = "-";
-            totalCommResult.style.color = "#2d3748";
-        }
+        totalCommResult.textContent = totalComm > 0 ? formatNumber(totalComm, false) : "-";
+        totalCommResult.style.color = totalComm > 0 ? "#2b6cb0" : "#2d3748";
 
-        if (totalComplus > 0) {
-            totalComplusResult.textContent = formatNumber(totalComplus, false);
-            totalComplusResult.style.color = "#2b6cb0";
-        } else {
-            totalComplusResult.textContent = "-";
-            totalComplusResult.style.color = "#2d3748";
-        }
+        totalComplusResult.textContent = totalComplus > 0 ? formatNumber(totalComplus, false) : "-";
+        totalComplusResult.style.color = totalComplus > 0 ? "#2b6cb0" : "#2d3748";
     }
 
     function updatePeriodsAndCommission() {
@@ -476,34 +461,15 @@
         calculateGrandTotal();
     }
 
-    ageInput.addEventListener('input', () => {
-        handleAgeChange();
-        updatePeriodsAndCommission();
-    });
     ageInput.addEventListener('change', () => {
         handleAgeChange();
         updatePeriodsAndCommission();
     });
 
-    // แก้ไข: เพิ่มการหน่วงเวลา (setTimeout) เพื่อป้องกันไม่ให้ Safari ปิด List ขณะพิมพ์
-    let productTimer;
-    productInput.addEventListener('input', () => {
-        clearTimeout(productTimer);
-        productTimer = setTimeout(() => {
-            syncProductToCode(true);
-        }, 150);
-    });
     productInput.addEventListener('change', () => {
         syncProductToCode(true);
     });
 
-    let codeTimer;
-    codeInput.addEventListener('input', () => {
-        clearTimeout(codeTimer);
-        codeTimer = setTimeout(() => {
-            syncCodeToProduct(true);
-        }, 150);
-    });
     codeInput.addEventListener('change', () => {
         syncCodeToProduct(true);
     });
@@ -513,10 +479,8 @@
 
     function handleAgeChange() {
         let ageInputVal = ageInput.value.trim();
-        productInput.value = '';
-        productList.innerHTML = '';
-        codeInput.value = '';
-        codeList.innerHTML = '';
+        productInput.innerHTML = '<option value="">-- กรุณาเลือกแบบประกัน --</option>';
+        codeInput.innerHTML = '<option value="">-- กรุณาเลือกรหัส --</option>';
         covPeriodInput.value = '';
         payPeriodInput.value = '';
         productInput.disabled = true;
@@ -545,9 +509,7 @@
 
         if (availableProducts.length > 0) {
             productInput.disabled = false;
-            productInput.placeholder = "พิมพ์หรือเลือกแบบประกัน";
             codeInput.disabled = false;
-            codeInput.placeholder = "พิมพ์หรือเลือกรหัส";
 
             let addedProducts = new Set();
             let addedCodes = new Set();
@@ -561,19 +523,18 @@
                     addedProducts.add(productName);
                     let opt = document.createElement('option');
                     opt.value = productName;
-                    productList.appendChild(opt);
+                    opt.textContent = productName;
+                    productInput.appendChild(opt);
                 }
 
                 if (codeName && !addedCodes.has(codeName)) {
                     addedCodes.add(codeName);
                     let opt = document.createElement('option');
                     opt.value = codeName;
-                    codeList.appendChild(opt);
+                    opt.textContent = codeName;
+                    codeInput.appendChild(opt);
                 }
             });
-        } else {
-            productInput.placeholder = "ไม่พบแบบประกันสำหรับอายุนี้";
-            codeInput.placeholder = "ไม่พบข้อมูลสำหรับอายุนี้";
         }
         
         calculateGrandTotal();
@@ -689,8 +650,8 @@
             } else {
                 commTd.textContent = "-";
                 commTd.style.color = "#718096";
-                commTd.textContent = "-";
-                commTd.style.color = "#718096";
+                complusTd.textContent = "-";
+                complusTd.style.color = "#718096";
             }
         });
 
