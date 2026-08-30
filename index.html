@@ -228,7 +228,7 @@
                 </h1>
                 <div class="d-flex align-items-center flex-wrap gap-2">
                   <span id="logged-in-user-display" class="me-2 text-white small fw-bold"><i class="bi bi-person-circle me-1"></i><span id="username-text"></span></span>
-                  <span id="last-update-display" class="me-2 text-white small fw-bold" style="display: none;">อัปเดตล่าสุด : -</span>
+                  <span id="last-update-display" class="me-2 text-white small fw-bold" style="display: none;">อัปเดต : -</span>
                   <button id="manage-users-btn" class="btn btn-warning btn-sm fw-bold text-dark d-none"><i class="bi bi-people me-1"></i>จัดการผู้ใช้</button>
                   <button id="config-date-btn" class="btn btn-info btn-sm fw-bold text-white d-none"><i class="bi bi-calendar-range me-1"></i>ตั้งค่าช่วงวันที่</button>
                   <button id="logout-main-btn" class="btn btn-danger btn-sm fw-bold"><i class="bi bi-box-arrow-right me-1"></i>ออกจากระบบ</button>
@@ -820,9 +820,9 @@
             let updateText = '';
             if (metaConfig.updateDate) {
                 const formattedUpdate = metaConfig.updateDate.includes('-') ? formatDateThaiShort(metaConfig.updateDate) : metaConfig.updateDate;
-                updateText = ` <span class="fs-6 fw-normal text-white-50">(อัปเดตล่าสุด : ${formattedUpdate})</span>`;
+                updateText = ` <span class="fs-6 fw-normal text-white-50">(อัปเดต : ${formattedUpdate})</span>`;
             } else {
-                updateText = ` <span class="fs-6 fw-normal text-white-50">(อัปเดตล่าสุด : -)</span>`;
+                updateText = ` <span class="fs-6 fw-normal text-white-50">(อัปเดต : -)</span>`;
             }
 
             MAIN_TITLE_TEXT.innerHTML = `${baseTitle}${dateRangeText}${updateText}`;
