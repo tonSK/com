@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตารางคอมมิชชั่น</title>
+    <title>98 ตารางคอมมิชชั่น</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; }
         .container { margin-top: 30px; margin-bottom: 30px; }
@@ -36,6 +35,15 @@
             height: 40px;
             z-index: 20;
         }
+
+        tr.category-header,
+        tr.category-header-red,
+        tr.category-header-rider {
+            position: sticky;
+            top: 88px; /* ความสูงรวมของ thead ทั้ง 2 แถว (48px + 40px) เพื่อให้ต่อลงมาพอดี */
+            z-index: 19;
+        }
+        /* ================================ */
         
         td { vertical-align: middle; background-color: #ffffff !important; }
         
@@ -158,110 +166,12 @@
             background-color: #0b5ed7;
         }
 
-        /* ===== Styles for the embedded commission-calculator widgets (ประกันทั่วไป / สบ๊าบ สบาย) ===== */
-.calc-widget * {
-            box-sizing: border-box;
-            font-family: 'Sarabun', sans-serif;
-        }.calc-widget {
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }.calc-widget .calc-inner-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }.calc-widget .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }.calc-widget .form-group {
-            flex: 1;
-            min-width: 250px;
-        }.calc-widget label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: #4a5568;
-        }.calc-widget input, .calc-widget select {
+        .comm-panel-iframe {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }.calc-widget input:focus, .calc-widget select:focus {
-            border-color: #3182ce;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
-        }.calc-widget input:disabled, .calc-widget select:disabled {
-            background-color: #edf2f7;
-            cursor: not-allowed;
-            color: #2d3748;
-            font-weight: 600;
-        }.calc-widget .code-container {
-            display: flex;
-            gap: 10px;
-        }.calc-widget .btn-clear {
-            background-color: #dc3545;
-            color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            white-space: nowrap;
-        }.calc-widget .btn-clear:hover {
-            background-color: #c82333;
-        }.calc-widget .btn-clear:active {
-            transform: scale(0.98);
-        }.calc-widget table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            margin-bottom: 25px;
-            background: #fff;
-        }.calc-widget th, .calc-widget td {
-            border: 1px solid #e2e8f0;
-            padding: 12px;
-            text-align: left;
-            font-size: 0.95rem;
-        }.calc-widget th {
-            background-color: #ebf8ff;
-            color: #2b6cb0;
-            font-weight: 600;
-        }.calc-widget tr:nth-child(even) {
-            background-color: #f8fafc;
-        }.calc-widget .text-right {
-            text-align: right;
-        }.calc-widget .loading {
-            text-align: center;
-            color: #718096;
-            font-style: italic;
-            padding: 10px;
-        }.calc-widget /* สไตล์ตารางผลรวมใหม่ */
-        .summary-table {
-            margin-top: 25px;
-            background-color: #ebf8ff;
-        }.calc-widget .summary-table th {
-            background-color: #bee3f8;
-            color: #2b6cb0;
-            text-align: center;
-            font-weight: 600;
-        }.calc-widget .summary-table td {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #2d3748;
+            display: block;
+            min-height: 200px;
         }
-    
     </style>
 </head>
 <body>
@@ -351,7 +261,7 @@
                         </div>
                         <div class="col-md-2">
                             <label for="filter-age" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-person-badge me-1"></i>ค้นหาอายุ</label>
-                            <input type="number" id="filter-age" class="form-control" placeholder="เช่น 30">
+                            <input type="number" id="filter-age" class="form-control" placeholder="เช่น 35">
                         </div>
                         <div class="col-md-2" id="filter-capital-wrapper">
                             <label for="filter-capital" class="form-label small fw-bold text-secondary mb-1"><i class="bi bi-currency-dollar me-1"></i>ค้นหาทุนประกัน</label>
@@ -392,196 +302,9 @@
                     </div>
 
                     <div id="commission-sub-content">
-                        <div id="gen-pane" class="calc-widget">
-                            <div class="calc-inner-container">
-
-    <div class="form-row" style="margin-top: 10px;">
-        <div class="form-group">
-            <label for="gen-ageInput">ระบุอายุ</label>
-            <input type="text" id="gen-ageInput" list="gen-ageList" placeholder="กำลังโหลดข้อมูล..." disabled autocomplete="off">
-            <datalist id="gen-ageList"></datalist>
-        </div>
-        <div class="form-group">
-            <label for="gen-productInput">แบบประกัน</label>
-            <input type="text" id="gen-productInput" list="gen-productList" placeholder="กรุณาระบุอายุก่อน..." disabled autocomplete="off">
-            <datalist id="gen-productList"></datalist>
-        </div>
-        <div class="form-group">
-            <label for="gen-codeInput">รหัส</label>
-            <div class="code-container">
-                <input type="text" id="gen-codeInput" list="gen-codeList" placeholder="กรุณาระบุอายุก่อน..." disabled autocomplete="off">
-                <datalist id="gen-codeList"></datalist>
-                <button type="button" id="gen-clearBtn" class="btn-clear">ล้างค่า</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group">
-            <label for="gen-covPeriodInput">คุ้มครอง (ปี)</label>
-            <input type="text" id="gen-covPeriodInput" placeholder="-" disabled>
-        </div>
-        <div class="form-group">
-            <label for="gen-payPeriodInput">ชำระเบี้ย (ปี)</label>
-            <input type="text" id="gen-payPeriodInput" placeholder="-" disabled>
-        </div>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 46%;">ทุนประกันชีวิต</th>
-                <th style="width: 18%;">เบี้ยประกันชีวิต</th>
-                <th style="width: 18%;">คอมมิชชั่น</th>
-                <th style="width: 18%;">คอมพลัส</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="text" id="gen-sumInsuredInput" class="formatted-number" placeholder="ระบุทุนประกันชีวิต"></td>
-                <td><input type="text" id="gen-premiumInput" class="formatted-number" placeholder="ระบุเบี้ยประกันชีวิต"></td>
-                <td id="gen-commResult" class="text-right" style="color: #718096;">-</td>
-                <td id="gen-complusResult" class="text-right" style="color: #718096;">-</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 46%;">สัญญาเพิ่มเติม</th>
-                <th style="width: 18%;">เบี้ยสัญญาเพิ่มเติม</th>
-                <th style="width: 18%;">คอมมิชชั่น</th>
-                <th style="width: 18%;">คอมพลัส</th>
-            </tr>
-        </thead>
-        <tbody id="gen-riderTableBody">
-            <tr>
-                <td colspan="4" class="loading">กรุณาระบุอายุและเลือกแบบประกันเพื่อแสดงสัญญาเพิ่มเติม</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <table class="summary-table">
-        <thead>
-            <tr>
-                <th style="width: 46%;">สรุปผล</th>
-                <th style="width: 18%;">เบี้ยประกันรวม</th>
-                <th style="width: 18%;">คอมมิชชั่นรวม</th>
-                <th style="width: 18%;">คอมพลัสรวม</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="text-align: center; color: #2b6cb0;">ผลรวม</td>
-                <td id="gen-totalPremiumResult" class="text-right">-</td>
-                <td id="gen-totalCommResult" class="text-right">-</td>
-                <td id="gen-totalComplusResult" class="text-right">-</td>
-            </tr>
-        </tbody>
-    </table>
-
-                            </div>
-                        </div>
-
-                        <div id="sab-pane" class="calc-widget d-none">
-                            <div class="calc-inner-container">
-
-    <div class="form-row" style="margin-top: 10px;">
-        <div class="form-group">
-            <label for="sab-ageInput">ระบุอายุ</label>
-            <input type="text" id="sab-ageInput" list="sab-ageList" placeholder="กำลังโหลดข้อมูล..." disabled autocomplete="off">
-            <datalist id="sab-ageList"></datalist>
-        </div>
-        <div class="form-group">
-            <label for="sab-productInput">แบบประกัน</label>
-            <input type="text" id="sab-productInput" value="เฮลท์ ฟิต สบ๊าย สบาย / คุ้มธนกิจ 99/99 (Nn)" disabled autocomplete="off">
-        </div>
-        <div class="form-group">
-            <label for="sab-codeInput">รหัส</label>
-            <div class="code-container">
-                <input type="text" id="sab-codeInput" value="W013" disabled autocomplete="off">
-                <button type="button" id="sab-clearBtn" class="btn-clear">ล้างค่า</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group">
-            <label for="sab-covPeriodInput">คุ้มครอง (ปี)</label>
-            <input type="text" id="sab-covPeriodInput" placeholder="-" disabled>
-        </div>
-        <div class="form-group">
-            <label for="sab-payPeriodInput">ชำระเบี้ย (ปี)</label>
-            <input type="text" id="sab-payPeriodInput" placeholder="-" disabled>
-        </div>
-    </div>
-
-    <!-- ปรับขนาดความกว้างคอลัมน์ให้เท่ากับ general.html (46%, 18%, 18%, 18%) -->
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 46%;">ทุนประกันชีวิต</th>
-                <th style="width: 18%;">เบี้ยประกันชีวิต</th>
-                <th style="width: 18%;">คอมมิชชั่น</th>
-                <th style="width: 18%;">คอมพลัส</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="text" id="sab-sumInsuredInput" value="50,000" disabled autocomplete="off"></td>
-                <td><input type="text" id="sab-premiumInput" class="formatted-number" placeholder="ระบุเบี้ยประกันชีวิต"></td>
-                <td id="sab-commResult" class="text-right" style="color: #718096;">-</td>
-                <td id="sab-complusResult" class="text-right" style="color: #718096;">-</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- ปรับขนาดความกว้างคอลัมน์สัญญาเพิ่มเติมให้เท่ากับ general.html -->
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 46%;">สัญญาเพิ่มเติม</th>
-                <th style="width: 18%;">เบี้ยสัญญาเพิ่มเติม</th>
-                <th style="width: 18%;">คอมมิชชั่น</th>
-                <th style="width: 18%;">คอมพลัส</th>
-            </tr>
-        </thead>
-        <tbody id="sab-riderTableBody">
-            <tr>
-                <td colspan="4" class="loading">กรุณาระบุอายุก่อน</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- ส่วนตารางผลรวมใหม่ให้เหมือน general.html -->
-    <table class="summary-table">
-        <thead>
-            <tr>
-                <th style="width: 46%;">สรุปผล</th>
-                <th style="width: 18%;">เบี้ยประกันรวม</th>
-                <th style="width: 18%;">คอมมิชชั่นรวม</th>
-                <th style="width: 18%;">คอมพลัสรวม</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="text-align: center; color: #2b6cb0;">ผลรวม</td>
-                <td id="sab-totalPremiumResult" class="text-right">-</td>
-                <td id="sab-totalCommResult" class="text-right">-</td>
-                <td id="sab-totalComplusResult" class="text-right">-</td>
-            </tr>
-        </tbody>
-    </table>
-
-                            </div>
-                        </div>
-
-                        <div id="live-pane" class="d-none">
-                            <div class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
-                                <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
-                                ระบบคำนวณค่าคอมมิชชั่น - ไลฟ์เวิร์ส (กำลังพัฒนา)
-                            </div>
+                        <div id="comm-loading" class="p-4 text-center text-muted fs-5 bg-light rounded-3 border">
+                            <i class="bi bi-calculator display-4 mb-2 d-block text-secondary"></i>
+                            กำลังโหลดข้อมูล...
                         </div>
                     </div>
                 </div>
@@ -625,13 +348,14 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th>Username</th>
-                                    <th>Role (สิทธิ์)</th>
-                                    <th>เข้าใช้งานล่าสุด</th>
+                                    <th>Role</th>
+                                    <th>Last</th>
+                                    <th>Count</th>
                                     <th>จัดการ</th>
                                 </tr>
                             </thead>
                             <tbody id="user-table-body">
-                                <tr><td colspan="4">กำลังโหลด...</td></tr>
+                                <tr><td colspan="5">กำลังโหลด...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -703,22 +427,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKf67KuOgyYDtmbi-kLsFPnVVQamhgNYqAsIqrvQu17G6Gj-c5uTFf9n9y-QpkEfLU/exec';
-
-        // ===== Shared, cached sheet-data loader used by the embedded commission-calculator widgets =====
-        // Both "ประกันทั่วไป" and "สบ๊าบ สบาย" widgets need the same Data/Rider (and general also
-        // needs Cal/RiderAge) sheets. Caching by sheet name means each sheet is fetched from the
-        // Google Sheet at most once per page load, no matter how many times the user switches tabs.
-        const _sheetDataCache = {};
-        window.getSheetData = function(sheetName) {
-            if (!_sheetDataCache[sheetName]) {
-                _sheetDataCache[sheetName] = fetch(`${SCRIPT_URL}?sheet=${sheetName}`)
-                    .then(res => res.json())
-                    .then(json => json.data || [])
-                    .catch(() => []);
-            }
-            return _sheetDataCache[sheetName];
-        };
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZqJza0rJlDgX7amqwhho1XRRABG1t7ZKKcOG3tY-i_4jiWBjO1fM_-6TXXVGfSP6g/exec';
 
         const SEARCH_INPUT = document.getElementById('search-input');
         const FILTER_CATEGORY = document.getElementById('filter-category');
@@ -870,7 +579,7 @@
 
         async function loadUsersList() {
             const tbody = document.getElementById('user-table-body');
-            tbody.innerHTML = '<tr><td colspan="4">กำลังโหลด...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5">กำลังโหลด...</td></tr>';
             try {
                 const res = await fetch(`${SCRIPT_URL}?sheet=Users`);
                 const result = await res.json();
@@ -879,8 +588,9 @@
                     result.data.forEach(u => {
                         const uname = u['username'] || u['Username'] || u[0] || '';
                         const urole = u['role'] || u['Role'] || u[2] || 'user';
-                        const rawLastLogin = u['lastLogin'] || u['LastLogin'] || u['เข้าใช้งานล่าสุด'] || '-';
+                        const rawLastLogin = u['lastLogin'] || u['LastLogin'] || u['Last'] || '-';
                         const lastLogin = formatDateTimeThai(rawLastLogin);
+                        const loginCount = u['count'] || u['Count'] || u['COUNT'] || u['Count'] || u[4] || 0;
                 
                         if (!uname) return;
 
@@ -888,13 +598,14 @@
                             <td class="fw-bold text-start ps-3"><i class="bi bi-person me-1"></i>${uname}</td>
                             <td><span class="badge bg-${urole.toLowerCase() === 'admin' ? 'danger' : 'secondary'}">${urole}</span></td>
                             <td class="small text-muted">${lastLogin}</td>
+                            <td class="fw-bold">${loginCount || 0}</td>
                             <td><button class="btn btn-sm btn-outline-danger py-0" onclick="deleteSystemUser(${u.rowIndex})"><i class="bi bi-trash"></i></button></td>
                         </tr>`;
                     });
                 }
-                tbody.innerHTML = html || '<tr><td colspan="4">ไม่พบข้อมูลผู้ใช้</td></tr>';
+                tbody.innerHTML = html || '<tr><td colspan="5">ไม่พบข้อมูลผู้ใช้</td></tr>';
             } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-danger">โหลดข้อมูลไม่สำเร็จ</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="text-danger">โหลดข้อมูลไม่สำเร็จ</td></tr>';
             }
         }
 
@@ -973,32 +684,99 @@
             }
         }
 
-        const GEN_PANE = document.getElementById('gen-pane');
-        const SAB_PANE = document.getElementById('sab-pane');
-        const LIVE_PANE = document.getElementById('live-pane');
+        // ----- Template HTML ของแต่ละแบบประกัน (ฝังไว้ในไฟล์นี้ ไม่ต้องพึ่งไฟล์ general.html/sabai.html/lifeverse.html แยกต่างหาก) -----
+        const COMM_TEMPLATE_GENERAL = "<!DOCTYPE html>\n<html lang=\"th\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e17\u0e31\u0e48\u0e27\u0e44\u0e1b</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\n    <style>\n        * {\n            box-sizing: border-box;\n            font-family: 'Sarabun', sans-serif;\n        }\n        body {\n            background-color: #f4f6f9;\n            margin: 0;\n            padding: 20px;\n            color: #333;\n        }\n        .container {\n            max-width: 1200px;\n            margin: 0 auto;\n            background: #fff;\n            padding: 30px;\n            border-radius: 12px;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.08);\n        }\n        .form-row {\n            display: flex;\n            gap: 20px;\n            margin-bottom: 15px;\n            flex-wrap: wrap;\n            align-items: flex-end;\n        }\n        .form-group {\n            flex: 1;\n            min-width: 250px;\n            position: relative;\n        }\n        label {\n            display: block;\n            margin-bottom: 6px;\n            font-weight: 500;\n            color: #4a5568;\n        }\n        input, select {\n            width: 100%;\n            padding: 10px 12px;\n            border: 1px solid #cbd5e0;\n            border-radius: 6px;\n            font-size: 1rem;\n            outline: none;\n            transition: border-color 0.2s;\n            background-color: #fff;\n        }\n        input:focus, select:focus {\n            border-color: #3182ce;\n            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);\n        }\n        input:disabled, select:disabled {\n            background-color: #edf2f7;\n            cursor: not-allowed;\n            color: #2d3748;\n            font-weight: 600;\n        }\n        .code-container {\n            display: flex;\n            gap: 10px;\n        }\n        .btn-clear {\n            background-color: #dc3545;\n            color: white;\n            border: none;\n            padding: 10px 20px;\n            font-size: 16px;\n            font-weight: 600;\n            border-radius: 6px;\n            cursor: pointer;\n            transition: background-color 0.2s ease, transform 0.1s ease;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            white-space: nowrap;\n        }\n        .btn-clear:hover {\n            background-color: #c82333;\n        }\n        .btn-clear:active {\n            transform: scale(0.98);\n        }\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-top: 10px;\n            margin-bottom: 25px;\n            background: #fff;\n        }\n        th, td {\n            border: 1px solid #e2e8f0;\n            padding: 12px;\n            text-align: left;\n            font-size: 0.95rem;\n        }\n        th {\n            background-color: #ebf8ff;\n            color: #2b6cb0;\n            font-weight: 600;\n        }\n        tr:nth-child(even) {\n            background-color: #f8fafc;\n        }\n        .text-right {\n            text-align: right;\n        }\n        .loading {\n            text-align: center;\n            color: #718096;\n            font-style: italic;\n            padding: 10px;\n        }\n        .summary-table {\n            margin-top: 25px;\n            background-color: #ebf8ff;\n        }\n        .summary-table th {\n            background-color: #bee3f8;\n            color: #2b6cb0;\n            text-align: center;\n            font-weight: 600;\n        }\n        .summary-table td {\n            font-weight: 700;\n            font-size: 1.1rem;\n            color: #2d3748;\n        }\n    </style>\n</head>\n<body>\n\n<div class=\"container\">\n    <div class=\"form-row\" style=\"margin-top: 10px;\">\n        <div class=\"form-group\">\n            <label for=\"ageInput\">\u0e2d\u0e32\u0e22\u0e38</label>\n            <select id=\"ageInput\" disabled>\n                <option value=\"\">\u0e01\u0e33\u0e25\u0e31\u0e07\u0e42\u0e2b\u0e25\u0e14\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25...</option>\n            </select>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"productInput\">\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19</label>\n            <select id=\"productInput\" disabled>\n                <option value=\"\">\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e32\u0e22\u0e38\u0e01\u0e48\u0e2d\u0e19...</option>\n            </select>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"codeInput\">\u0e23\u0e2b\u0e31\u0e2a</label>\n            <div class=\"code-container\">\n                <select id=\"codeInput\" disabled>\n                    <option value=\"\">\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e32\u0e22\u0e38\u0e01\u0e48\u0e2d\u0e19...</option>\n                </select>\n                <button type=\"button\" id=\"clearBtn\" class=\"btn-clear\">\u0e25\u0e49\u0e32\u0e07\u0e04\u0e48\u0e32</button>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"form-row\">\n        <div class=\"form-group\">\n            <label for=\"covPeriodInput\">\u0e04\u0e38\u0e49\u0e21\u0e04\u0e23\u0e2d\u0e07 (\u0e1b\u0e35)</label>\n            <input type=\"text\" id=\"covPeriodInput\" placeholder=\"-\" disabled>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"payPeriodInput\">\u0e0a\u0e33\u0e23\u0e30\u0e40\u0e1a\u0e35\u0e49\u0e22 (\u0e1b\u0e35)</label>\n            <input type=\"text\" id=\"payPeriodInput\" placeholder=\"-\" disabled>\n        </div>\n    </div>\n\n    <table>\n        <thead>\n            <tr>\n                <th style=\"width: 46%;\">\u0e17\u0e38\u0e19\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15</th>\n                <th style=\"width: 18%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td><input type=\"text\" id=\"sumInsuredInput\" class=\"formatted-number\" placeholder=\"\u0e23\u0e30\u0e1a\u0e38\u0e17\u0e38\u0e19\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15\"></td>\n                <td><input type=\"text\" id=\"premiumInput\" class=\"formatted-number\" placeholder=\"\u0e23\u0e30\u0e1a\u0e38\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15\"></td>\n                <td id=\"commResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n                <td id=\"complusResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n            </tr>\n        </tbody>\n    </table>\n\n    <table>\n        <thead>\n            <tr>\n                <th style=\"width: 46%;\">\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21</th>\n                <th style=\"width: 18%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a</th>\n            </tr>\n        </thead>\n        <tbody id=\"riderTableBody\">\n            <tr>\n                <td colspan=\"4\" class=\"loading\">-</td>\n            </tr>\n        </tbody>\n    </table>\n\n    <table class=\"summary-table\">\n        <thead>\n            <tr>\n                <th style=\"width: 46%;\">\u0e2a\u0e23\u0e38\u0e1b\u0e1c\u0e25</th>\n                <th style=\"width: 18%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e23\u0e27\u0e21</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19\u0e23\u0e27\u0e21</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a\u0e23\u0e27\u0e21</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td style=\"text-align: center; color: #2b6cb0;\">\u0e1c\u0e25\u0e23\u0e27\u0e21</td>\n                <td id=\"totalPremiumResult\" class=\"text-right\">-</td>\n                <td id=\"totalCommResult\" class=\"text-right\">-</td>\n                <td id=\"totalComplusResult\" class=\"text-right\">-</td>\n            </tr>\n        </tbody>\n    </table>\n</div>\n\n<script>\n    let calData = [];\n    let riderAgeData = [];\n    let dataSheetData = [];\n    let riderSheetData = [];\n\n    const ageInput = document.getElementById('ageInput');\n    const productInput = document.getElementById('productInput');\n    const codeInput = document.getElementById('codeInput');\n    const clearBtn = document.getElementById('clearBtn');\n    const covPeriodInput = document.getElementById('covPeriodInput');\n    const payPeriodInput = document.getElementById('payPeriodInput');\n    const sumInsuredInput = document.getElementById('sumInsuredInput');\n    const premiumInput = document.getElementById('premiumInput');\n    const commResult = document.getElementById('commResult');\n    const complusResult = document.getElementById('complusResult');\n    const riderTableBody = document.getElementById('riderTableBody');\n    const totalPremiumResult = document.getElementById('totalPremiumResult');\n    const totalCommResult = document.getElementById('totalCommResult');\n    const totalComplusResult = document.getElementById('totalComplusResult');\n\n    function formatNumber(value, isDecimal = false) {\n        if (value === undefined || value === null || value === \"\") return \"\";\n        let num = parseFloat(String(value).replace(/,/g, \"\"));\n        if (isNaN(num)) return \"\";\n        \n        let fixedStr = isDecimal ? num.toFixed(2) : num.toString();\n        let parts = fixedStr.split(\".\");\n        parts[0] = parts[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\n        return parts.join(\".\");\n    }\n\n    document.addEventListener(\"input\", function(e) {\n        if (e.target && e.target.classList.contains(\"formatted-number\")) {\n            let cursorPosition = e.target.selectionStart;\n            let originalLength = e.target.value.length;\n            \n            let rawValue = e.target.value.replace(/,/g, \"\");\n            if (!isNaN(rawValue) || rawValue.endsWith(\".\")) {\n                e.target.value = formatNumber(rawValue);\n                \n                let newLength = e.target.value.length;\n                cursorPosition = cursorPosition + (newLength - originalLength);\n                e.target.setSelectionRange(cursorPosition, cursorPosition);\n            }\n        }\n        if (e.target && (e.target.classList.contains(\"rider-premium-input\") || e.target.classList.contains(\"rider-plan-select\"))) {\n            updateRiderCommissions();\n        }\n    });\n\n    function initWithData(payload) {\n        try {\n            calData = (payload && payload.calData) || [];\n            riderAgeData = (payload && payload.riderAgeData) || [];\n            dataSheetData = (payload && payload.dataSheetData) || [];\n            riderSheetData = (payload && payload.riderSheetData) || [];\n\n            ageInput.innerHTML = '<option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e32\u0e22\u0e38 (0-80) --</option>';\n            for (let i = 0; i <= 80; i++) {\n                let opt = document.createElement('option');\n                opt.value = i;\n                opt.textContent = i;\n                ageInput.appendChild(opt);\n            }\n\n            ageInput.disabled = false;\n        } catch (error) {\n            console.error(\"Error loading data:\", error);\n            ageInput.innerHTML = '<option value=\"\">\u0e42\u0e2b\u0e25\u0e14\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e44\u0e21\u0e48\u0e2a\u0e33\u0e40\u0e23\u0e47\u0e08</option>';\n        }\n    }\n\n    window.addEventListener('message', function(e) {\n        if (e.data && e.data.type === 'commData') {\n            initWithData(e.data.payload);\n        }\n    });\n\n    if (window.parent) {\n        window.parent.postMessage({ type: 'commPanelReady' }, '*');\n    }\n\n    function clearAllValues() {\n        ageInput.value = \"\";\n        productInput.innerHTML = '<option value=\"\">\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e32\u0e22\u0e38\u0e01\u0e48\u0e2d\u0e19...</option>';\n        productInput.disabled = true;\n        codeInput.innerHTML = '<option value=\"\">\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e32\u0e22\u0e38\u0e01\u0e48\u0e2d\u0e19...</option>';\n        codeInput.disabled = true;\n        covPeriodInput.value = \"\";\n        payPeriodInput.value = \"\";\n        sumInsuredInput.value = \"\";\n        premiumInput.value = \"\";\n        commResult.textContent = \"-\";\n        commResult.style.color = \"#718096\";\n        complusResult.textContent = \"-\";\n        complusResult.style.color = \"#718096\";\n        riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\">-</td></tr>';\n        totalPremiumResult.textContent = \"-\";\n        totalPremiumResult.style.color = \"#2d3748\";\n        totalCommResult.textContent = \"-\";\n        totalCommResult.style.color = \"#2d3748\";\n        totalComplusResult.textContent = \"-\";\n        totalComplusResult.style.color = \"#2d3748\";\n    }\n\n    clearBtn.addEventListener('click', clearAllValues);\n\n    function calculateGrandTotal() {\n        let mainPremium = parseFloat(premiumInput.value.replace(/,/g, \"\")) || 0;\n        let mainComm = parseFloat(commResult.textContent.replace(/,/g, \"\")) || 0;\n        let mainComplus = parseFloat(complusResult.textContent.replace(/,/g, \"\")) || 0;\n\n        let totalPremium = isNaN(mainPremium) ? 0 : mainPremium;\n        let totalComm = isNaN(mainComm) ? 0 : mainComm;\n        let totalComplus = isNaN(mainComplus) ? 0 : mainComplus;\n\n        let riderRows = riderTableBody.querySelectorAll('tr');\n        riderRows.forEach(tr => {\n            let rPremInput = tr.querySelector('.rider-premium-input');\n            let commTd = tr.querySelector('.rider-comm-result');\n            let complusTd = tr.querySelector('.rider-complus-result');\n            \n            if (rPremInput) {\n                let rPrem = parseFloat(rPremInput.value.replace(/,/g, \"\")) || 0;\n                totalPremium += rPrem;\n            }\n            if (commTd && commTd.textContent !== \"-\" && !commTd.textContent.includes(\"\u0e44\u0e21\u0e48\u0e1e\u0e1a\")) {\n                let rComm = parseFloat(commTd.textContent.replace(/,/g, \"\")) || 0;\n                totalComm += rComm;\n            }\n            if (complusTd && complusTd.textContent !== \"-\" && !complusTd.textContent.includes(\"\u0e44\u0e21\u0e48\u0e1e\u0e1a\")) {\n                let rComplus = parseFloat(complusTd.textContent.replace(/,/g, \"\")) || 0;\n                totalComplus += rComplus;\n            }\n        });\n\n        totalPremiumResult.textContent = totalPremium > 0 ? formatNumber(totalPremium, false) : \"-\";\n        totalPremiumResult.style.color = totalPremium > 0 ? \"#2b6cb0\" : \"#2d3748\";\n\n        totalCommResult.textContent = totalComm > 0 ? formatNumber(totalComm, false) : \"-\";\n        totalCommResult.style.color = totalComm > 0 ? \"#2b6cb0\" : \"#2d3748\";\n\n        totalComplusResult.textContent = totalComplus > 0 ? formatNumber(totalComplus, false) : \"-\";\n        totalComplusResult.style.color = totalComplus > 0 ? \"#2b6cb0\" : \"#2d3748\";\n    }\n\n    function updatePeriodsAndCommission() {\n        let ageVal = ageInput.value.trim();\n        let productVal = productInput.value.trim();\n        let sumInsuredVal = sumInsuredInput.value.replace(/,/g, \"\").trim();\n        let premiumVal = premiumInput.value.replace(/,/g, \"\").trim();\n\n        covPeriodInput.value = \"\";\n        payPeriodInput.value = \"\";\n\n        if (productVal !== \"\") {\n            let matchedRow = calData.find(row => {\n                let keys = Object.keys(row);\n                let pName = row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19'] !== undefined ? String(row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19']).trim() : (keys[1] ? String(row[keys[1]]).trim() : \"\");\n                return pName === productVal;\n            });\n\n            if (matchedRow) {\n                let keys = Object.keys(matchedRow);\n                let rawCov = parseFloat(matchedRow['\u0e04\u0e38\u0e49\u0e21\u0e04\u0e23\u0e2d\u0e07'] !== undefined ? matchedRow['\u0e04\u0e38\u0e49\u0e21\u0e04\u0e23\u0e2d\u0e07'] : (keys[5] ? matchedRow[keys[5]] : NaN));\n                let rawPay = parseFloat(matchedRow['\u0e0a\u0e33\u0e23\u0e30'] !== undefined ? matchedRow['\u0e0a\u0e33\u0e23\u0e30'] : (keys[6] ? matchedRow[keys[6]] : NaN));\n                let age = parseFloat(ageVal);\n\n                if (!isNaN(rawCov)) {\n                    covPeriodInput.value = (rawCov > 50 && !isNaN(age)) ? (rawCov - age) : rawCov;\n                }\n                if (!isNaN(rawPay)) {\n                    payPeriodInput.value = (rawPay > 50 && !isNaN(age)) ? (rawPay - age) : rawPay;\n                }\n            }\n        }\n\n        if (ageVal === \"\" || productVal === \"\" || sumInsuredVal === \"\" || premiumVal === \"\" || isNaN(ageVal) || isNaN(sumInsuredVal) || isNaN(premiumVal)) {\n            commResult.textContent = \"-\";\n            commResult.style.color = \"#718096\";\n            complusResult.textContent = \"-\";\n            complusResult.style.color = \"#718096\";\n            calculateGrandTotal();\n            return;\n        }\n\n        let age = parseFloat(ageVal);\n        let sumInsured = parseFloat(sumInsuredVal);\n        let premium = parseFloat(premiumVal);\n\n        let matchingRows = dataSheetData.filter(row => {\n            let keys = Object.keys(row);\n            let rowName = row['\u0e0a\u0e37\u0e48\u0e2d\u0e41\u0e1a\u0e1a'] !== undefined ? String(row['\u0e0a\u0e37\u0e48\u0e2d\u0e41\u0e1a\u0e1a']).trim() : (row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19'] !== undefined ? String(row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19']).trim() : String(row[keys[1]] || \"\").trim());\n            if (rowName !== productVal) return false;\n\n            let minAge = parseFloat(row['\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e40\u0e23\u0e34\u0e48\u0e21'] : (row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] : row[keys[2]])) || 0;\n            let maxAge = parseFloat(row['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] !== undefined ? row['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] : (row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] : row[keys[3]])) || 0;\n            let minSum = parseFloat(row['\u0e17\u0e38\u0e19'] !== undefined ? row['\u0e17\u0e38\u0e19'] : (row['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] !== undefined ? row['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] : row[keys[4]])) || 0;\n\n            return age >= minAge && age <= maxAge && sumInsured >= minSum;\n        });\n\n        if (matchingRows.length > 0) {\n            matchingRows.sort((a, b) => {\n                let keysA = Object.keys(a);\n                let keysB = Object.keys(b);\n                let sumA = parseFloat(a['\u0e17\u0e38\u0e19'] !== undefined ? a['\u0e17\u0e38\u0e19'] : (a['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] !== undefined ? a['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] : keysA[4] !== undefined ? a[keysA[4]] : 0)) || 0;\n                let sumB = parseFloat(b['\u0e17\u0e38\u0e19'] !== undefined ? b['\u0e17\u0e38\u0e19'] : (b['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] !== undefined ? b['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] : keysB[4] !== undefined ? b[keysB[4]] : 0)) || 0;\n                return sumB - sumA;\n            });\n\n            let matchedRow = matchingRows[0];\n            let keys = Object.keys(matchedRow);\n            \n            let rawComm = parseFloat(matchedRow['\u0e04\u0e2d\u0e21'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21'] : (matchedRow['\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19'] : matchedRow[keys[5]])) || 0;\n            let rawComplus = parseFloat(matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] : matchedRow[keys[6]]) || 0;\n\n            let finalComm = Math.round((rawComm * premium) / 100);\n            let finalComplus = Math.round((rawComplus * premium) / 100);\n\n            commResult.textContent = finalComm > 0 ? formatNumber(finalComm, false) : \"-\";\n            commResult.style.color = finalComm > 0 ? \"#2d3748\" : \"#718096\";\n\n            complusResult.textContent = finalComplus > 0 ? formatNumber(finalComplus, false) : \"-\";\n            complusResult.style.color = finalComplus > 0 ? \"#2d3748\" : \"#718096\";\n        } else {\n            commResult.textContent = \"- (\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02)\";\n            commResult.style.color = \"#e53e3e\";\n            complusResult.textContent = \"-\";\n            complusResult.style.color = \"#718096\";\n        }\n        \n        calculateGrandTotal();\n    }\n\n    ageInput.addEventListener('change', () => {\n        handleAgeChange();\n        updatePeriodsAndCommission();\n    });\n\n    productInput.addEventListener('change', () => {\n        syncProductToCode(true);\n    });\n\n    codeInput.addEventListener('change', () => {\n        syncCodeToProduct(true);\n    });\n\n    sumInsuredInput.addEventListener('input', updatePeriodsAndCommission);\n    premiumInput.addEventListener('input', updatePeriodsAndCommission);\n\n    function handleAgeChange() {\n        let ageInputVal = ageInput.value.trim();\n        productInput.innerHTML = '<option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19 --</option>';\n        codeInput.innerHTML = '<option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e23\u0e2b\u0e31\u0e2a --</option>';\n        covPeriodInput.value = '';\n        payPeriodInput.value = '';\n        productInput.disabled = true;\n        codeInput.disabled = true;\n        riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\">-</td></tr>';\n        \n        if (ageInputVal === \"\" || isNaN(ageInputVal)) {\n            calculateGrandTotal();\n            return;\n        }\n\n        let age = parseFloat(ageInputVal);\n\n        const availableProducts = calData.filter(row => {\n            let keys = Object.keys(row);\n            let productName = row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19'] !== undefined ? String(row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19']).trim() : (keys[1] ? String(row[keys[1]]).trim() : \"\");\n            if (!productName || productName === \"\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\") return false;\n\n            let minAge = parseFloat(row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] : row[keys[3]]);\n            let maxAge = parseFloat(row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] : row[keys[4]]);\n\n            if (isNaN(minAge) || isNaN(maxAge)) return false;\n\n            return age >= minAge && age <= maxAge;\n        });\n\n        if (availableProducts.length > 0) {\n            productInput.disabled = false;\n            codeInput.disabled = false;\n\n            let addedProducts = new Set();\n            let addedCodes = new Set();\n\n            availableProducts.forEach(row => {\n                let keys = Object.keys(row);\n                let productName = row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19'] !== undefined ? String(row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19']).trim() : (keys[1] ? String(row[keys[1]]).trim() : \"\");\n                let codeName = row['\u0e23\u0e2b\u0e31\u0e2a'] !== undefined ? String(row['\u0e23\u0e2b\u0e31\u0e2a']).trim() : (keys[0] ? String(row[keys[0]]).trim() : \"\");\n\n                if (productName && !addedProducts.has(productName)) {\n                    addedProducts.add(productName);\n                    let opt = document.createElement('option');\n                    opt.value = productName;\n                    opt.textContent = productName;\n                    productInput.appendChild(opt);\n                }\n\n                if (codeName && !addedCodes.has(codeName)) {\n                    addedCodes.add(codeName);\n                    let opt = document.createElement('option');\n                    opt.value = codeName;\n                    opt.textContent = codeName;\n                    codeInput.appendChild(opt);\n                }\n            });\n        }\n        \n        calculateGrandTotal();\n    }\n\n    function syncProductToCode(triggerCalc = false) {\n        let productVal = productInput.value.trim();\n        let matchedRow = calData.find(row => {\n            let keys = Object.keys(row);\n            let pName = row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19'] !== undefined ? String(row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19']).trim() : (keys[1] ? String(row[keys[1]]).trim() : \"\");\n            return pName === productVal;\n        });\n\n        if (matchedRow) {\n            let keys = Object.keys(matchedRow);\n            let codeName = matchedRow['\u0e23\u0e2b\u0e31\u0e2a'] !== undefined ? String(matchedRow['\u0e23\u0e2b\u0e31\u0e2a']).trim() : (keys[0] ? String(matchedRow[keys[0]]).trim() : \"\");\n            if (codeInput.value !== codeName) {\n                codeInput.value = codeName;\n            }\n        } else {\n            codeInput.value = \"\";\n        }\n\n        handleProductChange();\n        if (triggerCalc) updatePeriodsAndCommission();\n    }\n\n    function syncCodeToProduct(triggerCalc = false) {\n        let codeVal = codeInput.value.trim();\n        \n        let matchedRow = calData.find(row => {\n            let keys = Object.keys(row);\n            let cName = row['\u0e23\u0e2b\u0e31\u0e2a'] !== undefined ? String(row['\u0e23\u0e2b\u0e31\u0e2a']).trim() : (keys[0] ? String(row[keys[0]]).trim() : \"\");\n            return cName === codeVal;\n        });\n\n        if (matchedRow) {\n            let keys = Object.keys(matchedRow);\n            let productName = matchedRow['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19'] !== undefined ? String(matchedRow['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19']).trim() : (keys[1] ? String(matchedRow[keys[1]]).trim() : \"\");\n            if (productInput.value !== productName) {\n                productInput.value = productName;\n            }\n        } else {\n            productInput.value = \"\";\n        }\n\n        handleProductChange();\n        if (triggerCalc) updatePeriodsAndCommission();\n    }\n\n    function updateRiderCommissions() {\n        let ageVal = ageInput.value.trim();\n        let age = parseFloat(ageVal);\n\n        let rows = riderTableBody.querySelectorAll('tr');\n        rows.forEach(tr => {\n            let riderCell = tr.querySelector('.rider-name-text');\n            let planSelectEl = tr.querySelector('.rider-plan-select');\n            let premiumInputEl = tr.querySelector('.rider-premium-input');\n            let commTd = tr.querySelector('.rider-comm-result');\n            let complusTd = tr.querySelector('.rider-complus-result');\n\n            if (!riderCell || !premiumInputEl || !commTd || !complusTd) return;\n\n            let riderName = riderCell.textContent.trim();\n            let selectedPlan = planSelectEl ? planSelectEl.value.trim() : \"\";\n            let premiumVal = parseFloat(premiumInputEl.value.replace(/,/g, \"\")) || 0;\n\n            if (isNaN(age) || premiumVal === 0) {\n                commTd.textContent = \"-\";\n                commTd.style.color = \"#718096\";\n                complusTd.textContent = \"-\";\n                complusTd.style.color = \"#718096\";\n                calculateGrandTotal();\n                return;\n            }\n\n            let matchingRows = riderSheetData.filter(row => {\n                let keys = Object.keys(row);\n                \n                let name = row['\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21'] !== undefined ? String(row['\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21']).trim() : (keys[1] ? String(row[keys[1]]).trim() : \"\");\n                if (name !== riderName) return false;\n\n                let typeVal = row['\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17'] !== undefined ? String(row['\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17']).trim() : (keys[11] ? String(row[keys[11]]).trim() : \"\");\n                if (typeVal.includes(\"\u0e2a\u0e1a\u0e32\u0e22\") || typeVal.includes(\"\u0e44\u0e25\u0e1f\u0e4c\u0e40\u0e27\u0e34\u0e23\u0e4c\u0e2a\")) return false;\n\n                if (planSelectEl) {\n                    if (selectedPlan === \"\") return false;\n                    let conditionVal = row['\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02'] !== undefined ? String(row['\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02']).trim() : (keys[2] ? String(row[keys[2]]).trim() : \"\");\n                    if (conditionVal !== selectedPlan) return false;\n                }\n\n                let minAge = parseFloat(row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] : (keys[3] ? row[keys[3]] : 0)) || 0;\n                let maxAge = parseFloat(row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] : (keys[4] ? row[keys[4]] : 0)) || 0;\n\n                return age >= minAge && age <= maxAge;\n            });\n\n            if (matchingRows.length > 0) {\n                let matchedRow = matchingRows[0];\n                let keys = Object.keys(matchedRow);\n\n                let rawComm = parseFloat(matchedRow['\u0e04\u0e2d\u0e21'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21'] : (keys[5] ? matchedRow[keys[5]] : 0)) || 0;\n                let rawComplus = parseFloat(matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] : (keys[6] ? matchedRow[keys[6]] : 0)) || 0;\n\n                let finalComm = Math.round((rawComm * premiumVal) / 100);\n                let finalComplus = Math.round((rawComplus * premiumVal) / 100);\n\n                commTd.textContent = finalComm > 0 ? formatNumber(finalComm, false) : \"-\";\n                commTd.style.color = finalComm > 0 ? \"#2d3748\" : \"#718096\";\n\n                complusTd.textContent = finalComplus > 0 ? formatNumber(finalComplus, false) : \"-\";\n                complusTd.style.color = finalComplus > 0 ? \"#2d3748\" : \"#718096\";\n            } else {\n                commTd.textContent = \"-\";\n                commTd.style.color = \"#718096\";\n                complusTd.textContent = \"-\";\n                complusTd.style.color = \"#718096\";\n            }\n        });\n\n        calculateGrandTotal();\n    }\n\n    function handleProductChange() {\n        let ageInputVal = ageInput.value.trim();\n        if (ageInputVal === \"\") return;\n        let age = parseFloat(ageInputVal);\n        let selectedProductName = productInput.value.trim();\n\n        if (!selectedProductName) {\n            riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\">-</td></tr>';\n            calculateGrandTotal();\n            return;\n        }\n\n        let productRow = calData.find(row => {\n            let keys = Object.keys(row);\n            let name = row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19'] !== undefined ? String(row['\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19']).trim() : String(row[keys[1]]).trim();\n            return name === selectedProductName;\n        });\n\n        if (!productRow) {\n            riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\" style=\"color: #e53e3e;\">\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e19\u0e35\u0e49</td></tr>';\n            calculateGrandTotal();\n            return;\n        }\n\n        let allKeys = Object.keys(productRow);\n\n        let getColVal = (colName, index) => {\n            if (productRow[colName] !== undefined && productRow[colName] !== null) {\n                return String(productRow[colName]).trim();\n            }\n            if (allKeys[index] !== undefined && productRow[allKeys[index]] !== null) {\n                return String(productRow[allKeys[index]]).trim();\n            }\n            return '';\n        };\n\n        let hCol = getColVal('Rider', 7);\n        let iCol = getColVal('\u0e09\u0e1e', 8);\n        let jCol = getColVal('\u0e21\u0e31\u0e25\u0e15\u0e34\u0e40\u0e1e\u0e22\u0e4c', 9);\n        let kCol = getColVal('44', 10);\n        let lCol = getColVal('\u0e14\u0e35\u0e14\u0e35', 11);\n        let mCol = getColVal('\u0e04\u0e1a', 12);\n\n        let hColLower = hCol.toLowerCase();\n\n        if (hColLower === \"no\" || hColLower === \"\") {\n            riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\" style=\"color: #e53e3e;\">\u0e44\u0e21\u0e48\u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16\u0e0b\u0e37\u0e49\u0e2d\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e44\u0e14\u0e49</td></tr>';\n            calculateGrandTotal();\n            return;\n        }\n\n        let allowedRiders = [];\n\n        if (hColLower === \"\u0e2d\u0e23\u0e1e\") {\n            allowedRiders = [\"\u0e2d.1\", \"\u0e06\u0e08.1\", \"\u0e2d.2\", \"\u0e06\u0e08.2\", \"\u0e2d.3\", \"\u0e23\u0e1e.\"];\n        } else if (hColLower === \"yes\") {\n            allowedRiders = [\"\u0e2d.1\", \"\u0e06\u0e08.1\", \"\u0e2d.2\", \"\u0e06\u0e08.2\", \"\u0e2d.3\", \"\u0e23\u0e1e.\", \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e40\u0e2e\u0e0a\u0e1a\u0e35 \u0e42\u0e1b\u0e23\", \"\u0e2a\u0e23.2\", \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e21\u0e31\u0e25\u0e15\u0e34\u0e40\u0e1e\u0e22\u0e4c \u0e41\u0e04\u0e19\u0e40\u0e0b\u0e2d\u0e23\u0e4c\", \"\u0e17\u0e23.48\", \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e2d\u0e31\u0e25\u0e15\u0e23\u0e49\u0e32\", \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e0a\u0e35\u0e25\u0e14\u0e4c\", \"\u0e1c\u0e39\u0e49\u0e1b\u0e48\u0e27\u0e22\u0e19\u0e2d\u0e01\"];\n            if (iCol.toLowerCase() === \"yes\") allowedRiders.push(\"\u0e09\u0e1e.\");\n            if (jCol.toLowerCase() === \"yes\") allowedRiders.push(\"\u0e21\u0e31\u0e25\u0e15\u0e34\u0e40\u0e1e\u0e22\u0e4c\");\n            if (kCol.toLowerCase() === \"yes\") allowedRiders.push(\"\u0e17\u0e23.44\");\n            if (lCol.toLowerCase() === \"yes\") allowedRiders.push(\"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e14\u0e35\u0e14\u0e35\");\n            if (mCol.toLowerCase() === \"yes\") allowedRiders.push(\"\u0e04\u0e1a.\");\n        }\n\n        let validRiders = allowedRiders.filter(riderName => {\n            let cleanRiderName = riderName.replace(/\\./g, '');\n            \n            let ageRule = riderAgeData.find(r => {\n                let name = \"\";\n                if (Array.isArray(r)) {\n                    name = r[0] !== undefined ? String(r[0]).trim() : (r[1] !== undefined ? String(r[1]).trim() : \"\");\n                } else if (typeof r === 'object' && r !== null) {\n                    let rKeys = Object.keys(r);\n                    name = r['\u0e0a\u0e37\u0e48\u0e2d'] !== undefined ? r['\u0e0a\u0e37\u0e48\u0e2d'] : (r['A'] !== undefined ? r['A'] : (rKeys[0] !== undefined ? r[rKeys[0]] : ''));\n                }\n                if (!name || name === \"\u0e0a\u0e37\u0e48\u0e2d\") return false;\n                let sheetName = String(name).trim();\n                return sheetName === riderName || sheetName.replace(/\\./g, '') === cleanRiderName;\n            });\n\n            if (!ageRule) return false;\n\n            let minA = 0, maxA = 100;\n            if (Array.isArray(ageRule)) {\n                minA = parseFloat(ageRule[1]) || 0;\n                maxA = parseFloat(ageRule[2]) || 100;\n            } else {\n                let rKeys = Object.keys(ageRule);\n                minA = parseFloat(ageRule['\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? ageRule['\u0e40\u0e23\u0e34\u0e48\u0e21'] : (ageRule['B'] !== undefined ? ageRule['B'] : ageRule[rKeys[1]])) || 0;\n                maxA = parseFloat(ageRule['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] !== undefined ? ageRule['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] : (ageRule['C'] !== undefined ? ageRule['C'] : ageRule[rKeys[2]])) || 100;\n            }\n            \n            return age >= minA && age <= maxA;\n        });\n\n        const masterOrder = [\n            \"\u0e2d.1\", \"\u0e06\u0e08.1\", \"\u0e2d.2\", \"\u0e06\u0e08.2\", \"\u0e2d.3\", \"\u0e09\u0e1e.\", \"\u0e23\u0e1e.\", \n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e40\u0e2e\u0e0a\u0e1a\u0e35 \u0e42\u0e1b\u0e23\", \"\u0e2a\u0e23.2\", \"\u0e21\u0e31\u0e25\u0e15\u0e34\u0e40\u0e1e\u0e22\u0e4c\", \n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e21\u0e31\u0e25\u0e15\u0e34\u0e40\u0e1e\u0e22\u0e4c \u0e41\u0e04\u0e19\u0e40\u0e0b\u0e2d\u0e23\u0e4c\", \"\u0e17\u0e23.44\", \"\u0e17\u0e23.48\", \n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e2d\u0e31\u0e25\u0e15\u0e23\u0e49\u0e32\", \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e0a\u0e35\u0e25\u0e14\u0e4c\", \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e14\u0e35\u0e14\u0e35\", \"\u0e1c\u0e39\u0e49\u0e1b\u0e48\u0e27\u0e22\u0e19\u0e2d\u0e01\", \"\u0e04\u0e1a.\"\n        ];\n\n        validRiders.sort((a, b) => {\n            let indexA = masterOrder.indexOf(a);\n            let indexB = masterOrder.indexOf(b);\n            if (indexA === -1) indexA = 999;\n            if (indexB === -1) indexB = 999;\n            return indexA - indexB;\n        });\n\n        if (validRiders.length > 0) {\n            riderTableBody.innerHTML = '';\n            validRiders.forEach(rider => {\n                let extraHtml = '';\n                if (rider === \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e2d\u0e31\u0e25\u0e15\u0e23\u0e49\u0e32\") {\n                    extraHtml = ` <select class=\"rider-plan-select\" style=\"width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;\">\n                        <option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e1c\u0e19 --</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 1\">\u0e41\u0e1c\u0e19 1</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 2\">\u0e41\u0e1c\u0e19 2</option>\n                    </select>`;\n                } else if (rider === \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e0a\u0e35\u0e25\u0e14\u0e4c\") {\n                    extraHtml = ` <select class=\"rider-plan-select\" style=\"width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;\">\n                        <option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e1c\u0e19 --</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 1\">\u0e41\u0e1c\u0e19 1</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 2\">\u0e41\u0e1c\u0e19 2</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 3\">\u0e41\u0e1c\u0e19 3</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 4\">\u0e41\u0e1c\u0e19 4</option>\n                    </select>`;\n                } else if (rider === \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e14\u0e35\u0e14\u0e35\") {\n                    let ddOptions = `\n                        <option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e1c\u0e19 --</option>\n                        <option value=\"2,000 Deduct 0\">2,000 Deduct 0</option>\n                        <option value=\"2,000 Deduct 30,000\">2,000 Deduct 30,000</option>\n                        <option value=\"2,000 Deduct 50,000\">2,000 Deduct 50,000</option>\n                        <option value=\"3,000 Deduct 0\">3,000 Deduct 0</option>\n                        <option value=\"3,000 Deduct 30,000\">3,000 Deduct 30,000</option>\n                        <option value=\"3,000 Deduct 50,000\">3,000 Deduct 50,000</option>\n                        <option value=\"3,000 Deduct 100,000\">3,000 Deduct 100,000</option>\n                    `;\n                    if (age >= 6) {\n                        ddOptions += `\n                            <option value=\"6,000 Deduct 0\">6,000 Deduct 0</option>\n                        `;\n                    }\n                    ddOptions += `\n                        <option value=\"6,000 Deduct 30,000\">6,000 Deduct 30,000</option>\n                        <option value=\"6,000 Deduct 50,000\">6,000 Deduct 50,000</option>\n                        <option value=\"6,000 Deduct 100,000\">6,000 Deduct 100,000</option>\n                    `;\n                    if (age >= 6) {\n                        ddOptions += `\n                            <option value=\"12,000 Deduct 0\">12,000 Deduct 0</option>\n                        `;\n                    }\n                    ddOptions += `\n                        <option value=\"12,000 Deduct 30,000\">12,000 Deduct 30,000</option>\n                        <option value=\"12,000 Deduct 50,000\">12,000 Deduct 50,000</option>\n                        <option value=\"12,000 Deduct 100,000\">12,000 Deduct 100,000</option>\n                    `;\n                    extraHtml = ` <select class=\"rider-plan-select\" style=\"width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;\">${ddOptions}</select>`;\n                }\n\n                let tr = document.createElement('tr');\n                tr.innerHTML = `\n                    <td><span class=\"rider-name-text\">${rider}</span>${extraHtml}</td>\n                    <td><input type=\"text\" class=\"formatted-number rider-premium-input\" placeholder=\"\u0e23\u0e30\u0e1a\u0e38\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e16\u0e49\u0e32\u0e21\u0e35\"></td>\n                    <td class=\"rider-comm-result text-right\" style=\"color: #718096;\">-</td>\n                    <td class=\"rider-complus-result text-right\" style=\"color: #718096;\">-</td>\n                `;\n                riderTableBody.appendChild(tr);\n            });\n        } else {\n            riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\" style=\"color: #e53e3e;\">\u0e44\u0e21\u0e48\u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16\u0e0b\u0e37\u0e49\u0e2d\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e44\u0e14\u0e49</td></tr>';\n        }\n        \n        calculateGrandTotal();\n    }\n<\/script>\n\n\n<script>\n    (function() {\n        function sendHeight() {\n            if (window.parent) {\n                var h = document.body ? document.body.scrollHeight : 0;\n                window.parent.postMessage({ type: 'commPanelResize', height: h }, '*');\n            }\n        }\n        window.addEventListener('load', sendHeight);\n        window.addEventListener('resize', sendHeight);\n        if (window.ResizeObserver) {\n            new ResizeObserver(sendHeight).observe(document.body);\n        } else {\n            setInterval(sendHeight, 500);\n        }\n    })();\n<\/script>\n</body>\n</html>";
+        const COMM_TEMPLATE_SABABY = "<!DOCTYPE html>\n<html lang=\"th\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e17\u0e31\u0e48\u0e27\u0e44\u0e1b</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\n    <style>\n        * {\n            box-sizing: border-box;\n            font-family: 'Sarabun', sans-serif;\n        }\n        body {\n            background-color: #f4f6f9;\n            margin: 0;\n            padding: 20px;\n            color: #333;\n        }\n        .container {\n            max-width: 1200px;\n            margin: 0 auto;\n            background: #fff;\n            padding: 30px;\n            border-radius: 12px;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.08);\n        }\n        .form-row {\n            display: flex;\n            gap: 20px;\n            margin-bottom: 15px;\n            flex-wrap: wrap;\n            align-items: flex-end;\n        }\n        .form-group {\n            flex: 1;\n            min-width: 250px;\n        }\n        label {\n            display: block;\n            margin-bottom: 6px;\n            font-weight: 500;\n            color: #4a5568;\n        }\n        input, select {\n            width: 100%;\n            padding: 10px 12px;\n            border: 1px solid #cbd5e0;\n            border-radius: 6px;\n            font-size: 1rem;\n            outline: none;\n            transition: border-color 0.2s;\n            background-color: #fff;\n        }\n        input:focus, select:focus {\n            border-color: #3182ce;\n            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);\n        }\n        input:disabled, select:disabled {\n            background-color: #edf2f7;\n            cursor: not-allowed;\n            color: #2d3748;\n            font-weight: 600;\n        }\n        .code-container {\n            display: flex;\n            gap: 10px;\n        }\n        .btn-clear {\n            background-color: #dc3545;\n            color: white;\n            border: none;\n            padding: 10px 20px;\n            font-size: 16px;\n            font-weight: 600;\n            border-radius: 6px;\n            cursor: pointer;\n            transition: background-color 0.2s ease, transform 0.1s ease;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            white-space: nowrap;\n        }\n        .btn-clear:hover {\n            background-color: #c82333;\n        }\n        .btn-clear:active {\n            transform: scale(0.98);\n        }\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-top: 10px;\n            margin-bottom: 25px;\n            background: #fff;\n        }\n        th, td {\n            border: 1px solid #e2e8f0;\n            padding: 12px;\n            text-align: left;\n            font-size: 0.95rem;\n        }\n        th {\n            background-color: #ebf8ff;\n            color: #2b6cb0;\n            font-weight: 600;\n        }\n        tr:nth-child(even) {\n            background-color: #f8fafc;\n        }\n        .text-right {\n            text-align: right;\n        }\n        .loading {\n            text-align: center;\n            color: #718096;\n            font-style: italic;\n            padding: 10px;\n        }\n        .summary-table {\n            margin-top: 25px;\n            background-color: #ebf8ff;\n        }\n        .summary-table th {\n            background-color: #bee3f8;\n            color: #2b6cb0;\n            text-align: center;\n            font-weight: 600;\n        }\n        .summary-table td {\n            font-weight: 700;\n            font-size: 1.1rem;\n            color: #2d3748;\n        }\n    </style>\n</head>\n<body>\n\n<div class=\"container\">\n    <div class=\"form-row\" style=\"margin-top: 10px;\">\n        <div class=\"form-group\">\n            <label for=\"ageInput\">\u0e2d\u0e32\u0e22\u0e38</label>\n            <select id=\"ageInput\" disabled>\n                <option value=\"\">\u0e01\u0e33\u0e25\u0e31\u0e07\u0e42\u0e2b\u0e25\u0e14\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25...</option>\n            </select>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"productInput\">\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19</label>\n            <input type=\"text\" id=\"productInput\" value=\"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e2a\u0e1a\u0e4a\u0e32\u0e22 \u0e2a\u0e1a\u0e32\u0e22 / \u0e04\u0e38\u0e49\u0e21\u0e18\u0e19\u0e01\u0e34\u0e08 99/99 (Nn)\" disabled autocomplete=\"off\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"codeInput\">\u0e23\u0e2b\u0e31\u0e2a</label>\n            <div class=\"code-container\">\n                <input type=\"text\" id=\"codeInput\" value=\"W013\" disabled autocomplete=\"off\">\n                <button type=\"button\" id=\"clearBtn\" class=\"btn-clear\">\u0e25\u0e49\u0e32\u0e07\u0e04\u0e48\u0e32</button>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"form-row\">\n        <div class=\"form-group\">\n            <label for=\"covPeriodInput\">\u0e04\u0e38\u0e49\u0e21\u0e04\u0e23\u0e2d\u0e07 (\u0e1b\u0e35)</label>\n            <input type=\"text\" id=\"covPeriodInput\" placeholder=\"-\" disabled>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"payPeriodInput\">\u0e0a\u0e33\u0e23\u0e30\u0e40\u0e1a\u0e35\u0e49\u0e22 (\u0e1b\u0e35)</label>\n            <input type=\"text\" id=\"payPeriodInput\" placeholder=\"-\" disabled>\n        </div>\n    </div>\n\n    <table>\n        <thead>\n            <tr>\n                <th style=\"width: 46%;\">\u0e17\u0e38\u0e19\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15</th>\n                <th style=\"width: 18%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td><input type=\"text\" id=\"sumInsuredInput\" value=\"50,000\" disabled autocomplete=\"off\"></td>\n                <td><input type=\"text\" id=\"premiumInput\" class=\"formatted-number\" placeholder=\"\u0e23\u0e30\u0e1a\u0e38\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15\"></td>\n                <td id=\"commResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n                <td id=\"complusResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n            </tr>\n        </tbody>\n    </table>\n\n    <table>\n        <thead>\n            <tr>\n                <th style=\"width: 46%;\">\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21</th>\n                <th style=\"width: 18%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a</th>\n            </tr>\n        </thead>\n        <tbody id=\"riderTableBody\">\n            <tr>\n                <td colspan=\"4\" class=\"loading\">-</td>\n            </tr>\n        </tbody>\n    </table>\n\n    <table class=\"summary-table\">\n        <thead>\n            <tr>\n                <th style=\"width: 46%;\">\u0e2a\u0e23\u0e38\u0e1b\u0e1c\u0e25</th>\n                <th style=\"width: 18%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e23\u0e27\u0e21</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19\u0e23\u0e27\u0e21</th>\n                <th style=\"width: 18%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a\u0e23\u0e27\u0e21</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td style=\"text-align: center; color: #2b6cb0;\">\u0e1c\u0e25\u0e23\u0e27\u0e21</td>\n                <td id=\"totalPremiumResult\" class=\"text-right\">-</td>\n                <td id=\"totalCommResult\" class=\"text-right\">-</td>\n                <td id=\"totalComplusResult\" class=\"text-right\">-</td>\n            </tr>\n        </tbody>\n    </table>\n</div>\n\n<script>\n    let dataSheetData = [];\n    let riderSheetData = [];\n\n    const ageInput = document.getElementById('ageInput');\n    const productInput = document.getElementById('productInput');\n    const codeInput = document.getElementById('codeInput');\n    const clearBtn = document.getElementById('clearBtn');\n    const covPeriodInput = document.getElementById('covPeriodInput');\n    const payPeriodInput = document.getElementById('payPeriodInput');\n    const sumInsuredInput = document.getElementById('sumInsuredInput');\n    const premiumInput = document.getElementById('premiumInput');\n    const commResult = document.getElementById('commResult');\n    const complusResult = document.getElementById('complusResult');\n    const riderTableBody = document.getElementById('riderTableBody');\n    const totalPremiumResult = document.getElementById('totalPremiumResult');\n    const totalCommResult = document.getElementById('totalCommResult');\n    const totalComplusResult = document.getElementById('totalComplusResult');\n\n    function formatNumber(value, isDecimal = false) {\n        if (value === undefined || value === null || value === \"\") return \"\";\n        let num = parseFloat(String(value).replace(/,/g, \"\"));\n        if (isNaN(num)) return \"\";\n        \n        let fixedStr = isDecimal ? num.toFixed(2) : num.toString();\n        let parts = fixedStr.split(\".\");\n        parts[0] = parts[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\n        return parts.join(\".\");\n    }\n\n    document.addEventListener(\"input\", function(e) {\n        if (e.target && e.target.classList.contains(\"formatted-number\")) {\n            let cursorPosition = e.target.selectionStart;\n            let originalLength = e.target.value.length;\n            \n            let rawValue = e.target.value.replace(/,/g, \"\");\n            if (!isNaN(rawValue) || rawValue.endsWith(\".\")) {\n                e.target.value = formatNumber(rawValue);\n                \n                let newLength = e.target.value.length;\n                cursorPosition = cursorPosition + (newLength - originalLength);\n                e.target.setSelectionRange(cursorPosition, cursorPosition);\n            }\n        }\n        if (e.target && (e.target.classList.contains(\"rider-premium-input\") || e.target.classList.contains(\"rider-plan-select\"))) {\n            updateRiderCommissions();\n        }\n    });\n\n    function initWithData(payload) {\n        try {\n            dataSheetData = (payload && payload.dataSheetData) || [];\n            riderSheetData = (payload && payload.riderSheetData) || [];\n\n            ageInput.innerHTML = '<option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e32\u0e22\u0e38 (11-64) --</option>';\n            for (let i = 11; i <= 64; i++) {\n                let opt = document.createElement('option');\n                opt.value = i;\n                opt.textContent = i;\n                ageInput.appendChild(opt);\n            }\n\n            ageInput.disabled = false;\n        } catch (error) {\n            console.error(\"Error loading data:\", error);\n            ageInput.innerHTML = '<option value=\"\">\u0e42\u0e2b\u0e25\u0e14\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e44\u0e21\u0e48\u0e2a\u0e33\u0e40\u0e23\u0e47\u0e08 \u0e01\u0e23\u0e38\u0e13\u0e32\u0e23\u0e35\u0e40\u0e1f\u0e23\u0e0a</option>';\n        }\n    }\n\n    window.addEventListener('message', function(e) {\n        if (e.data && e.data.type === 'commData') {\n            initWithData(e.data.payload);\n        }\n    });\n\n    if (window.parent) {\n        window.parent.postMessage({ type: 'commPanelReady' }, '*');\n    }\n\n    function clearAllValues() {\n        ageInput.value = \"\";\n        covPeriodInput.value = \"\";\n        payPeriodInput.value = \"\";\n        premiumInput.value = \"\";\n        commResult.textContent = \"-\";\n        commResult.style.color = \"#718096\";\n        complusResult.textContent = \"-\";\n        complusResult.style.color = \"#718096\";\n        riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\">-</td></tr>';\n        totalPremiumResult.textContent = \"-\";\n        totalPremiumResult.style.color = \"#2d3748\";\n        totalCommResult.textContent = \"-\";\n        totalCommResult.style.color = \"#2d3748\";\n        totalComplusResult.textContent = \"-\";\n        totalComplusResult.style.color = \"#2d3748\";\n    }\n\n    clearBtn.addEventListener('click', clearAllValues);\n\n    function calculateGrandTotal() {\n        let mainPremium = parseFloat(premiumInput.value.replace(/,/g, \"\")) || 0;\n        let mainComm = parseFloat(commResult.textContent.replace(/,/g, \"\")) || 0;\n        let mainComplus = parseFloat(complusResult.textContent.replace(/,/g, \"\")) || 0;\n\n        let totalPremium = isNaN(mainPremium) ? 0 : mainPremium;\n        let totalComm = isNaN(mainComm) ? 0 : mainComm;\n        let totalComplus = isNaN(mainComplus) ? 0 : mainComplus;\n\n        let riderRows = riderTableBody.querySelectorAll('tr');\n        riderRows.forEach(tr => {\n            let rPremInput = tr.querySelector('.rider-premium-input');\n            let commTd = tr.querySelector('.rider-comm-result');\n            let complusTd = tr.querySelector('.rider-complus-result');\n            \n            if (rPremInput) {\n                let rPrem = parseFloat(rPremInput.value.replace(/,/g, \"\")) || 0;\n                totalPremium += rPrem;\n            }\n            if (commTd && commTd.textContent !== \"-\" && !commTd.textContent.includes(\"\u0e44\u0e21\u0e48\u0e1e\u0e1a\")) {\n                let rComm = parseFloat(commTd.textContent.replace(/,/g, \"\")) || 0;\n                totalComm += rComm;\n            }\n            if (complusTd && complusTd.textContent !== \"-\" && !complusTd.textContent.includes(\"\u0e44\u0e21\u0e48\u0e1e\u0e1a\")) {\n                let rComplus = parseFloat(complusTd.textContent.replace(/,/g, \"\")) || 0;\n                totalComplus += rComplus;\n            }\n        });\n\n        if (totalPremium > 0) {\n            totalPremiumResult.textContent = formatNumber(totalPremium, true);\n            totalPremiumResult.style.color = \"#2b6cb0\";\n        } else {\n            totalPremiumResult.textContent = \"-\";\n            totalPremiumResult.style.color = \"#2d3748\";\n        }\n\n        if (totalComm > 0) {\n            totalCommResult.textContent = formatNumber(totalComm, false);\n            totalCommResult.style.color = \"#2b6cb0\";\n        } else {\n            totalCommResult.textContent = \"-\";\n            totalCommResult.style.color = \"#2d3748\";\n        }\n\n        if (totalComplus > 0) {\n            totalComplusResult.textContent = formatNumber(totalComplus, false);\n            totalComplusResult.style.color = \"#2b6cb0\";\n        } else {\n            totalComplusResult.textContent = \"-\";\n            totalComplusResult.style.color = \"#2d3748\";\n        }\n    }\n\n    function updatePeriodsAndCommission() {\n        let ageVal = ageInput.value.trim();\n        let sumInsuredVal = \"50000\";\n        let premiumVal = premiumInput.value.replace(/,/g, \"\").trim();\n\n        covPeriodInput.value = \"\";\n        payPeriodInput.value = \"\";\n\n        if (ageVal !== \"\" && !isNaN(ageVal)) {\n            let age = parseFloat(ageVal);\n            covPeriodInput.value = 99 - age;\n            payPeriodInput.value = 99 - age;\n        }\n\n        if (ageVal === \"\" || premiumVal === \"\" || isNaN(ageVal) || isNaN(premiumVal)) {\n            commResult.textContent = \"-\";\n            commResult.style.color = \"#718096\";\n            complusResult.textContent = \"-\";\n            complusResult.style.color = \"#718096\";\n            calculateGrandTotal();\n            return;\n        }\n\n        let age = parseFloat(ageVal);\n        let sumInsured = parseFloat(sumInsuredVal);\n        let premium = parseFloat(premiumVal);\n\n        let matchingRows = dataSheetData.filter(row => {\n            let keys = Object.keys(row);\n            let codeVal = row['\u0e23\u0e2b\u0e31\u0e2a'] !== undefined ? String(row['\u0e23\u0e2b\u0e31\u0e2a']).trim() : (row['\u0e23\u0e2b\u0e31\u0e2a\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19'] !== undefined ? String(row['\u0e23\u0e2b\u0e31\u0e2a\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19']).trim() : String(keys[0] ? row[keys[0]] : \"\").trim());\n            if (codeVal !== \"W013\") return false;\n\n            let minAge = parseFloat(row['\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e40\u0e23\u0e34\u0e48\u0e21'] : (row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] : row[keys[2]])) || 0;\n            let maxAge = parseFloat(row['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] !== undefined ? row['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] : (row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] : row[keys[3]])) || 0;\n            let minSum = parseFloat(row['\u0e17\u0e38\u0e19'] !== undefined ? row['\u0e17\u0e38\u0e19'] : (row['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] !== undefined ? row['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] : row[keys[4]])) || 0;\n\n            return age >= minAge && age <= maxAge && sumInsured >= minSum;\n        });\n\n        if (matchingRows.length > 0) {\n            matchingRows.sort((a, b) => {\n                let keysA = Object.keys(a);\n                let keysB = Object.keys(b);\n                let sumA = parseFloat(a['\u0e17\u0e38\u0e19'] !== undefined ? a['\u0e17\u0e38\u0e19'] : (a['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] !== undefined ? a['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] : keysA[4] !== undefined ? a[keysA[4]] : 0)) || 0;\n                let sumB = parseFloat(b['\u0e17\u0e38\u0e19'] !== undefined ? b['\u0e17\u0e38\u0e19'] : (b['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] !== undefined ? b['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] : keysB[4] !== undefined ? b[keysB[4]] : 0)) || 0;\n                return sumB - sumA;\n            });\n\n            let matchedRow = matchingRows[0];\n            let keys = Object.keys(matchedRow);\n            \n            let rawComm = parseFloat(matchedRow['\u0e04\u0e2d\u0e21'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21'] : (matchedRow['\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19'] : matchedRow[keys[5]])) || 0;\n            let rawComplus = parseFloat(matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] : matchedRow[keys[6]]) || 0;\n\n            let finalComm = Math.round((rawComm * premium) / 100);\n            let finalComplus = Math.round((rawComplus * premium) / 100);\n\n            if (finalComm > 0) {\n                commResult.textContent = formatNumber(finalComm, false);\n                commResult.style.color = \"#2d3748\";\n            } else {\n                commResult.textContent = \"-\";\n                commResult.style.color = \"#718096\";\n            }\n\n            if (finalComplus > 0) {\n                complusResult.textContent = formatNumber(finalComplus, false);\n                complusResult.style.color = \"#2d3748\";\n            } else {\n                complusResult.textContent = \"-\";\n                complusResult.style.color = \"#718096\";\n            }\n        } else {\n            commResult.textContent = \"- (\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02)\";\n            commResult.style.color = \"#e53e3e\";\n            complusResult.textContent = \"-\";\n            complusResult.style.color = \"#718096\";\n        }\n        \n        calculateGrandTotal();\n    }\n\n    ageInput.addEventListener('change', () => {\n        handleAgeChange();\n        updatePeriodsAndCommission();\n    });\n\n    premiumInput.addEventListener('input', updatePeriodsAndCommission);\n\n    function handleAgeChange() {\n        let ageInputVal = ageInput.value.trim();\n        covPeriodInput.value = '';\n        payPeriodInput.value = '';\n        riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\">\u0e01\u0e23\u0e38\u0e13\u0e32\u0e23\u0e30\u0e1a\u0e38\u0e2d\u0e32\u0e22\u0e38\u0e43\u0e2b\u0e49\u0e16\u0e39\u0e01\u0e15\u0e49\u0e2d\u0e07 (11-64)</td></tr>';\n        \n        if (ageInputVal === \"\" || isNaN(ageInputVal)) {\n            calculateGrandTotal();\n            return;\n        }\n\n        let age = parseFloat(ageInputVal);\n        if (age < 11 || age > 64) {\n            riderTableBody.innerHTML = '<tr><td colspan=\"4\" class=\"loading\" style=\"color: #e53e3e;\">\u0e2d\u0e32\u0e22\u0e38\u0e15\u0e49\u0e2d\u0e07\u0e2d\u0e22\u0e39\u0e48\u0e23\u0e30\u0e2b\u0e27\u0e48\u0e32\u0e07 11 - 64 \u0e1b\u0e35</td></tr>';\n            calculateGrandTotal();\n            return;\n        }\n\n        covPeriodInput.value = 99 - age;\n        payPeriodInput.value = 99 - age;\n\n        const validRiders = [\n            \"\u0e2d.1\",\n            \"\u0e2d.2\",\n            \"\u0e2d.3\",\n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e40\u0e2e\u0e0a\u0e1a\u0e35 \u0e42\u0e1b\u0e23\",\n            \"\u0e21\u0e31\u0e25\u0e15\u0e34\u0e40\u0e1e\u0e22\u0e4c\",\n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e0a\u0e35\u0e25\u0e14\u0e4c\",\n            \"\u0e1c\u0e39\u0e49\u0e1b\u0e48\u0e27\u0e22\u0e19\u0e2d\u0e01\"\n        ];\n\n        riderTableBody.innerHTML = '';\n        validRiders.forEach(rider => {\n            let extraHtml = '';\n            if (rider === \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e0a\u0e35\u0e25\u0e14\u0e4c\") {\n                extraHtml = ` <select class=\"rider-plan-select\" style=\"width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;\">\n                    <option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e1c\u0e19 --</option>\n                    <option value=\"\u0e41\u0e1c\u0e19 1\">\u0e41\u0e1c\u0e19 1</option>\n                    <option value=\"\u0e41\u0e1c\u0e19 2\">\u0e41\u0e1c\u0e19 2</option>\n                    <option value=\"\u0e41\u0e1c\u0e19 3\">\u0e41\u0e1c\u0e19 3</option>\n                    <option value=\"\u0e41\u0e1c\u0e19 4\">\u0e41\u0e1c\u0e19 4</option>\n                </select>`;\n            }\n\n            let tr = document.createElement('tr');\n            tr.innerHTML = `\n                <td><span class=\"rider-name-text\">${rider}</span>${extraHtml}</td>\n                <td><input type=\"text\" class=\"formatted-number rider-premium-input\" placeholder=\"\u0e23\u0e30\u0e1a\u0e38\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e16\u0e49\u0e32\u0e21\u0e35\"></td>\n                <td class=\"rider-comm-result text-right\" style=\"color: #718096;\">-</td>\n                <td class=\"rider-complus-result text-right\" style=\"color: #718096;\">-</td>\n            `;\n            riderTableBody.appendChild(tr);\n        });\n\n        updateRiderCommissions();\n        calculateGrandTotal();\n    }\n\n    function updateRiderCommissions() {\n        let ageVal = ageInput.value.trim();\n        let age = parseFloat(ageVal);\n\n        let rows = riderTableBody.querySelectorAll('tr');\n        rows.forEach(tr => {\n            let riderCell = tr.querySelector('.rider-name-text');\n            let planSelectEl = tr.querySelector('.rider-plan-select');\n            let premiumInputEl = tr.querySelector('.rider-premium-input');\n            let commTd = tr.querySelector('.rider-comm-result');\n            let complusTd = tr.querySelector('.rider-complus-result');\n\n            if (!riderCell || !premiumInputEl || !commTd || !complusTd) return;\n\n            let riderName = riderCell.textContent.trim();\n            let selectedPlan = planSelectEl ? planSelectEl.value.trim() : \"\";\n            let premiumVal = parseFloat(premiumInputEl.value.replace(/,/g, \"\")) || 0;\n\n            if (isNaN(age) || premiumVal === 0) {\n                commTd.textContent = \"-\";\n                commTd.style.color = \"#718096\";\n                complusTd.textContent = \"-\";\n                complusTd.style.color = \"#718096\";\n                return;\n            }\n\n            let matchingRows = riderSheetData.filter(row => {\n                let keys = Object.keys(row);\n                let name = row['\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21'] !== undefined ? String(row['\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21']).trim() : (keys[1] ? String(row[keys[1]]).trim() : \"\");\n                if (name !== riderName) return false;\n\n                let typeVal = row['\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17'] !== undefined ? String(row['\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17']).trim() : (keys[11] ? String(row[keys[11]]).trim() : \"\");\n                if (typeVal !== \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e2a\u0e1a\u0e4a\u0e32\u0e22 \u0e2a\u0e1a\u0e32\u0e22\" && typeVal !== \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e2a\u0e1a\u0e4a\u0e32\u0e1a \u0e2a\u0e1a\u0e32\u0e22\") return false;\n\n                if (riderName === \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e0a\u0e35\u0e25\u0e14\u0e4c\") {\n                    if (selectedPlan === \"\") return false;\n                    let conditionVal = row['\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02'] !== undefined ? String(row['\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02']).trim() : (keys[2] ? String(row[keys[2]]).trim() : \"\");\n                    if (conditionVal !== selectedPlan) return false;\n                }\n\n                return true;\n            });\n\n            if (matchingRows.length > 0) {\n                let matchedRow = matchingRows[0];\n                let keys = Object.keys(matchedRow);\n\n                let rawComm = parseFloat(matchedRow['\u0e04\u0e2d\u0e21'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21'] : (keys[5] ? matchedRow[keys[5]] : 0)) || 0;\n                let rawComplus = parseFloat(matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] : (keys[6] ? matchedRow[keys[6]] : 0)) || 0;\n\n                let finalComm = Math.round((rawComm * premiumVal) / 100);\n                let finalComplus = Math.round((rawComplus * premiumVal) / 100);\n\n                if (finalComm > 0) {\n                    commTd.textContent = formatNumber(finalComm, false);\n                    commTd.style.color = \"#2d3748\";\n                } else {\n                    commTd.textContent = \"-\";\n                    commTd.style.color = \"#718096\";\n                }\n\n                if (finalComplus > 0) {\n                    complusTd.textContent = formatNumber(finalComplus, false);\n                    complusTd.style.color = \"#2d3748\";\n                } else {\n                    complusTd.textContent = \"-\";\n                    complusTd.style.color = \"#718096\";\n                }\n            } else {\n                commTd.textContent = \"-\";\n                commTd.style.color = \"#718096\";\n                complusTd.textContent = \"-\";\n                complusTd.style.color = \"#718096\";\n            }\n        });\n\n        calculateGrandTotal();\n    }\n<\/script>\n\n\n<script>\n    (function() {\n        function sendHeight() {\n            if (window.parent) {\n                var h = document.body ? document.body.scrollHeight : 0;\n                window.parent.postMessage({ type: 'commPanelResize', height: h }, '*');\n            }\n        }\n        window.addEventListener('load', sendHeight);\n        window.addEventListener('resize', sendHeight);\n        if (window.ResizeObserver) {\n            new ResizeObserver(sendHeight).observe(document.body);\n        } else {\n            setInterval(sendHeight, 500);\n        }\n    })();\n<\/script>\n</body>\n</html>";
+        const COMM_TEMPLATE_LIVEVERSE = "<!DOCTYPE html>\n<html lang=\"th\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e17\u0e31\u0e48\u0e27\u0e44\u0e1b</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\n    <style>\n        * {\n            box-sizing: border-box;\n            font-family: 'Sarabun', sans-serif;\n        }\n        body {\n            background-color: #f4f6f9;\n            margin: 0;\n            padding: 20px;\n            color: #333;\n        }\n        .container {\n            max-width: 1200px;\n            margin: 0 auto;\n            background: #fff;\n            padding: 30px;\n            border-radius: 12px;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.08);\n        }\n        .form-row {\n            display: flex;\n            gap: 20px;\n            margin-bottom: 15px;\n            flex-wrap: wrap;\n            align-items: flex-end;\n        }\n        .form-group {\n            flex: 1;\n            min-width: 250px;\n            position: relative;\n        }\n        label {\n            display: block;\n            margin-bottom: 6px;\n            font-weight: 500;\n            color: #4a5568;\n        }\n        input, select {\n            width: 100%;\n            padding: 10px 12px;\n            border: 1px solid #cbd5e0;\n            border-radius: 6px;\n            font-size: 1rem;\n            outline: none;\n            transition: border-color 0.2s;\n            background-color: #fff;\n        }\n        input:focus, select:focus {\n            border-color: #3182ce;\n            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);\n        }\n        input:disabled, select:disabled {\n            background-color: #edf2f7;\n            cursor: not-allowed;\n            color: #2d3748;\n            font-weight: 600;\n        }\n        .code-container {\n            display: flex;\n            gap: 10px;\n        }\n        .btn-clear {\n            background-color: #dc3545;\n            color: white;\n            border: none;\n            padding: 10px 20px;\n            font-size: 16px;\n            font-weight: 600;\n            border-radius: 6px;\n            cursor: pointer;\n            transition: background-color 0.2s ease, transform 0.1s ease;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            white-space: nowrap;\n        }\n        .btn-clear:hover {\n            background-color: #c82333;\n        }\n        .btn-clear:active {\n            transform: scale(0.98);\n        }\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-top: 10px;\n            margin-bottom: 25px;\n            background: #fff;\n        }\n        th, td {\n            border: 1px solid #e2e8f0;\n            padding: 12px;\n            text-align: left;\n            font-size: 0.95rem;\n        }\n        th {\n            background-color: #ebf8ff;\n            color: #2b6cb0;\n            font-weight: 600;\n        }\n        tr:nth-child(even) {\n            background-color: #f8fafc;\n        }\n        .text-right {\n            text-align: right;\n        }\n        .loading {\n            text-align: center;\n            color: #718096;\n            font-style: italic;\n            padding: 10px;\n        }\n        .summary-table {\n            margin-top: 25px;\n            background-color: #ebf8ff;\n        }\n        .summary-table th {\n            background-color: #bee3f8;\n            color: #2b6cb0;\n            text-align: center;\n            font-weight: 600;\n        }\n        .summary-table td {\n            font-weight: 700;\n            font-size: 1.1rem;\n            color: #2d3748;\n        }\n    </style>\n</head>\n<body>\n\n<div class=\"container\">\n    <div class=\"form-row\" style=\"margin-top: 10px;\">\n        <div class=\"form-group\">\n            <label for=\"ageInput\">\u0e2d\u0e32\u0e22\u0e38</label>\n            <select id=\"ageInput\" disabled>\n                <option value=\"\">\u0e01\u0e33\u0e25\u0e31\u0e07\u0e42\u0e2b\u0e25\u0e14\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25...</option>\n            </select>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"productInput\">\u0e41\u0e1a\u0e1a\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19</label>\n            <input type=\"text\" id=\"productInput\" value=\"\u0e44\u0e25\u0e1f\u0e4c\u0e40\u0e27\u0e34\u0e23\u0e4c\u0e2a \u0e40\u0e27\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 99/99\" disabled>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"codeInput\">\u0e23\u0e2b\u0e31\u0e2a</label>\n            <div class=\"code-container\">\n                <input type=\"text\" id=\"codeInput\" value=\"UWD\" disabled>\n                <button type=\"button\" id=\"clearBtn\" class=\"btn-clear\">\u0e25\u0e49\u0e32\u0e07\u0e04\u0e48\u0e32</button>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"form-row\">\n        <div class=\"form-group\">\n            <label for=\"covPeriodInput\">\u0e04\u0e38\u0e49\u0e21\u0e04\u0e23\u0e2d\u0e07 (\u0e1b\u0e35)</label>\n            <input type=\"text\" id=\"covPeriodInput\" placeholder=\"-\" disabled>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"payPeriodInput\">\u0e0a\u0e33\u0e23\u0e30\u0e40\u0e1a\u0e35\u0e49\u0e22 (\u0e1b\u0e35)</label>\n            <input type=\"text\" id=\"payPeriodInput\" placeholder=\"-\" disabled>\n        </div>\n    </div>\n\n    <table>\n        <thead>\n            <tr>\n                <th style=\"width: 38%;\">\u0e44\u0e25\u0e1f\u0e4c\u0e40\u0e27\u0e34\u0e23\u0e4c\u0e2a</th>\n                <th style=\"width: 15.5%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19</th>\n                <th style=\"width: 15.5%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19</th>\n                <th style=\"width: 15.5%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a</th>\n                <th style=\"width: 15.5%;\">LA Bonus</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td style=\"font-weight: 600; color: #2b6cb0;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e2b\u0e25\u0e31\u0e01</td>\n                <td><input type=\"text\" id=\"premiumInput\" class=\"formatted-number\" placeholder=\"\u0e23\u0e30\u0e1a\u0e38\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e2b\u0e25\u0e31\u0e01\"></td>\n                <td id=\"commResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n                <td id=\"complusResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n                <td id=\"laBonusResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n            </tr>\n            <tr>\n                <td style=\"font-weight: 600; color: #2b6cb0;\">Top Up</td>\n                <td><input type=\"text\" id=\"topupPremiumInput\" class=\"formatted-number\" placeholder=\"\u0e23\u0e30\u0e1a\u0e38\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e16\u0e49\u0e32\u0e21\u0e35\"></td>\n                <td id=\"topupCommResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n                <td id=\"topupComplusResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n                <td id=\"topupLaBonusResult\" class=\"text-right\" style=\"color: #718096;\">-</td>\n            </tr>\n        </tbody>\n    </table>\n\n    <table>\n        <thead>\n            <tr>\n                <th style=\"width: 38%;\">\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21</th>\n                <th style=\"width: 15.5%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21</th>\n                <th style=\"width: 15.5%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19</th>\n                <th style=\"width: 15.5%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a</th>\n                <th style=\"width: 15.5%;\">LA Bonus</th>\n            </tr>\n        </thead>\n        <tbody id=\"riderTableBody\">\n            <tr>\n                <td colspan=\"5\" class=\"loading\">-</td>\n            </tr>\n        </tbody>\n    </table>\n\n    <table class=\"summary-table\">\n        <thead>\n            <tr>\n                <th style=\"width: 38%;\">\u0e2a\u0e23\u0e38\u0e1b\u0e1c\u0e25</th>\n                <th style=\"width: 15.5%;\">\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e23\u0e27\u0e21</th>\n                <th style=\"width: 15.5%;\">\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19\u0e23\u0e27\u0e21</th>\n                <th style=\"width: 15.5%;\">\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a\u0e23\u0e27\u0e21</th>\n                <th style=\"width: 15.5%;\">LA Bonus \u0e23\u0e27\u0e21</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td style=\"text-align: center; color: #2b6cb0;\">\u0e1c\u0e25\u0e23\u0e27\u0e21</td>\n                <td id=\"totalPremiumResult\" class=\"text-right\">-</td>\n                <td id=\"totalCommResult\" class=\"text-right\">-</td>\n                <td id=\"totalComplusResult\" class=\"text-right\">-</td>\n                <td id=\"totalLaBonusResult\" class=\"text-right\">-</td>\n            </tr>\n        </tbody>\n    </table>\n</div>\n\n<script>\n    let riderAgeData = [];\n    let dataSheetData = [];\n    let riderSheetData = [];\n\n    const ageInput = document.getElementById('ageInput');\n    const productInput = document.getElementById('productInput');\n    const codeInput = document.getElementById('codeInput');\n    const clearBtn = document.getElementById('clearBtn');\n    const covPeriodInput = document.getElementById('covPeriodInput');\n    const payPeriodInput = document.getElementById('payPeriodInput');\n    const premiumInput = document.getElementById('premiumInput');\n    const commResult = document.getElementById('commResult');\n    const complusResult = document.getElementById('complusResult');\n    const laBonusResult = document.getElementById('laBonusResult');\n    const topupPremiumInput = document.getElementById('topupPremiumInput');\n    const topupCommResult = document.getElementById('topupCommResult');\n    const topupComplusResult = document.getElementById('topupComplusResult');\n    const topupLaBonusResult = document.getElementById('topupLaBonusResult');\n    const riderTableBody = document.getElementById('riderTableBody');\n    const totalPremiumResult = document.getElementById('totalPremiumResult');\n    const totalCommResult = document.getElementById('totalCommResult');\n    const totalComplusResult = document.getElementById('totalComplusResult');\n    const totalLaBonusResult = document.getElementById('totalLaBonusResult');\n\n    function formatNumber(value, isDecimal = false) {\n        if (value === undefined || value === null || value === \"\") return \"\";\n        let num = parseFloat(String(value).replace(/,/g, \"\"));\n        if (isNaN(num)) return \"\";\n        \n        let fixedStr = isDecimal ? num.toFixed(2) : num.toString();\n        let parts = fixedStr.split(\".\");\n        parts[0] = parts[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\n        return parts.join(\".\");\n    }\n\n    document.addEventListener(\"input\", function(e) {\n        if (e.target && e.target.classList.contains(\"formatted-number\")) {\n            let cursorPosition = e.target.selectionStart;\n            let originalLength = e.target.value.length;\n            \n            let rawValue = e.target.value.replace(/,/g, \"\");\n            if (!isNaN(rawValue) || rawValue.endsWith(\".\")) {\n                e.target.value = formatNumber(rawValue);\n                \n                let newLength = e.target.value.length;\n                cursorPosition = cursorPosition + (newLength - originalLength);\n                e.target.setSelectionRange(cursorPosition, cursorPosition);\n            }\n        }\n        if (e.target && (e.target.classList.contains(\"rider-premium-input\") || e.target.classList.contains(\"rider-plan-select\"))) {\n            updateRiderCommissions();\n        }\n    });\n\n    function initWithData(payload) {\n        try {\n            riderAgeData = (payload && payload.riderAgeData) || [];\n            dataSheetData = (payload && payload.dataSheetData) || [];\n            riderSheetData = (payload && payload.riderSheetData) || [];\n\n            ageInput.innerHTML = '<option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e32\u0e22\u0e38 (0-80) --</option>';\n            for (let i = 0; i <= 80; i++) {\n                let opt = document.createElement('option');\n                opt.value = i;\n                opt.textContent = i;\n                ageInput.appendChild(opt);\n            }\n\n            ageInput.disabled = false;\n            updatePeriodsAndCommission();\n            handleProductChange();\n        } catch (error) {\n            console.error(\"Error loading data:\", error);\n            ageInput.innerHTML = '<option value=\"\">\u0e42\u0e2b\u0e25\u0e14\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e44\u0e21\u0e48\u0e2a\u0e33\u0e40\u0e23\u0e47\u0e08</option>';\n        }\n    }\n\n    window.addEventListener('message', function(e) {\n        if (e.data && e.data.type === 'commData') {\n            initWithData(e.data.payload);\n        }\n    });\n\n    if (window.parent) {\n        window.parent.postMessage({ type: 'commPanelReady' }, '*');\n    }\n\n    function clearAllValues() {\n        ageInput.value = \"\";\n        covPeriodInput.value = \"\";\n        payPeriodInput.value = \"\";\n        premiumInput.value = \"\";\n        commResult.textContent = \"-\";\n        commResult.style.color = \"#718096\";\n        complusResult.textContent = \"-\";\n        complusResult.style.color = \"#718096\";\n        laBonusResult.textContent = \"-\";\n        laBonusResult.style.color = \"#718096\";\n        topupPremiumInput.value = \"\";\n        topupCommResult.textContent = \"-\";\n        topupCommResult.style.color = \"#718096\";\n        topupComplusResult.textContent = \"-\";\n        topupComplusResult.style.color = \"#718096\";\n        topupLaBonusResult.textContent = \"-\";\n        topupLaBonusResult.style.color = \"#718096\";\n        riderTableBody.innerHTML = '<tr><td colspan=\"5\" class=\"loading\">-</td></tr>';\n        totalPremiumResult.textContent = \"-\";\n        totalPremiumResult.style.color = \"#2d3748\";\n        totalCommResult.textContent = \"-\";\n        totalCommResult.style.color = \"#2d3748\";\n        totalComplusResult.textContent = \"-\";\n        totalComplusResult.style.color = \"#2d3748\";\n        totalLaBonusResult.textContent = \"-\";\n        totalLaBonusResult.style.color = \"#2d3748\";\n    }\n\n    clearBtn.addEventListener('click', clearAllValues);\n\n    function calculateGrandTotal() {\n        let mainPremium = parseFloat(premiumInput.value.replace(/,/g, \"\")) || 0;\n        let mainComm = parseFloat(commResult.textContent.replace(/,/g, \"\")) || 0;\n        let mainComplus = parseFloat(complusResult.textContent.replace(/,/g, \"\")) || 0;\n        let mainLabonus = parseFloat(laBonusResult.textContent.replace(/,/g, \"\")) || 0;\n\n        let topupPrem = parseFloat(topupPremiumInput.value.replace(/,/g, \"\")) || 0;\n        let topupComm = parseFloat(topupCommResult.textContent.replace(/,/g, \"\")) || 0;\n        let topupComplus = parseFloat(topupComplusResult.textContent.replace(/,/g, \"\")) || 0;\n        let topupLabonus = parseFloat(topupLaBonusResult.textContent.replace(/,/g, \"\")) || 0;\n\n        let totalPremium = mainPremium + topupPrem;\n        let totalComm = mainComm + topupComm;\n        let totalComplus = mainComplus + topupComplus;\n        let totalLabonus = mainLabonus + topupLabonus;\n\n        let riderRows = riderTableBody.querySelectorAll('tr');\n        riderRows.forEach(tr => {\n            let rPremInput = tr.querySelector('.rider-premium-input');\n            let commTd = tr.querySelector('.rider-comm-result');\n            let complusTd = tr.querySelector('.rider-complus-result');\n            let labonusTd = tr.querySelector('.rider-labonus-result');\n            \n            if (rPremInput) {\n                let rPrem = parseFloat(rPremInput.value.replace(/,/g, \"\")) || 0;\n                totalPremium += rPrem;\n            }\n            if (commTd && commTd.textContent !== \"-\" && !commTd.textContent.includes(\"\u0e44\u0e21\u0e48\u0e1e\u0e1a\")) {\n                let rComm = parseFloat(commTd.textContent.replace(/,/g, \"\")) || 0;\n                totalComm += rComm;\n            }\n            if (complusTd && complusTd.textContent !== \"-\" && !complusTd.textContent.includes(\"\u0e44\u0e21\u0e48\u0e1e\u0e1a\")) {\n                let rComplus = parseFloat(complusTd.textContent.replace(/,/g, \"\")) || 0;\n                totalComplus += rComplus;\n            }\n            if (labonusTd && labonusTd.textContent !== \"-\" && !labonusTd.textContent.includes(\"\u0e44\u0e21\u0e48\u0e1e\u0e1a\")) {\n                let rLabonus = parseFloat(labonusTd.textContent.replace(/,/g, \"\")) || 0;\n                totalLabonus += rLabonus;\n            }\n        });\n\n        totalPremiumResult.textContent = totalPremium > 0 ? formatNumber(totalPremium, false) : \"-\";\n        totalPremiumResult.style.color = totalPremium > 0 ? \"#2b6cb0\" : \"#2d3748\";\n\n        totalCommResult.textContent = totalComm > 0 ? formatNumber(totalComm, false) : \"-\";\n        totalCommResult.style.color = totalComm > 0 ? \"#2b6cb0\" : \"#2d3748\";\n\n        totalComplusResult.textContent = totalComplus > 0 ? formatNumber(totalComplus, false) : \"-\";\n        totalComplusResult.style.color = totalComplus > 0 ? \"#2b6cb0\" : \"#2d3748\";\n\n        totalLaBonusResult.textContent = totalLabonus > 0 ? formatNumber(totalLabonus, false) : \"-\";\n        totalLaBonusResult.style.color = totalLabonus > 0 ? \"#2b6cb0\" : \"#2d3748\";\n    }\n\n    function updatePeriodsAndCommission() {\n        let ageVal = ageInput.value.trim();\n        let codeVal = codeInput.value.trim();\n        let premiumVal = premiumInput.value.replace(/,/g, \"\").trim();\n        let topupVal = topupPremiumInput.value.replace(/,/g, \"\").trim();\n\n        covPeriodInput.value = \"\";\n        payPeriodInput.value = \"\";\n\n        let age = parseFloat(ageVal);\n        if (!isNaN(age)) {\n            covPeriodInput.value = 99 - age;\n            payPeriodInput.value = 99 - age;\n        }\n\n        if (ageVal === \"\" || isNaN(age)) {\n            commResult.textContent = \"-\";\n            commResult.style.color = \"#718096\";\n            complusResult.textContent = \"-\";\n            complusResult.style.color = \"#718096\";\n            laBonusResult.textContent = \"-\";\n            laBonusResult.style.color = \"#718096\";\n            topupCommResult.textContent = \"-\";\n            topupCommResult.style.color = \"#718096\";\n            topupComplusResult.textContent = \"-\";\n            topupComplusResult.style.color = \"#718096\";\n            topupLaBonusResult.textContent = \"-\";\n            topupLaBonusResult.style.color = \"#718096\";\n            calculateGrandTotal();\n            return;\n        }\n\n        // Calculate Main Premium Commission, Complus & LA Bonus (\u0e17\u0e38\u0e19 = '\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e2b\u0e25\u0e31\u0e01')\n        if (premiumVal === \"\" || isNaN(premiumVal)) {\n            commResult.textContent = \"-\";\n            commResult.style.color = \"#718096\";\n            complusResult.textContent = \"-\";\n            complusResult.style.color = \"#718096\";\n            laBonusResult.textContent = \"-\";\n            laBonusResult.style.color = \"#718096\";\n        } else {\n            let premium = parseFloat(premiumVal);\n            let matchingRows = dataSheetData.filter(row => {\n                let keys = Object.keys(row);\n                let rowCode = row['\u0e23\u0e2b\u0e31\u0e2a'] !== undefined ? String(row['\u0e23\u0e2b\u0e31\u0e2a']).trim() : String(keys[0] ? row[keys[0]] : \"\").trim();\n                if (rowCode !== codeVal) return false;\n\n                let minAge = parseFloat(row['\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e40\u0e23\u0e34\u0e48\u0e21'] : (row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] : row[keys[2]])) || 0;\n                let maxAge = parseFloat(row['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] !== undefined ? row['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] : (row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] : row[keys[3]])) || 0;\n                \n                let capitalCol = row['\u0e17\u0e38\u0e19'] !== undefined ? String(row['\u0e17\u0e38\u0e19']).trim() : (row['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] !== undefined ? String(row['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19']).trim() : String(keys[4] ? row[keys[4]] : \"\").trim());\n\n                return age >= minAge && age <= maxAge && capitalCol === \"\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e2b\u0e25\u0e31\u0e01\";\n            });\n\n            if (matchingRows.length > 0) {\n                let matchedRow = matchingRows[0];\n                let keys = Object.keys(matchedRow);\n                \n                let rawComm = parseFloat(matchedRow['\u0e04\u0e2d\u0e21'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21'] : (matchedRow['\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19'] : matchedRow[keys[5]])) || 0;\n                let rawComplus = parseFloat(matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] : matchedRow[keys[6]]) || 0;\n\n                let finalComm = Math.round((rawComm * premium) / 100);\n                let finalComplus = Math.round((rawComplus * premium) / 100);\n\n                commResult.textContent = finalComm > 0 ? formatNumber(finalComm, false) : \"-\";\n                commResult.style.color = \"#2d3748\";\n                complusResult.textContent = finalComplus > 0 ? formatNumber(finalComplus, false) : \"-\";\n                complusResult.style.color = \"#2d3748\";\n                laBonusResult.textContent = \"-\";\n                laBonusResult.style.color = \"#718096\";\n            } else {\n                commResult.textContent = \"- (\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02)\";\n                commResult.style.color = \"#e53e3e\";\n                complusResult.textContent = \"-\";\n                complusResult.style.color = \"#718096\";\n                laBonusResult.textContent = \"-\";\n                laBonusResult.style.color = \"#718096\";\n            }\n        }\n\n        // Calculate Top Up Commission, Complus & LA Bonus (\u0e17\u0e38\u0e19 = 'Top Up')\n        if (topupVal === \"\" || isNaN(topupVal)) {\n            topupCommResult.textContent = \"-\";\n            topupCommResult.style.color = \"#718096\";\n            topupComplusResult.textContent = \"-\";\n            topupComplusResult.style.color = \"#718096\";\n            topupLaBonusResult.textContent = \"-\";\n            topupLaBonusResult.style.color = \"#718096\";\n        } else {\n            let topup = parseFloat(topupVal);\n            let matchingTopupRows = dataSheetData.filter(row => {\n                let keys = Object.keys(row);\n                let rowCode = row['\u0e23\u0e2b\u0e31\u0e2a'] !== undefined ? String(row['\u0e23\u0e2b\u0e31\u0e2a']).trim() : String(keys[0] ? row[keys[0]] : \"\").trim();\n                if (rowCode !== codeVal) return false;\n\n                let minAge = parseFloat(row['\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e40\u0e23\u0e34\u0e48\u0e21'] : (row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] : row[keys[2]])) || 0;\n                let maxAge = parseFloat(row['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] !== undefined ? row['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] : (row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] : row[keys[3]])) || 0;\n                \n                let capitalCol = row['\u0e17\u0e38\u0e19'] !== undefined ? String(row['\u0e17\u0e38\u0e19']).trim() : (row['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19'] !== undefined ? String(row['\u0e17\u0e38\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19']).trim() : String(keys[4] ? row[keys[4]] : \"\").trim());\n\n                return age >= minAge && age <= maxAge && capitalCol === \"Top Up\";\n            });\n\n            if (matchingTopupRows.length > 0) {\n                let matchedRow = matchingTopupRows[0];\n                let keys = Object.keys(matchedRow);\n                let rawComm = parseFloat(matchedRow['\u0e04\u0e2d\u0e21'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21'] : (matchedRow['\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e21\u0e34\u0e0a\u0e0a\u0e31\u0e48\u0e19'] : matchedRow[keys[5]])) || 0;\n                let rawComplus = parseFloat(matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] : matchedRow[keys[6]]) || 0;\n\n                let finalComm = Math.round((rawComm * topup) / 100);\n                let finalComplus = Math.round((rawComplus * topup) / 100);\n\n                topupCommResult.textContent = finalComm > 0 ? formatNumber(finalComm, false) : \"-\";\n                topupCommResult.style.color = \"#2d3748\";\n                topupComplusResult.textContent = finalComplus > 0 ? formatNumber(finalComplus, false) : \"-\";\n                topupComplusResult.style.color = \"#2d3748\";\n                topupLaBonusResult.textContent = \"-\";\n                topupLaBonusResult.style.color = \"#718096\";\n            } else {\n                topupCommResult.textContent = \"- (\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02)\";\n                topupCommResult.style.color = \"#e53e3e\";\n                topupComplusResult.textContent = \"-\";\n                topupComplusResult.style.color = \"#718096\";\n                topupLaBonusResult.textContent = \"-\";\n                topupLaBonusResult.style.color = \"#718096\";\n            }\n        }\n        \n        calculateGrandTotal();\n    }\n\n    ageInput.addEventListener('change', () => {\n        handleProductChange();\n        updatePeriodsAndCommission();\n    });\n\n    premiumInput.addEventListener('input', updatePeriodsAndCommission);\n    topupPremiumInput.addEventListener('input', updatePeriodsAndCommission);\n\n    function updateRiderCommissions() {\n        let ageVal = ageInput.value.trim();\n        let age = parseFloat(ageVal);\n\n        let rows = riderTableBody.querySelectorAll('tr');\n        rows.forEach(tr => {\n            let riderCell = tr.querySelector('.rider-name-text');\n            let planSelectEl = tr.querySelector('.rider-plan-select');\n            let premiumInputEl = tr.querySelector('.rider-premium-input');\n            let commTd = tr.querySelector('.rider-comm-result');\n            let complusTd = tr.querySelector('.rider-complus-result');\n            let labonusTd = tr.querySelector('.rider-labonus-result');\n\n            if (!riderCell || !premiumInputEl || !commTd || !complusTd || !labonusTd) return;\n\n            let riderName = riderCell.textContent.trim();\n            let selectedPlan = planSelectEl ? planSelectEl.value.trim() : \"\";\n            let premiumVal = parseFloat(premiumInputEl.value.replace(/,/g, \"\")) || 0;\n\n            if (isNaN(age) || premiumVal === 0) {\n                commTd.textContent = \"-\";\n                commTd.style.color = \"#718096\";\n                complusTd.textContent = \"-\";\n                complusTd.style.color = \"#718096\";\n                labonusTd.textContent = \"-\";\n                labonusTd.style.color = \"#718096\";\n                calculateGrandTotal();\n                return;\n            }\n\n            let matchingRows = riderSheetData.filter(row => {\n                let keys = Object.keys(row);\n                \n                let name = row['\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21'] !== undefined ? String(row['\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21']).trim() : (keys[1] ? String(row[keys[1]]).trim() : \"\");\n                if (name !== riderName) return false;\n\n                let typeVal = row['\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17'] !== undefined ? String(row['\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17']).trim() : (keys[11] ? String(row[keys[11]]).trim() : \"\");\n                if (!typeVal.startsWith(\"\u0e44\u0e25\u0e1f\u0e4c\u0e40\u0e27\u0e34\u0e23\u0e4c\u0e2a\")) return false;\n\n                if (planSelectEl) {\n                    if (selectedPlan === \"\") return false;\n                    let conditionVal = row['\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02'] !== undefined ? String(row['\u0e40\u0e07\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e02']).trim() : (keys[2] ? String(row[keys[2]]).trim() : \"\");\n                    if (conditionVal !== selectedPlan) return false;\n                }\n\n                let minAge = parseFloat(row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e40\u0e23\u0e34\u0e48\u0e21'] : (keys[3] ? row[keys[3]] : 0)) || 0;\n                let maxAge = parseFloat(row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] !== undefined ? row['\u0e1e\u0e34\u0e01\u0e31\u0e14\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22'] : (keys[4] ? row[keys[4]] : 0)) || 0;\n\n                return age >= minAge && age <= maxAge;\n            });\n\n            if (matchingRows.length > 0) {\n                let matchedRow = matchingRows[0];\n                let keys = Object.keys(matchedRow);\n\n                let rawComm = parseFloat(matchedRow['\u0e04\u0e2d\u0e21'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21'] : (keys[5] ? matchedRow[keys[5]] : 0)) || 0;\n                let rawComplus = parseFloat(matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] !== undefined ? matchedRow['\u0e04\u0e2d\u0e21\u0e1e\u0e25\u0e31\u0e2a'] : (keys[6] ? matchedRow[keys[6]] : 0)) || 0;\n                let rawLabonus = parseFloat(matchedRow['LA Bonus'] !== undefined ? matchedRow['LA Bonus'] : (matchedRow['\u0e25\u0e32\u0e42\u0e1a\u0e19\u0e31\u0e2a'] !== undefined ? matchedRow['\u0e25\u0e32\u0e42\u0e1a\u0e19\u0e31\u0e2a'] : (keys[7] ? matchedRow[keys[7]] : 0))) || 0;\n\n                let finalComm = Math.round((rawComm * premiumVal) / 100);\n                let finalComplus = Math.round((rawComplus * premiumVal) / 100);\n                let finalLabonus = Math.round((rawLabonus * premiumVal) / 100);\n\n                commTd.textContent = finalComm > 0 ? formatNumber(finalComm, false) : \"-\";\n                commTd.style.color = \"#2d3748\";\n                complusTd.textContent = finalComplus > 0 ? formatNumber(finalComplus, false) : \"-\";\n                complusTd.style.color = \"#2d3748\";\n                labonusTd.textContent = finalLabonus > 0 ? formatNumber(finalLabonus, false) : \"-\";\n                labonusTd.style.color = \"#2d3748\";\n            } else {\n                commTd.textContent = \"-\";\n                commTd.style.color = \"#718096\";\n                complusTd.textContent = \"-\";\n                complusTd.style.color = \"#718096\";\n                labonusTd.textContent = \"-\";\n                labonusTd.style.color = \"#718096\";\n            }\n        });\n\n        calculateGrandTotal();\n    }\n\n    function handleProductChange() {\n        let ageInputVal = ageInput.value.trim();\n        if (ageInputVal === \"\") {\n            riderTableBody.innerHTML = '<tr><td colspan=\"5\" class=\"loading\">-</td></tr>';\n            calculateGrandTotal();\n            return;\n        }\n        let age = parseFloat(ageInputVal);\n\n        const masterOrder = [\n            \"\u0e2d.1\",\n            \"\u0e06\u0e08.1\",\n            \"\u0e2d.2\",\n            \"\u0e06\u0e08.2\",\n            \"\u0e2d.3\",\n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e2d\u0e31\u0e25\u0e15\u0e23\u0e49\u0e32\",\n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e0a\u0e35\u0e25\u0e14\u0e4c\",\n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e14\u0e35\u0e14\u0e35\",\n            \"\u0e1c\u0e39\u0e49\u0e1b\u0e48\u0e27\u0e22\u0e19\u0e2d\u0e01\",\n            \"\u0e23\u0e1e.\",\n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e40\u0e2e\u0e0a\u0e1a\u0e35 \u0e42\u0e1b\u0e23\",\n            \"\u0e2a\u0e23.2\",\n            \"\u0e17\u0e23.48\",\n            \"\u0e21\u0e31\u0e25\u0e15\u0e34\u0e40\u0e1e\u0e22\u0e4c\",\n            \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e21\u0e31\u0e25\u0e15\u0e34\u0e40\u0e1e\u0e22\u0e4c \u0e41\u0e04\u0e19\u0e40\u0e0b\u0e2d\u0e23\u0e4c\"\n        ];\n\n        let validRiders = masterOrder.filter(riderName => {\n            let cleanRiderName = riderName.replace(/\\./g, '');\n            \n            let ageRule = riderAgeData.find(r => {\n                let name = \"\";\n                if (Array.isArray(r)) {\n                    name = r[0] !== undefined ? String(r[0]).trim() : (r[1] !== undefined ? String(r[1]).trim() : \"\");\n                } else if (typeof r === 'object' && r !== null) {\n                    let rKeys = Object.keys(r);\n                    name = r['\u0e0a\u0e37\u0e48\u0e2d'] !== undefined ? r['\u0e0a\u0e37\u0e48\u0e2d'] : (r['A'] !== undefined ? r['A'] : (rKeys[0] !== undefined ? r[rKeys[0]] : ''));\n                }\n                if (!name || name === \"\u0e0a\u0e37\u0e48\u0e2d\") return false;\n                let sheetName = String(name).trim();\n                return sheetName === riderName || sheetName.replace(/\\./g, '') === cleanRiderName;\n            });\n\n            if (!ageRule) return true;\n\n            let minA = 0, maxA = 100;\n            if (Array.isArray(ageRule)) {\n                minA = parseFloat(ageRule[1]) || 0;\n                maxA = parseFloat(ageRule[2]) || 100;\n            } else {\n                let rKeys = Object.keys(ageRule);\n                minA = parseFloat(ageRule['\u0e40\u0e23\u0e34\u0e48\u0e21'] !== undefined ? ageRule['\u0e40\u0e23\u0e34\u0e48\u0e21'] : (ageRule['B'] !== undefined ? ageRule['B'] : ageRule[rKeys[1]])) || 0;\n                maxA = parseFloat(ageRule['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] !== undefined ? ageRule['\u0e2a\u0e34\u0e49\u0e19\u0e2a\u0e38\u0e14'] : (ageRule['C'] !== undefined ? ageRule['C'] : ageRule[rKeys[2]])) || 100;\n            }\n            \n            return age >= minA && age <= maxA;\n        });\n\n        if (validRiders.length > 0) {\n            riderTableBody.innerHTML = '';\n            validRiders.forEach(rider => {\n                let extraHtml = '';\n                if (rider === \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e2d\u0e31\u0e25\u0e15\u0e23\u0e49\u0e32\") {\n                    extraHtml = ` <select class=\"rider-plan-select\" style=\"width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;\">\n                        <option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e1c\u0e19 --</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 1\">\u0e41\u0e1c\u0e19 1</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 2\">\u0e41\u0e1c\u0e19 2</option>\n                    </select>`;\n                } else if (rider === \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e0a\u0e35\u0e25\u0e14\u0e4c\") {\n                    extraHtml = ` <select class=\"rider-plan-select\" style=\"width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;\">\n                        <option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e1c\u0e19 --</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 1\">\u0e41\u0e1c\u0e19 1</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 2\">\u0e41\u0e1c\u0e19 2</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 3\">\u0e41\u0e1c\u0e19 3</option>\n                        <option value=\"\u0e41\u0e1c\u0e19 4\">\u0e41\u0e1c\u0e19 4</option>\n                    </select>`;\n                } else if (rider === \"\u0e40\u0e2e\u0e25\u0e17\u0e4c \u0e1f\u0e34\u0e15 \u0e14\u0e35\u0e14\u0e35\") {\n                    let ddOptions = `\n                        <option value=\"\">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e1c\u0e19 --</option>\n                        <option value=\"2,000 Deduct 0\">2,000 Deduct 0</option>\n                        <option value=\"2,000 Deduct 30,000\">2,000 Deduct 30,000</option>\n                        <option value=\"2,000 Deduct 50,000\">2,000 Deduct 50,000</option>\n                        <option value=\"3,000 Deduct 0\">3,000 Deduct 0</option>\n                        <option value=\"3,000 Deduct 30,000\">3,000 Deduct 30,000</option>\n                        <option value=\"3,000 Deduct 50,000\">3,000 Deduct 50,000</option>\n                        <option value=\"3,000 Deduct 100,000\">3,000 Deduct 100,000</option>\n                    `;\n                    if (age >= 6) {\n                        ddOptions += `\n                            <option value=\"6,000 Deduct 0\">6,000 Deduct 0</option>\n                        `;\n                    }\n                    ddOptions += `\n                        <option value=\"6,000 Deduct 30,000\">6,000 Deduct 30,000</option>\n                        <option value=\"6,000 Deduct 50,000\">6,000 Deduct 50,000</option>\n                        <option value=\"6,000 Deduct 100,000\">6,000 Deduct 100,000</option>\n                    `;\n                    if (age >= 6) {\n                        ddOptions += `\n                            <option value=\"12,000 Deduct 0\">12,000 Deduct 0</option>\n                        `;\n                    }\n                    ddOptions += `\n                        <option value=\"12,000 Deduct 30,000\">12,000 Deduct 30,000</option>\n                        <option value=\"12,000 Deduct 50,000\">12,000 Deduct 50,000</option>\n                        <option value=\"12,000 Deduct 100,000\">12,000 Deduct 100,000</option>\n                    `;\n                    extraHtml = ` <select class=\"rider-plan-select\" style=\"width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;\">${ddOptions}</select>`;\n                }\n\n                let tr = document.createElement('tr');\n                tr.innerHTML = `\n                    <td><span class=\"rider-name-text\">${rider}</span>${extraHtml}</td>\n                    <td><input type=\"text\" class=\"formatted-number rider-premium-input\" placeholder=\"\u0e23\u0e30\u0e1a\u0e38\u0e40\u0e1a\u0e35\u0e49\u0e22\u0e16\u0e49\u0e32\u0e21\u0e35\"></td>\n                    <td class=\"rider-comm-result text-right\" style=\"color: #718096;\">-</td>\n                    <td class=\"rider-complus-result text-right\" style=\"color: #718096;\">-</td>\n                    <td class=\"rider-labonus-result text-right\" style=\"color: #718096;\">-</td>\n                `;\n                riderTableBody.appendChild(tr);\n            });\n        } else {\n            riderTableBody.innerHTML = '<tr><td colspan=\"5\" class=\"loading\" style=\"color: #e53e3e;\">\u0e44\u0e21\u0e48\u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16\u0e0b\u0e37\u0e49\u0e2d\u0e2a\u0e31\u0e0d\u0e0d\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e44\u0e14\u0e49</td></tr>';\n        }\n        \n        calculateGrandTotal();\n    }\n<\/script>\n\n\n<script>\n    (function() {\n        function sendHeight() {\n            if (window.parent) {\n                var h = document.body ? document.body.scrollHeight : 0;\n                window.parent.postMessage({ type: 'commPanelResize', height: h }, '*');\n            }\n        }\n        window.addEventListener('load', sendHeight);\n        window.addEventListener('resize', sendHeight);\n        if (window.ResizeObserver) {\n            new ResizeObserver(sendHeight).observe(document.body);\n        } else {\n            setInterval(sendHeight, 500);\n        }\n    })();\n<\/script>\n</body>\n</html>";
+
+        // ----- คำนวณค่าคอม: โหลดข้อมูลจาก Google Script ครั้งเดียว แล้วแชร์ให้ทุกแบบประกัน -----
+        let commissionDataCache = null;
+        let commissionDataPromise = null;
+
+        function loadCommissionSheetData() {
+            if (commissionDataCache) return Promise.resolve(commissionDataCache);
+            if (commissionDataPromise) return commissionDataPromise;
+
+            commissionDataPromise = Promise.all([
+                fetch(`${SCRIPT_URL}?sheet=Cal`).then(res => res.json()).catch(() => ({ data: [] })),
+                fetch(`${SCRIPT_URL}?sheet=RiderAge`).then(res => res.json()).catch(() => ({ data: [] })),
+                fetch(`${SCRIPT_URL}?sheet=Data`).then(res => res.json()).catch(() => ({ data: [] })),
+                fetch(`${SCRIPT_URL}?sheet=Rider`).then(res => res.json()).catch(() => ({ data: [] }))
+            ]).then(([calRes, riderAgeRes, dataRes, riderRes]) => {
+                commissionDataCache = {
+                    calData: calRes.data || [],
+                    riderAgeData: riderAgeRes.data || [],
+                    dataSheetData: dataRes.data || [],
+                    riderSheetData: riderRes.data || []
+                };
+                return commissionDataCache;
+            }).catch(err => {
+                commissionDataPromise = null;
+                throw err;
+            });
+
+            return commissionDataPromise;
+        }
+
+        const COMM_PANEL_TEMPLATES = {
+            general: COMM_TEMPLATE_GENERAL,
+            sababy: COMM_TEMPLATE_SABABY,
+            liveverse: COMM_TEMPLATE_LIVEVERSE
+        };
+
+        const commPanelIframes = {};
+        const COMM_LOADING_EL = document.getElementById('comm-loading');
+
+        function createCommPanel(subType) {
+            const iframe = document.createElement('iframe');
+            iframe.className = 'comm-panel-iframe';
+            iframe.srcdoc = COMM_PANEL_TEMPLATES[subType];
+            COMMISSION_SUB_CONTENT.appendChild(iframe);
+            commPanelIframes[subType] = iframe;
+            iframe.addEventListener('load', () => {
+                COMM_LOADING_EL.style.display = 'none';
+            });
+        }
+
+        window.addEventListener('message', (e) => {
+            const msg = e.data;
+            if (!msg) return;
+
+            if (msg.type === 'commPanelReady') {
+                const subType = Object.keys(commPanelIframes).find(key => commPanelIframes[key].contentWindow === e.source);
+                if (!subType) return;
+                loadCommissionSheetData().then(data => {
+                    e.source.postMessage({ type: 'commData', payload: data }, '*');
+                }).catch(() => {
+                    e.source.postMessage({ type: 'commData', payload: { riderAgeData: [], dataSheetData: [], riderSheetData: [] } }, '*');
+                });
+            } else if (msg.type === 'commPanelResize') {
+                const subType = Object.keys(commPanelIframes).find(key => commPanelIframes[key].contentWindow === e.source);
+                if (subType) {
+                    commPanelIframes[subType].style.height = Math.max(msg.height || 0, 200) + 'px';
+                }
+            }
+        });
 
         function switchCommissionSub(subType) {
             BTN_COMM_GENERAL.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
             BTN_COMM_SABABY.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
             BTN_COMM_LIVEVERSE.className = 'btn btn-outline-dark-theme fw-bold w-100 py-2 shadow-sm';
 
-            // The content for every sub-tab already lives in the page (see gen-pane / sab-pane /
-            // live-pane below), so switching tabs is just an instant show/hide - no fetch, no
-            // network wait. The underlying sheet data is loaded once (and cached/shared - see
-            // window.getSheetData above) the first time each tab is opened.
-            GEN_PANE.classList.toggle('d-none', subType !== 'general');
-            SAB_PANE.classList.toggle('d-none', subType !== 'sababy');
-            LIVE_PANE.classList.toggle('d-none', subType !== 'liveverse');
+            const activeBtnMap = { general: BTN_COMM_GENERAL, sababy: BTN_COMM_SABABY, liveverse: BTN_COMM_LIVEVERSE };
+            activeBtnMap[subType].className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm active';
 
-            if (subType === 'general') {
-                BTN_COMM_GENERAL.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
-                if (window.initGeneralCalc) window.initGeneralCalc();
-            } else if (subType === 'sababy') {
-                BTN_COMM_SABABY.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
-                if (window.initSabaiCalc) window.initSabaiCalc();
-            } else if (subType === 'liveverse') {
-                BTN_COMM_LIVEVERSE.className = 'btn btn-dark-theme fw-bold w-100 py-2 shadow-sm';
+            Object.keys(commPanelIframes).forEach(key => {
+                commPanelIframes[key].style.display = (key === subType) ? 'block' : 'none';
+            });
+
+            if (commPanelIframes[subType]) {
+                COMM_LOADING_EL.style.display = 'none';
+                return;
             }
+
+            COMM_LOADING_EL.style.display = 'block';
+            createCommPanel(subType);
         }
 
         BTN_VIEW_INSURANCE.addEventListener('click', () => switchView('insurance'));
@@ -1234,12 +1012,12 @@
             });
 
             const customRiderOrder = [
-                "เฮลท์ ฟิต สบ๊าบ สบาย", "อุบัติเหตุ", "ค่าชดเชยรายวัน", "โรคร้ายแรง", "ชั่วระยะเวลา", 
-                "ประกันสุขภาพ", "ไลฟ์เวิร์ส อุบัติเหตุ", "ไลฟ์เวิร์ส ค่าชดเชยรายวัน", "ไลฟ์เวิร์ส โรคร้ายแรง", "ไลฟ์เวิร์ส ประกันสุขภาพ"
+                "เฮลท์ ฟิต สบ๊าบ สบาย", "อุบัติเหตุ ฆาตกรรมและจลาจล", "ชดเชยรายได้", "โรคร้ายแรง", "สุขภาพ", 
+                "ชั่วระยะเวลา", "ไลฟ์เวิร์ส อุบัติเหตุ ฆาตกรรมและจลาจล", "ไลฟ์เวิร์ส ชดเชยรายได้", "ไลฟ์เวิร์ส โรคร้ายแรง", "ไลฟ์เวิร์ส สุขภาพ"
             ];
 
             const customInsuranceOrder = [
-                "จำกัดระยะเวลาขาย", "ตลอดชีพ", "สะสมทรัพย์", "สะสมทรัพย์ (มีเงินคืนระหว่างปี)", "PAR Product", 
+                "จำกัดระยะเวลาขาย", "ตลอดชีพ", "สะสมทรัพย์", "สะสมทรัพย์ (เงินคืนระหว่างปี)", "PAR Product", 
                 "High Net Worth", "Life Verse", "ลดหย่อนบำนาญ", "กบข.", "ชีวิตหลังเกษียณ", "ผู้สูงอายุ", "คนพิการ", "อิสลาม"
             ];
 
@@ -1336,13 +1114,13 @@
             }
 
             const customRiderOrder = [
-                "เฮลท์ ฟิต สบ๊าบ สบาย", "อุบัติเหตุ ฆาตกรรมและจลาจล", "ชดเชยรายได้", "โรคร้ายแรง", "ชั่วระยะเวลา", 
-                "สุขภาพ", "ไลฟ์เวิร์ส อุบัติเหตุ ฆาตกรรมและจลาจล", "ไลฟ์เวิร์ส ชดเชยรายได้", "ไลฟ์เวิร์ส โรคร้ายแรง", "ไลฟ์เวิร์ส สุขภาพ"
+                "เฮลท์ ฟิต สบ๊าบ สบาย", "อุบัติเหตุ ฆาตกรรมและจลาจล", "ชดเชยรายได้", "โรคร้ายแรง", "สุขภาพ", 
+                "ชั่วระยะเวลา", "ไลฟ์เวิร์ส อุบัติเหตุ ฆาตกรรมและจลาจล", "ไลฟ์เวิร์ส ชดเชยรายได้", "ไลฟ์เวิร์ส โรคร้ายแรง", "ไลฟ์เวิร์ส สุขภาพ"
             ];
 
             const customInsuranceOrder = [
                 "จำกัดระยะเวลาขาย", "ตลอดชีพ", "สะสมทรัพย์", "สะสมทรัพย์ (เงินคืนระหว่างปี)", "PAR Product", 
-                "High Net Worth", "ลดหย่อนบำนาญ", "Life Verse", "กบข.", "ชีวิตหลังเกษียณ", "ผู้สูงอายุ", "คนพิการ", "อิสลาม"
+                "High Net Worth", "Life Verse", "ลดหย่อนบำนาญ", "กบข.", "ชีวิตหลังเกษียณ", "ผู้สูงอายุ", "คนพิการ", "อิสลาม"
             ];
 
             filtered.sort((a, b) => {
@@ -1401,7 +1179,7 @@
                     } else if (category === 'จำกัดระยะเวลาขาย') {
                         headerClass = 'category-header-red';
                     }
-                    rowsHtml += `<tr class="${headerClass}"><td colspan="${colspanVal}"><i class="bi bi-folder2-open me-2"></i>${category}</td></tr>`;
+                    rowsHtml += `<tr class="${headerClass}"><td colspan="${colspanVal}" style="position: sticky; top: 88px; z-index: 19;"><i class="bi bi-folder2-open me-2"></i>${category}</td></tr>`;
                     lastCategory = category;
                     lastCode = '';
                     lastName = '';
@@ -1574,1037 +1352,6 @@
             FILTER_CAPITAL.value = '';
             filterAndRenderTable();
         });
-    </script>
-
-    <!-- ===== Embedded calculator: ประกันทั่วไป (general) ===== -->
-    <script>
-(function() {
-    const PANE = document.getElementById('gen-pane');
-    let genInitialized = false;
-
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKf67KuOgyYDtmbi-kLsFPnVVQamhgNYqAsIqrvQu17G6Gj-c5uTFf9n9y-QpkEfLU/exec";
-    
-    let calData = [];
-    let riderAgeData = [];
-    let dataSheetData = [];
-    let riderSheetData = [];
-
-    const ageInput = document.getElementById('gen-ageInput');
-    const ageList = document.getElementById('gen-ageList');
-    const productInput = document.getElementById('gen-productInput');
-    const productList = document.getElementById('gen-productList');
-    const codeInput = document.getElementById('gen-codeInput');
-    const codeList = document.getElementById('gen-codeList');
-    const clearBtn = document.getElementById('gen-clearBtn');
-    const covPeriodInput = document.getElementById('gen-covPeriodInput');
-    const payPeriodInput = document.getElementById('gen-payPeriodInput');
-    const sumInsuredInput = document.getElementById('gen-sumInsuredInput');
-    const premiumInput = document.getElementById('gen-premiumInput');
-    const commResult = document.getElementById('gen-commResult');
-    const complusResult = document.getElementById('gen-complusResult');
-    const riderTableBody = document.getElementById('gen-riderTableBody');
-    const totalPremiumResult = document.getElementById('gen-totalPremiumResult');
-    const totalCommResult = document.getElementById('gen-totalCommResult');
-    const totalComplusResult = document.getElementById('gen-totalComplusResult');
-
-    function formatNumber(value, isDecimal = false) {
-        if (value === undefined || value === null || value === "") return "";
-        let num = parseFloat(String(value).replace(/,/g, ""));
-        if (isNaN(num)) return "";
-        
-        let fixedStr = isDecimal ? num.toFixed(2) : num.toString();
-        let parts = fixedStr.split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-    }
-
-    PANE.addEventListener("input", function(e) {
-        if (e.target && e.target.classList.contains("formatted-number")) {
-            let cursorPosition = e.target.selectionStart;
-            let originalLength = e.target.value.length;
-            
-            let rawValue = e.target.value.replace(/,/g, "");
-            if (!isNaN(rawValue) || rawValue.endsWith(".")) {
-                e.target.value = formatNumber(rawValue);
-                
-                let newLength = e.target.value.length;
-                cursorPosition = cursorPosition + (newLength - originalLength);
-                e.target.setSelectionRange(cursorPosition, cursorPosition);
-            }
-        }
-        if (e.target && (e.target.classList.contains("rider-premium-input") || e.target.classList.contains("rider-plan-select"))) {
-            updateRiderCommissions();
-        }
-    });
-
-    async function loadSheetData() {
-        try {
-            const [cal, riderAge, data, rider] = await Promise.all([
-                window.getSheetData('Cal'),
-                window.getSheetData('RiderAge'),
-                window.getSheetData('Data'),
-                window.getSheetData('Rider')
-            ]);
-
-            calData = cal;
-            riderAgeData = riderAge;
-            dataSheetData = data;
-            riderSheetData = rider;
-
-            ageList.innerHTML = '';
-            for (let i = 0; i <= 80; i++) {
-                let opt = document.createElement('option');
-                opt.value = i;
-                ageList.appendChild(opt);
-            }
-
-            ageInput.disabled = false;
-            ageInput.placeholder = "ระบุหรือเลือกอายุ (0-80)";
-        } catch (error) {
-            console.error("Error loading data:", error);
-            ageInput.placeholder = "โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรช";
-        }
-    }
-
-
-    function clearAllValues() {
-        ageInput.value = "";
-        productInput.value = "";
-        productList.innerHTML = "";
-        codeInput.value = "";
-        codeList.innerHTML = "";
-        productInput.disabled = true;
-        codeInput.disabled = true;
-        covPeriodInput.value = "";
-        payPeriodInput.value = "";
-        sumInsuredInput.value = "";
-        premiumInput.value = "";
-        commResult.textContent = "-";
-        commResult.style.color = "#718096";
-        complusResult.textContent = "-";
-        complusResult.style.color = "#718096";
-        riderTableBody.innerHTML = '<tr><td colspan="4" class="loading">กรุณาเลือกแบบประกัน</td></tr>';
-        totalPremiumResult.textContent = "-";
-        totalPremiumResult.style.color = "#2d3748";
-        totalCommResult.textContent = "-";
-        totalCommResult.style.color = "#2d3748";
-        totalComplusResult.textContent = "-";
-        totalComplusResult.style.color = "#2d3748";
-    }
-
-    clearBtn.addEventListener('click', clearAllValues);
-
-    function calculateGrandTotal() {
-        let mainPremium = parseFloat(premiumInput.value.replace(/,/g, "")) || 0;
-        let mainComm = parseFloat(commResult.textContent.replace(/,/g, "")) || 0;
-        let mainComplus = parseFloat(complusResult.textContent.replace(/,/g, "")) || 0;
-
-        let totalPremium = isNaN(mainPremium) ? 0 : mainPremium;
-        let totalComm = isNaN(mainComm) ? 0 : mainComm;
-        let totalComplus = isNaN(mainComplus) ? 0 : mainComplus;
-
-        let riderRows = riderTableBody.querySelectorAll('tr');
-        riderRows.forEach(tr => {
-            let rPremInput = tr.querySelector('.rider-premium-input');
-            let commTd = tr.querySelector('.rider-comm-result');
-            let complusTd = tr.querySelector('.rider-complus-result');
-            
-            if (rPremInput) {
-                let rPrem = parseFloat(rPremInput.value.replace(/,/g, "")) || 0;
-                totalPremium += rPrem;
-            }
-            if (commTd && commTd.textContent !== "-" && !commTd.textContent.includes("ไม่พบ")) {
-                let rComm = parseFloat(commTd.textContent.replace(/,/g, "")) || 0;
-                totalComm += rComm;
-            }
-            if (complusTd && complusTd.textContent !== "-" && !complusTd.textContent.includes("ไม่พบ")) {
-                let rComplus = parseFloat(complusTd.textContent.replace(/,/g, "")) || 0;
-                totalComplus += rComplus;
-            }
-        });
-
-        if (totalPremium > 0) {
-            totalPremiumResult.textContent = formatNumber(totalPremium, false);
-            totalPremiumResult.style.color = "#2b6cb0";
-        } else {
-            totalPremiumResult.textContent = "-";
-            totalPremiumResult.style.color = "#2d3748";
-        }
-
-        if (totalComm > 0) {
-            totalCommResult.textContent = formatNumber(totalComm, false);
-            totalCommResult.style.color = "#2b6cb0";
-        } else {
-            totalCommResult.textContent = "-";
-            totalCommResult.style.color = "#2d3748";
-        }
-
-        if (totalComplus > 0) {
-            totalComplusResult.textContent = formatNumber(totalComplus, false);
-            totalComplusResult.style.color = "#2b6cb0";
-        } else {
-            totalComplusResult.textContent = "-";
-            totalComplusResult.style.color = "#2d3748";
-        }
-    }
-
-    function updatePeriodsAndCommission() {
-        let ageVal = ageInput.value.trim();
-        let productVal = productInput.value.trim();
-        let sumInsuredVal = sumInsuredInput.value.replace(/,/g, "").trim();
-        let premiumVal = premiumInput.value.replace(/,/g, "").trim();
-
-        covPeriodInput.value = "";
-        payPeriodInput.value = "";
-
-        if (productVal !== "") {
-            let matchedRow = calData.find(row => {
-                let keys = Object.keys(row);
-                let pName = row['แบบประกัน'] !== undefined ? String(row['แบบประกัน']).trim() : (keys[1] ? String(row[keys[1]]).trim() : "");
-                return pName === productVal;
-            });
-
-            if (matchedRow) {
-                let keys = Object.keys(matchedRow);
-                let rawCov = parseFloat(matchedRow['คุ้มครอง'] !== undefined ? matchedRow['คุ้มครอง'] : (keys[5] ? matchedRow[keys[5]] : NaN));
-                let rawPay = parseFloat(matchedRow['ชำระ'] !== undefined ? matchedRow['ชำระ'] : (keys[6] ? matchedRow[keys[6]] : NaN));
-                let age = parseFloat(ageVal);
-
-                if (!isNaN(rawCov)) {
-                    covPeriodInput.value = (rawCov > 50 && !isNaN(age)) ? (rawCov - age) : rawCov;
-                }
-                if (!isNaN(rawPay)) {
-                    payPeriodInput.value = (rawPay > 50 && !isNaN(age)) ? (rawPay - age) : rawPay;
-                }
-            }
-        }
-
-        if (ageVal === "" || productVal === "" || sumInsuredVal === "" || premiumVal === "" || isNaN(ageVal) || isNaN(sumInsuredVal) || isNaN(premiumVal)) {
-            commResult.textContent = "-";
-            commResult.style.color = "#718096";
-            complusResult.textContent = "-";
-            complusResult.style.color = "#718096";
-            calculateGrandTotal();
-            return;
-        }
-
-        let age = parseFloat(ageVal);
-        let sumInsured = parseFloat(sumInsuredVal);
-        let premium = parseFloat(premiumVal);
-
-        let matchingRows = dataSheetData.filter(row => {
-            let keys = Object.keys(row);
-            let rowName = row['ชื่อแบบ'] !== undefined ? String(row['ชื่อแบบ']).trim() : (row['แบบประกัน'] !== undefined ? String(row['แบบประกัน']).trim() : String(row[keys[1]] || "").trim());
-            if (rowName !== productVal) return false;
-
-            let minAge = parseFloat(row['เริ่ม'] !== undefined ? row['เริ่ม'] : (row['พิกัดเริ่ม'] !== undefined ? row['พิกัดเริ่ม'] : row[keys[2]])) || 0;
-            let maxAge = parseFloat(row['สิ้นสุด'] !== undefined ? row['สิ้นสุด'] : (row['พิกัดสุดท้าย'] !== undefined ? row['พิกัดสุดท้าย'] : row[keys[3]])) || 0;
-            let minSum = parseFloat(row['ทุน'] !== undefined ? row['ทุน'] : (row['ทุนเริ่มต้น'] !== undefined ? row['ทุนเริ่มต้น'] : row[keys[4]])) || 0;
-
-            return age >= minAge && age <= maxAge && sumInsured >= minSum;
-        });
-
-        if (matchingRows.length > 0) {
-            matchingRows.sort((a, b) => {
-                let keysA = Object.keys(a);
-                let keysB = Object.keys(b);
-                let sumA = parseFloat(a['ทุน'] !== undefined ? a['ทุน'] : (a['ทุนเริ่มต้น'] !== undefined ? a['ทุนเริ่มต้น'] : keysA[4] !== undefined ? a[keysA[4]] : 0)) || 0;
-                let sumB = parseFloat(b['ทุน'] !== undefined ? b['ทุน'] : (b['ทุนเริ่มต้น'] !== undefined ? b['ทุนเริ่มต้น'] : keysB[4] !== undefined ? b[keysB[4]] : 0)) || 0;
-                return sumB - sumA;
-            });
-
-            let matchedRow = matchingRows[0];
-            let keys = Object.keys(matchedRow);
-            
-            let rawComm = parseFloat(matchedRow['คอม'] !== undefined ? matchedRow['คอม'] : (matchedRow['คอมมิชชั่น'] !== undefined ? matchedRow['คอมมิชชั่น'] : matchedRow[keys[5]])) || 0;
-            let rawComplus = parseFloat(matchedRow['คอมพลัส'] !== undefined ? matchedRow['คอมพลัส'] : matchedRow[keys[6]]) || 0;
-
-            let finalComm = Math.round((rawComm * premium) / 100);
-            let finalComplus = Math.round((rawComplus * premium) / 100);
-
-            commResult.textContent = formatNumber(finalComm, false);
-            commResult.style.color = "#2d3748";
-            complusResult.textContent = formatNumber(finalComplus, false);
-            complusResult.style.color = "#2d3748";
-        } else {
-            commResult.textContent = "- (ไม่พบเงื่อนไข)";
-            commResult.style.color = "#e53e3e";
-            complusResult.textContent = "-";
-            complusResult.style.color = "#718096";
-        }
-        
-        calculateGrandTotal();
-    }
-
-    ageInput.addEventListener('input', () => {
-        handleAgeChange();
-        updatePeriodsAndCommission();
-    });
-    ageInput.addEventListener('change', () => {
-        handleAgeChange();
-        updatePeriodsAndCommission();
-    });
-
-    productInput.addEventListener('input', () => {
-        syncProductToCode(true);
-    });
-    productInput.addEventListener('change', () => {
-        syncProductToCode(true);
-    });
-
-    codeInput.addEventListener('input', () => {
-        syncCodeToProduct(true);
-    });
-    codeInput.addEventListener('change', () => {
-        syncCodeToProduct(true);
-    });
-
-    sumInsuredInput.addEventListener('input', updatePeriodsAndCommission);
-    premiumInput.addEventListener('input', updatePeriodsAndCommission);
-
-    function handleAgeChange() {
-        let ageInputVal = ageInput.value.trim();
-        productInput.value = '';
-        productList.innerHTML = '';
-        codeInput.value = '';
-        codeList.innerHTML = '';
-        covPeriodInput.value = '';
-        payPeriodInput.value = '';
-        productInput.disabled = true;
-        codeInput.disabled = true;
-        riderTableBody.innerHTML = '<tr><td colspan="4" class="loading">กรุณาเลือกแบบประกัน</td></tr>';
-        
-        if (ageInputVal === "" || isNaN(ageInputVal)) {
-            calculateGrandTotal();
-            return;
-        }
-
-        let age = parseFloat(ageInputVal);
-
-        const availableProducts = calData.filter(row => {
-            let keys = Object.keys(row);
-            let productName = row['แบบประกัน'] !== undefined ? String(row['แบบประกัน']).trim() : (keys[1] ? String(row[keys[1]]).trim() : "");
-            if (!productName || productName === "แบบประกัน") return false;
-
-            let minAge = parseFloat(row['พิกัดเริ่ม'] !== undefined ? row['พิกัดเริ่ม'] : row[keys[3]]);
-            let maxAge = parseFloat(row['พิกัดสุดท้าย'] !== undefined ? row['พิกัดสุดท้าย'] : row[keys[4]]);
-
-            if (isNaN(minAge) || isNaN(maxAge)) return false;
-
-            return age >= minAge && age <= maxAge;
-        });
-
-        if (availableProducts.length > 0) {
-            productInput.disabled = false;
-            productInput.placeholder = "ระบุหรือเลือกแบบประกัน";
-            codeInput.disabled = false;
-            codeInput.placeholder = "ระบุหรือเลือกรหัส";
-
-            let addedProducts = new Set();
-            let addedCodes = new Set();
-
-            availableProducts.forEach(row => {
-                let keys = Object.keys(row);
-                let productName = row['แบบประกัน'] !== undefined ? String(row['แบบประกัน']).trim() : (keys[1] ? String(row[keys[1]]).trim() : "");
-                let codeName = row['รหัส'] !== undefined ? String(row['รหัส']).trim() : (keys[0] ? String(row[keys[0]]).trim() : "");
-
-                if (productName && !addedProducts.has(productName)) {
-                    addedProducts.add(productName);
-                    let opt = document.createElement('option');
-                    opt.value = productName;
-                    productList.appendChild(opt);
-                }
-
-                if (codeName && !addedCodes.has(codeName)) {
-                    addedCodes.add(codeName);
-                    let opt = document.createElement('option');
-                    opt.value = codeName;
-                    codeList.appendChild(opt);
-                }
-            });
-        } else {
-            productInput.placeholder = "ไม่พบแบบประกันสำหรับอายุนี้";
-            codeInput.placeholder = "ไม่พบข้อมูลสำหรับอายุนี้";
-        }
-        
-        calculateGrandTotal();
-    }
-
-    function syncProductToCode(triggerCalc = false) {
-        let productVal = productInput.value.trim();
-        let matchedRow = calData.find(row => {
-            let keys = Object.keys(row);
-            let pName = row['แบบประกัน'] !== undefined ? String(row['แบบประกัน']).trim() : (keys[1] ? String(row[keys[1]]).trim() : "");
-            return pName === productVal;
-        });
-
-        if (matchedRow) {
-            let keys = Object.keys(matchedRow);
-            let codeName = matchedRow['รหัส'] !== undefined ? String(matchedRow['รหัส']).trim() : (keys[0] ? String(row[keys[0]]).trim() : "");
-            if (codeInput.value !== codeName) {
-                codeInput.value = codeName;
-            }
-        } else {
-            codeInput.value = "";
-        }
-
-        handleProductChange();
-        if (triggerCalc) updatePeriodsAndCommission();
-    }
-
-    function syncCodeToProduct(triggerCalc = false) {
-        let codeVal = codeInput.value.trim();
-        
-        let matchedRow = calData.find(row => {
-            let keys = Object.keys(row);
-            let cName = row['รหัส'] !== undefined ? String(row['รหัส']).trim() : (keys[0] ? String(row[keys[0]]).trim() : "");
-            return cName === codeVal;
-        });
-
-        if (matchedRow) {
-            let keys = Object.keys(matchedRow);
-            let productName = matchedRow['แบบประกัน'] !== undefined ? String(matchedRow['แบบประกัน']).trim() : (keys[1] ? String(row[keys[1]]).trim() : "");
-            if (productInput.value !== productName) {
-                productInput.value = productName;
-            }
-        } else {
-            productInput.value = "";
-        }
-
-        handleProductChange();
-        if (triggerCalc) updatePeriodsAndCommission();
-    }
-
-    function updateRiderCommissions() {
-        let ageVal = ageInput.value.trim();
-        let age = parseFloat(ageVal);
-
-        let rows = riderTableBody.querySelectorAll('tr');
-        rows.forEach(tr => {
-            let riderCell = tr.querySelector('.rider-name-text');
-            let planSelectEl = tr.querySelector('.rider-plan-select');
-            let premiumInputEl = tr.querySelector('.rider-premium-input');
-            let commTd = tr.querySelector('.rider-comm-result');
-            let complusTd = tr.querySelector('.rider-complus-result');
-
-            if (!riderCell || !premiumInputEl || !commTd || !complusTd) return;
-
-            let riderName = riderCell.textContent.trim();
-            let selectedPlan = planSelectEl ? planSelectEl.value.trim() : "";
-            let premiumVal = parseFloat(premiumInputEl.value.replace(/,/g, "")) || 0;
-
-            if (isNaN(age) || premiumVal === 0) {
-                commTd.textContent = "-";
-                commTd.style.color = "#718096";
-                complusTd.textContent = "-";
-                complusTd.style.color = "#718096";
-                calculateGrandTotal();
-                return;
-            }
-
-            let matchingRows = riderSheetData.filter(row => {
-                let keys = Object.keys(row);
-                
-                let name = row['สัญญาเพิ่มเติม'] !== undefined ? String(row['สัญญาเพิ่มเติม']).trim() : (keys[1] ? String(row[keys[1]]).trim() : "");
-                if (name !== riderName) return false;
-
-                let typeVal = row['ประเภท'] !== undefined ? String(row['ประเภท']).trim() : (keys[11] ? String(row[keys[11]]).trim() : "");
-                if (typeVal.includes("สบาย") || typeVal.includes("ไลฟ์เวิร์ส")) return false;
-
-                if (planSelectEl) {
-                    if (selectedPlan === "") return false;
-                    let conditionVal = row['เงื่อนไข'] !== undefined ? String(row['เงื่อนไข']).trim() : (keys[2] ? String(row[keys[2]]).trim() : "");
-                    if (conditionVal !== selectedPlan) return false;
-                }
-
-                let minAge = parseFloat(row['พิกัดเริ่ม'] !== undefined ? row['พิกัดเริ่ม'] : (keys[3] ? row[keys[3]] : 0)) || 0;
-                let maxAge = parseFloat(row['พิกัดสุดท้าย'] !== undefined ? row['พิกัดสุดท้าย'] : (keys[4] ? row[keys[4]] : 0)) || 0;
-
-                return age >= minAge && age <= maxAge;
-            });
-
-            if (matchingRows.length > 0) {
-                let matchedRow = matchingRows[0];
-                let keys = Object.keys(matchedRow);
-
-                let rawComm = parseFloat(matchedRow['คอม'] !== undefined ? matchedRow['คอม'] : (keys[5] ? matchedRow[keys[5]] : 0)) || 0;
-                let rawComplus = parseFloat(matchedRow['คอมพลัส'] !== undefined ? matchedRow['คอมพลัส'] : (keys[6] ? matchedRow[keys[6]] : 0)) || 0;
-
-                let finalComm = Math.round((rawComm * premiumVal) / 100);
-                let finalComplus = Math.round((rawComplus * premiumVal) / 100);
-
-                commTd.textContent = formatNumber(finalComm, false);
-                commTd.style.color = "#2d3748";
-                complusTd.textContent = formatNumber(finalComplus, false);
-                complusTd.style.color = "#2d3748";
-            } else {
-                commTd.textContent = "-";
-                commTd.style.color = "#718096";
-                complusTd.textContent = "-";
-                complusTd.style.color = "#718096";
-            }
-        });
-
-        calculateGrandTotal();
-    }
-
-    function handleProductChange() {
-        let ageInputVal = ageInput.value.trim();
-        if (ageInputVal === "") return;
-        let age = parseFloat(ageInputVal);
-        let selectedProductName = productInput.value.trim();
-
-        if (!selectedProductName) {
-            riderTableBody.innerHTML = '<tr><td colspan="4" class="loading">กรุณาเลือกแบบประกัน</td></tr>';
-            calculateGrandTotal();
-            return;
-        }
-
-        let productRow = calData.find(row => {
-            let keys = Object.keys(row);
-            let name = row['แบบประกัน'] !== undefined ? String(row['แบบประกัน']).trim() : String(row[keys[1]]).trim();
-            return name === selectedProductName;
-        });
-
-        if (!productRow) {
-            riderTableBody.innerHTML = '<tr><td colspan="4" class="loading" style="color: #e53e3e;">ไม่พบข้อมูลแบบประกันนี้</td></tr>';
-            calculateGrandTotal();
-            return;
-        }
-
-        let allKeys = Object.keys(productRow);
-
-        let getColVal = (colName, index) => {
-            if (productRow[colName] !== undefined && productRow[colName] !== null) {
-                return String(productRow[colName]).trim();
-            }
-            if (allKeys[index] !== undefined && productRow[allKeys[index]] !== null) {
-                return String(productRow[allKeys[index]]).trim();
-            }
-            return '';
-        };
-
-        let hCol = getColVal('Rider', 7);
-        let iCol = getColVal('ฉพ', 8);
-        let jCol = getColVal('มัลติเพย์', 9);
-        let kCol = getColVal('44', 10);
-        let lCol = getColVal('ดีดี', 11);
-        let mCol = getColVal('คบ', 12);
-
-        let hColLower = hCol.toLowerCase();
-
-        if (hColLower === "no" || hColLower === "") {
-            riderTableBody.innerHTML = '<tr><td colspan="4" class="loading" style="color: #e53e3e;">ไม่สามารถซื้อสัญญาเพิ่มเติมได้</td></tr>';
-            calculateGrandTotal();
-            return;
-        }
-
-        let allowedRiders = [];
-
-        if (hColLower === "อรพ") {
-            allowedRiders = ["อ.1", "ฆจ.1", "อ.2", "ฆจ.2", "อ.3", "รพ."];
-        } else if (hColLower === "yes") {
-            allowedRiders = ["อ.1", "ฆจ.1", "อ.2", "ฆจ.2", "อ.3", "รพ.", "เฮลท์ ฟิต เฮชบี โปร", "สร.2", "เฮลท์ ฟิต มัลติเพย์ แคนเซอร์", "ทร.48", "เฮลท์ ฟิต อัลตร้า", "เฮลท์ ฟิต ชีลด์", "ผู้ป่วยนอก"];
-            if (iCol.toLowerCase() === "yes") allowedRiders.push("ฉพ.");
-            if (jCol.toLowerCase() === "yes") allowedRiders.push("มัลติเพย์");
-            if (kCol.toLowerCase() === "yes") allowedRiders.push("ทร.44");
-            if (lCol.toLowerCase() === "yes") allowedRiders.push("เฮลท์ ฟิต ดีดี");
-            if (mCol.toLowerCase() === "yes") allowedRiders.push("คบ.");
-        }
-
-        let validRiders = allowedRiders.filter(riderName => {
-            let cleanRiderName = riderName.replace(/\./g, '');
-            
-            let ageRule = riderAgeData.find(r => {
-                let name = "";
-                if (Array.isArray(r)) {
-                    name = r[0] !== undefined ? String(r[0]).trim() : (r[1] !== undefined ? String(r[1]).trim() : "");
-                } else if (typeof r === 'object' && r !== null) {
-                    let rKeys = Object.keys(r);
-                    name = r['ชื่อ'] !== undefined ? r['ชื่อ'] : (r['A'] !== undefined ? r['A'] : (rKeys[0] !== undefined ? r[rKeys[0]] : ''));
-                }
-                if (!name || name === "ชื่อ") return false;
-                let sheetName = String(name).trim();
-                return sheetName === riderName || sheetName.replace(/\./g, '') === cleanRiderName;
-            });
-
-            if (!ageRule) return false;
-
-            let minA = 0, maxA = 100;
-            if (Array.isArray(ageRule)) {
-                minA = parseFloat(ageRule[1]) || 0;
-                maxA = parseFloat(ageRule[2]) || 100;
-            } else {
-                let rKeys = Object.keys(ageRule);
-                minA = parseFloat(ageRule['เริ่ม'] !== undefined ? ageRule['เริ่ม'] : (ageRule['B'] !== undefined ? ageRule['B'] : ageRule[rKeys[1]])) || 0;
-                maxA = parseFloat(ageRule['สิ้นสุด'] !== undefined ? ageRule['สิ้นสุด'] : (ageRule['C'] !== undefined ? ageRule['C'] : ageRule[rKeys[2]])) || 100;
-            }
-            
-            return age >= minA && age <= maxA;
-        });
-
-        const masterOrder = [
-            "อ.1", "ฆจ.1", "อ.2", "ฆจ.2", "อ.3", "ฉพ.", "รพ.", 
-            "เฮลท์ ฟิต เฮชบี โปร", "สร.2", "มัลติเพย์", 
-            "เฮลท์ ฟิต มัลติเพย์ แคนเซอร์", "ทร.44", "ทร.48", 
-            "เฮลท์ ฟิต อัลตร้า", "เฮลท์ ฟิต ชีลด์", "เฮลท์ ฟิต ดีดี", "ผู้ป่วยนอก", "คบ."
-        ];
-
-        validRiders.sort((a, b) => {
-            let indexA = masterOrder.indexOf(a);
-            let indexB = masterOrder.indexOf(b);
-            if (indexA === -1) indexA = 999;
-            if (indexB === -1) indexB = 999;
-            return indexA - indexB;
-        });
-
-        if (validRiders.length > 0) {
-            riderTableBody.innerHTML = '';
-            validRiders.forEach(rider => {
-                let extraHtml = '';
-                if (rider === "เฮลท์ ฟิต อัลตร้า") {
-                    extraHtml = ` <select class="rider-plan-select" style="width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;">
-                        <option value="">-- เลือกแผน --</option>
-                        <option value="แผน 1">แผน 1</option>
-                        <option value="แผน 2">แผน 2</option>
-                    </select>`;
-                } else if (rider === "เฮลท์ ฟิต ชีลด์") {
-                    extraHtml = ` <select class="rider-plan-select" style="width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;">
-                        <option value="">-- เลือกแผน --</option>
-                        <option value="แผน 1">แผน 1</option>
-                        <option value="แผน 2">แผน 2</option>
-                        <option value="แผน 3">แผน 3</option>
-                        <option value="แผน 4">แผน 4</option>
-                    </select>`;
-                } else if (rider === "เฮลท์ ฟิต ดีดี") {
-                    let ddOptions = `
-                        <option value="">-- เลือกแผน --</option>
-                        <option value="2,000 Deduct 0">2,000 Deduct 0</option>
-                        <option value="2,000 Deduct 30,000">2,000 Deduct 30,000</option>
-                        <option value="2,000 Deduct 50,000">2,000 Deduct 50,000</option>
-                        <option value="3,000 Deduct 0">3,000 Deduct 0</option>
-                        <option value="3,000 Deduct 30,000">3,000 Deduct 30,000</option>
-                        <option value="3,000 Deduct 50,000">3,000 Deduct 50,000</option>
-                        <option value="3,000 Deduct 100,000">3,000 Deduct 100,000</option>
-                    `;
-                    if (age >= 6) {
-                        ddOptions += `
-                            <option value="6,000 Deduct 0">6,000 Deduct 0</option>
-                        `;
-                    }
-                    ddOptions += `
-                        <option value="6,000 Deduct 30,000">6,000 Deduct 30,000</option>
-                        <option value="6,000 Deduct 50,000">6,000 Deduct 50,000</option>
-                        <option value="6,000 Deduct 100,000">6,000 Deduct 100,000</option>
-                    `;
-                    if (age >= 6) {
-                        ddOptions += `
-                            <option value="12,000 Deduct 0">12,000 Deduct 0</option>
-                        `;
-                    }
-                    ddOptions += `
-                        <option value="12,000 Deduct 30,000">12,000 Deduct 30,000</option>
-                        <option value="12,000 Deduct 50,000">12,000 Deduct 50,000</option>
-                        <option value="12,000 Deduct 100,000">12,000 Deduct 100,000</option>
-                    `;
-                    extraHtml = ` <select class="rider-plan-select" style="width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;">${ddOptions}</select>`;
-                }
-
-                let tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><span class="rider-name-text">${rider}</span>${extraHtml}</td>
-                    <td><input type="text" class="formatted-number rider-premium-input" placeholder="ระบุเบี้ยถ้ามี"></td>
-                    <td class="rider-comm-result text-right" style="color: #718096;">-</td>
-                    <td class="rider-complus-result text-right" style="color: #718096;">-</td>
-                `;
-                riderTableBody.appendChild(tr);
-            });
-        } else {
-            riderTableBody.innerHTML = '<tr><td colspan="4" class="loading" style="color: #e53e3e;">ไม่สามารถซื้อสัญญาเพิ่มเติมได้</td></tr>';
-        }
-        
-        calculateGrandTotal();
-    }
-
-    window.initGeneralCalc = function() {
-        if (genInitialized) return;
-        genInitialized = true;
-        loadSheetData();
-    };
-})();
-    </script>
-
-    <!-- ===== Embedded calculator: สบ๊าบ สบาย (sabai) ===== -->
-    <script>
-(function() {
-    const PANE = document.getElementById('sab-pane');
-    let sabInitialized = false;
-
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKf67KuOgyYDtmbi-kLsFPnVVQamhgNYqAsIqrvQu17G6Gj-c5uTFf9n9y-QpkEfLU/exec";
-    
-    let dataSheetData = [];
-    let riderSheetData = [];
-
-    const ageInput = document.getElementById('sab-ageInput');
-    const ageList = document.getElementById('sab-ageList');
-    const productInput = document.getElementById('sab-productInput');
-    const codeInput = document.getElementById('sab-codeInput');
-    const clearBtn = document.getElementById('sab-clearBtn');
-    const covPeriodInput = document.getElementById('sab-covPeriodInput');
-    const payPeriodInput = document.getElementById('sab-payPeriodInput');
-    const sumInsuredInput = document.getElementById('sab-sumInsuredInput');
-    const premiumInput = document.getElementById('sab-premiumInput');
-    const commResult = document.getElementById('sab-commResult');
-    const complusResult = document.getElementById('sab-complusResult');
-    const riderTableBody = document.getElementById('sab-riderTableBody');
-    const totalPremiumResult = document.getElementById('sab-totalPremiumResult');
-    const totalCommResult = document.getElementById('sab-totalCommResult');
-    const totalComplusResult = document.getElementById('sab-totalComplusResult');
-
-    function formatNumber(value, isDecimal = false) {
-        if (value === undefined || value === null || value === "") return "";
-        let num = parseFloat(String(value).replace(/,/g, ""));
-        if (isNaN(num)) return "";
-        
-        let fixedStr = isDecimal ? num.toFixed(2) : num.toString();
-        let parts = fixedStr.split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-    }
-
-    PANE.addEventListener("input", function(e) {
-        if (e.target && e.target.classList.contains("formatted-number")) {
-            let cursorPosition = e.target.selectionStart;
-            let originalLength = e.target.value.length;
-            
-            let rawValue = e.target.value.replace(/,/g, "");
-            if (!isNaN(rawValue) || rawValue.endsWith(".")) {
-                e.target.value = formatNumber(rawValue);
-                
-                let newLength = e.target.value.length;
-                cursorPosition = cursorPosition + (newLength - originalLength);
-                e.target.setSelectionRange(cursorPosition, cursorPosition);
-            }
-        }
-        if (e.target && (e.target.classList.contains("rider-premium-input") || e.target.classList.contains("rider-plan-select"))) {
-            updateRiderCommissions();
-        }
-    });
-
-    async function loadSheetData() {
-        try {
-            const [data, rider] = await Promise.all([
-                window.getSheetData('Data'),
-                window.getSheetData('Rider')
-            ]);
-
-            dataSheetData = data;
-            riderSheetData = rider;
-
-            ageList.innerHTML = '';
-            for (let i = 11; i <= 64; i++) {
-                let opt = document.createElement('option');
-                opt.value = i;
-                ageList.appendChild(opt);
-            }
-
-            ageInput.disabled = false;
-            ageInput.placeholder = "ระบุหรือเลือกอายุ (11-64)";
-        } catch (error) {
-            console.error("Error loading data:", error);
-            ageInput.placeholder = "โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรช";
-        }
-    }
-
-
-    function clearAllValues() {
-        ageInput.value = "";
-        covPeriodInput.value = "";
-        payPeriodInput.value = "";
-        premiumInput.value = "";
-        commResult.textContent = "-";
-        commResult.style.color = "#718096";
-        complusResult.textContent = "-";
-        complusResult.style.color = "#718096";
-        riderTableBody.innerHTML = '<tr><td colspan="4" class="loading">กรุณาระบุอายุก่อน</td></tr>';
-        totalPremiumResult.textContent = "-";
-        totalPremiumResult.style.color = "#2d3748";
-        totalCommResult.textContent = "-";
-        totalCommResult.style.color = "#2d3748";
-        totalComplusResult.textContent = "-";
-        totalComplusResult.style.color = "#2d3748";
-    }
-
-    clearBtn.addEventListener('click', clearAllValues);
-
-    function calculateGrandTotal() {
-        let mainPremium = parseFloat(premiumInput.value.replace(/,/g, "")) || 0;
-        let mainComm = parseFloat(commResult.textContent.replace(/,/g, "")) || 0;
-        let mainComplus = parseFloat(complusResult.textContent.replace(/,/g, "")) || 0;
-
-        let totalPremium = isNaN(mainPremium) ? 0 : mainPremium;
-        let totalComm = isNaN(mainComm) ? 0 : mainComm;
-        let totalComplus = isNaN(mainComplus) ? 0 : mainComplus;
-
-        let riderRows = riderTableBody.querySelectorAll('tr');
-        riderRows.forEach(tr => {
-            let rPremInput = tr.querySelector('.rider-premium-input');
-            let commTd = tr.querySelector('.rider-comm-result');
-            let complusTd = tr.querySelector('.rider-complus-result');
-            
-            if (rPremInput) {
-                let rPrem = parseFloat(rPremInput.value.replace(/,/g, "")) || 0;
-                totalPremium += rPrem;
-            }
-            if (commTd && commTd.textContent !== "-" && !commTd.textContent.includes("ไม่พบ")) {
-                let rComm = parseFloat(commTd.textContent.replace(/,/g, "")) || 0;
-                totalComm += rComm;
-            }
-            if (complusTd && complusTd.textContent !== "-" && !complusTd.textContent.includes("ไม่พบ")) {
-                let rComplus = parseFloat(complusTd.textContent.replace(/,/g, "")) || 0;
-                totalComplus += rComplus;
-            }
-        });
-
-        if (totalPremium > 0) {
-            totalPremiumResult.textContent = formatNumber(totalPremium, true);
-            totalPremiumResult.style.color = "#2b6cb0";
-        } else {
-            totalPremiumResult.textContent = "-";
-            totalPremiumResult.style.color = "#2d3748";
-        }
-
-        if (totalComm > 0) {
-            totalCommResult.textContent = formatNumber(totalComm, false);
-            totalCommResult.style.color = "#2b6cb0";
-        } else {
-            totalCommResult.textContent = "-";
-            totalCommResult.style.color = "#2d3748";
-        }
-
-        if (totalComplus > 0) {
-            totalComplusResult.textContent = formatNumber(totalComplus, false);
-            totalComplusResult.style.color = "#2b6cb0";
-        } else {
-            totalComplusResult.textContent = "-";
-            totalComplusResult.style.color = "#2d3748";
-        }
-    }
-
-    function updatePeriodsAndCommission() {
-        let ageVal = ageInput.value.trim();
-        let sumInsuredVal = "50000";
-        let premiumVal = premiumInput.value.replace(/,/g, "").trim();
-
-        covPeriodInput.value = "";
-        payPeriodInput.value = "";
-
-        if (ageVal !== "" && !isNaN(ageVal)) {
-            let age = parseFloat(ageVal);
-            covPeriodInput.value = 99 - age;
-            payPeriodInput.value = 99 - age;
-        }
-
-        if (ageVal === "" || premiumVal === "" || isNaN(ageVal) || isNaN(premiumVal)) {
-            commResult.textContent = "-";
-            commResult.style.color = "#718096";
-            complusResult.textContent = "-";
-            complusResult.style.color = "#718096";
-            calculateGrandTotal();
-            return;
-        }
-
-        let age = parseFloat(ageVal);
-        let sumInsured = parseFloat(sumInsuredVal);
-        let premium = parseFloat(premiumVal);
-
-        let matchingRows = dataSheetData.filter(row => {
-            let keys = Object.keys(row);
-            let codeVal = row['รหัส'] !== undefined ? String(row['รหัส']).trim() : (row['รหัสแบบประกัน'] !== undefined ? String(row['รหัสแบบประกัน']).trim() : String(keys[0] ? row[keys[0]] : "").trim());
-            if (codeVal !== "W013") return false;
-
-            let minAge = parseFloat(row['เริ่ม'] !== undefined ? row['เริ่ม'] : (row['พิกัดเริ่ม'] !== undefined ? row['พิกัดเริ่ม'] : row[keys[2]])) || 0;
-            let maxAge = parseFloat(row['สิ้นสุด'] !== undefined ? row['สิ้นสุด'] : (row['พิกัดสุดท้าย'] !== undefined ? row['พิกัดสุดท้าย'] : row[keys[3]])) || 0;
-            let minSum = parseFloat(row['ทุน'] !== undefined ? row['ทุน'] : (row['ทุนเริ่มต้น'] !== undefined ? row['ทุนเริ่มต้น'] : row[keys[4]])) || 0;
-
-            return age >= minAge && age <= maxAge && sumInsured >= minSum;
-        });
-
-        if (matchingRows.length > 0) {
-            matchingRows.sort((a, b) => {
-                let keysA = Object.keys(a);
-                let keysB = Object.keys(b);
-                let sumA = parseFloat(a['ทุน'] !== undefined ? a['ทุน'] : (a['ทุนเริ่มต้น'] !== undefined ? a['ทุนเริ่มต้น'] : keysA[4] !== undefined ? a[keysA[4]] : 0)) || 0;
-                let sumB = parseFloat(b['ทุน'] !== undefined ? b['ทุน'] : (b['ทุนเริ่มต้น'] !== undefined ? b['ทุนเริ่มต้น'] : keysB[4] !== undefined ? b[keysB[4]] : 0)) || 0;
-                return sumB - sumA;
-            });
-
-            let matchedRow = matchingRows[0];
-            let keys = Object.keys(matchedRow);
-            
-            let rawComm = parseFloat(matchedRow['คอม'] !== undefined ? matchedRow['คอม'] : (matchedRow['คอมมิชชั่น'] !== undefined ? matchedRow['คอมมิชชั่น'] : matchedRow[keys[5]])) || 0;
-            let rawComplus = parseFloat(matchedRow['คอมพลัส'] !== undefined ? matchedRow['คอมพลัส'] : matchedRow[keys[6]]) || 0;
-
-            let finalComm = Math.round((rawComm * premium) / 100);
-            let finalComplus = Math.round((rawComplus * premium) / 100);
-
-            commResult.textContent = formatNumber(finalComm, false);
-            commResult.style.color = "#2d3748";
-            complusResult.textContent = formatNumber(finalComplus, false);
-            complusResult.style.color = "#2d3748";
-        } else {
-            commResult.textContent = "- (ไม่พบเงื่อนไข)";
-            commResult.style.color = "#e53e3e";
-            complusResult.textContent = "-";
-            complusResult.style.color = "#718096";
-        }
-        
-        calculateGrandTotal();
-    }
-
-    ageInput.addEventListener('input', () => {
-        handleAgeChange();
-        updatePeriodsAndCommission();
-    });
-    ageInput.addEventListener('change', () => {
-        handleAgeChange();
-        updatePeriodsAndCommission();
-    });
-
-    premiumInput.addEventListener('input', updatePeriodsAndCommission);
-
-    function handleAgeChange() {
-        let ageInputVal = ageInput.value.trim();
-        covPeriodInput.value = '';
-        payPeriodInput.value = '';
-        riderTableBody.innerHTML = '<tr><td colspan="4" class="loading">กรุณาระบุอายุให้ถูกต้อง (11-64)</td></tr>';
-        
-        if (ageInputVal === "" || isNaN(ageInputVal)) {
-            calculateGrandTotal();
-            return;
-        }
-
-        let age = parseFloat(ageInputVal);
-        if (age < 11 || age > 64) {
-            riderTableBody.innerHTML = '<tr><td colspan="4" class="loading" style="color: #e53e3e;">อายุต้องอยู่ระหว่าง 11 - 64 ปี</td></tr>';
-            calculateGrandTotal();
-            return;
-        }
-
-        covPeriodInput.value = 99 - age;
-        payPeriodInput.value = 99 - age;
-
-        const validRiders = [
-            "อ.1",
-            "อ.2",
-            "อ.3",
-            "เฮลท์ ฟิต เฮชบี โปร",
-            "มัลติเพย์",
-            "เฮลท์ ฟิต ชีลด์",
-            "ผู้ป่วยนอก"
-        ];
-
-        riderTableBody.innerHTML = '';
-        validRiders.forEach(rider => {
-            let extraHtml = '';
-            if (rider === "เฮลท์ ฟิต ชีลด์") {
-                extraHtml = ` <select class="rider-plan-select" style="width: auto; display: inline-block; margin-left: 10px; padding: 2px 6px;">
-                    <option value="">-- เลือกแผน --</option>
-                    <option value="แผน 1">แผน 1</option>
-                    <option value="แผน 2">แผน 2</option>
-                    <option value="แผน 3">แผน 3</option>
-                    <option value="แผน 4">แผน 4</option>
-                </select>`;
-            }
-
-            let tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><span class="rider-name-text">${rider}</span>${extraHtml}</td>
-                <td><input type="text" class="formatted-number rider-premium-input" placeholder="ระบุเบี้ยถ้ามี"></td>
-                <td class="rider-comm-result text-right" style="color: #718096;">-</td>
-                <td class="rider-complus-result text-right" style="color: #718096;">-</td>
-            `;
-            riderTableBody.appendChild(tr);
-        });
-
-        updateRiderCommissions();
-        calculateGrandTotal();
-    }
-
-    function updateRiderCommissions() {
-        let ageVal = ageInput.value.trim();
-        let age = parseFloat(ageVal);
-
-        let rows = riderTableBody.querySelectorAll('tr');
-        rows.forEach(tr => {
-            let riderCell = tr.querySelector('.rider-name-text');
-            let planSelectEl = tr.querySelector('.rider-plan-select');
-            let premiumInputEl = tr.querySelector('.rider-premium-input');
-            let commTd = tr.querySelector('.rider-comm-result');
-            let complusTd = tr.querySelector('.rider-complus-result');
-
-            if (!riderCell || !premiumInputEl || !commTd || !complusTd) return;
-
-            let riderName = riderCell.textContent.trim();
-            let selectedPlan = planSelectEl ? planSelectEl.value.trim() : "";
-            let premiumVal = parseFloat(premiumInputEl.value.replace(/,/g, "")) || 0;
-
-            if (isNaN(age) || premiumVal === 0) {
-                commTd.textContent = "-";
-                commTd.style.color = "#718096";
-                complusTd.textContent = "-";
-                complusTd.style.color = "#718096";
-                return;
-            }
-
-            let matchingRows = riderSheetData.filter(row => {
-                let keys = Object.keys(row);
-                let name = row['สัญญาเพิ่มเติม'] !== undefined ? String(row['สัญญาเพิ่มเติม']).trim() : (keys[1] ? String(row[keys[1]]).trim() : "");
-                if (name !== riderName) return false;
-
-                let typeVal = row['ประเภท'] !== undefined ? String(row['ประเภท']).trim() : (keys[11] ? String(row[keys[11]]).trim() : "");
-                if (typeVal !== "เฮลท์ ฟิต สบ๊าย สบาย" && typeVal !== "เฮลท์ ฟิต สบ๊าบ สบาย") return false;
-
-                if (riderName === "เฮลท์ ฟิต ชีลด์") {
-                    if (selectedPlan === "") return false;
-                    let conditionVal = row['เงื่อนไข'] !== undefined ? String(row['เงื่อนไข']).trim() : (keys[2] ? String(row[keys[2]]).trim() : "");
-                    if (conditionVal !== selectedPlan) return false;
-                }
-
-                return true;
-            });
-
-            if (matchingRows.length > 0) {
-                let matchedRow = matchingRows[0];
-                let keys = Object.keys(matchedRow);
-
-                let rawComm = parseFloat(matchedRow['คอม'] !== undefined ? matchedRow['คอม'] : (keys[5] ? matchedRow[keys[5]] : 0)) || 0;
-                let rawComplus = parseFloat(matchedRow['คอมพลัส'] !== undefined ? matchedRow['คอมพลัส'] : (keys[6] ? matchedRow[keys[6]] : 0)) || 0;
-
-                let finalComm = Math.round((rawComm * premiumVal) / 100);
-                let finalComplus = Math.round((rawComplus * premiumVal) / 100);
-
-                commTd.textContent = formatNumber(finalComm, false);
-                commTd.style.color = "#2d3748";
-                complusTd.textContent = formatNumber(finalComplus, false);
-                complusTd.style.color = "#2d3748";
-            } else {
-                commTd.textContent = "-";
-                commTd.style.color = "#718096";
-                commTd.textContent = "-";
-                commTd.style.color = "#718096";
-            }
-        });
-
-        calculateGrandTotal();
-    }
-
-    window.initSabaiCalc = function() {
-        if (sabInitialized) return;
-        sabInitialized = true;
-        loadSheetData();
-    };
-})();
     </script>
 </body>
 </html>
